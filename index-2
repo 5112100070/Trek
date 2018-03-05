@@ -1,0 +1,286 @@
+
+
+
+
+      <!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Trek-Sewa alat berat semudah klik</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/landing-page.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top ">
+      
+        <img src="img/logo-trek.png" width="100" height="35" class="d-inline-block align-top" alt="" style="margin-right:20px;">
+      
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" style="margin:0 10px 0;">
+              <a class="nav-link" href="#"><b>TENTANG KAMI</b> <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item"style="margin:0 10px 0;">
+              <a class="nav-link" href="#"><b>CARA KERJA</b></a>
+            </li>
+          
+            <li class="nav-item "style="margin:0 10px 0;">
+              <a class="nav-link" href="#"><b>PENYEDIA ALAT</b></a>
+            </li>
+          </ul>
+          <a 
+          <a class="btn btn-trek" href="#"><i class="fa fa-phone">Contact Us</i></a>
+        </div>
+      </nav>
+
+    <!-- Masthead -->
+    <header class="masthead text-black">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-left">
+
+            <span  style=" padding:0.2rem;font-weight: bold;font-size: 2.5rem;background-color:rgba(255, 255, 255, 0.445);" class="mb-5">Sewa alat berat semudah klik</span>
+            <br>
+            <span  style="padding:0.2rem;font-size: 1.25rem;background-color:rgba(255, 255, 255, 0.445);" class="mb-5"><i class="fa fa-play" style="color:rgba(255, 255, 255, 0.445);-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;padding-right:0.2rem;"></i>Tonton video kami</span>
+             
+
+          </div>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-left" style="padding-top:3.5rem">
+            <a class="btn btn-home btn-lg"href="">SEWA SEKARANG</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- penjelasan trek -->
+    <section class="showcase">
+        <!-- <div class="container-fluid p-0"> -->
+        <div class="container-fluid p-5">
+            
+          <div class="row no-gutters p-3">
+              <h3 class="">Kami carikan</h3>
+            <!-- <div class="col-lg-3 text-white my-auto showcase-img" style="background-color:#252729;padding-left:2rem;">
+                <p class="lead mb-1">Kami carikan</p>
+               <h3>alat berat yang anda butuhkan</h2>
+
+            </div>
+              
+            <div class="col-lg-3 text-white my-auto showcase-img" style="background-image: url('img/bg-trek-1.jpg');"></div>
+              
+            <div class="col-lg-6 my-auto showcase-text">
+              <h2>Kami carikan alat berat yang anda butuhkan</h2>
+              <p class="lead mb-0">Dengan mitra Penyedia Alat yang
+                  tersebar di seluruh Indonesia, Trek adalah
+                  tempat paling tepat untuk mencari alat
+                  terbaik sesuai dengan kebutuhanmu.
+                  Reservasi sekarang atau hubungi 0811-
+                  136-TREK.</p>
+                  <a class="btn btn-home btn-lg"href="" style="margin-top:2rem;">SEWA SEKARANG</a>
+            </div> -->
+          </div>
+
+          <!-- penyedia -->
+          <!-- <div class="row no-gutters p-3">
+              <div class="col-lg-6 my-auto showcase-text">
+                  <h2>Kami carikan alat berat yang anda butuhkan</h2>
+                  <p class="lead mb-0">Dengan mitra Penyedia Alat yang
+                      tersebar di seluruh Indonesia, Trek adalah
+                      tempat paling tepat untuk mencari alat
+                      terbaik sesuai dengan kebutuhanmu.
+                      Reservasi sekarang atau hubungi 0811-
+                      136-TREK.</p>
+                      <a class="btn btn-home btn-lg"href="" style="margin-top:2rem;">SEWA SEKARANG</a>
+                </div>
+            
+              
+            <div class="col-lg-3 text-white my-auto showcase-img" style="background-image: url('img/bg-trek-1.jpg');"></div>
+              
+            <div class="col-lg-3 text-white my-auto showcase-img" style="background-color:#252729;padding-left:2rem;">
+                <p class="lead mb-1">Kami carikan</p>
+               <h3>alat berat yang anda butuhkan</h2>
+
+            </div>
+          </div>
+          
+        </div>
+      </section>
+      
+    <!-- keuntungan -->
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+         <h3 style="padding-bottom:5rem;">Keuntungan menggunakan Trek?</h3>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                <div class="features-icons-icon d-flex">
+                  <i class="icon-screen-desktop m-auto text-primary"></i>
+                </div>
+                <h3>Jaringan Luas</h3>
+                <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                <div class="features-icons-icon d-flex">
+                  <i class="icon-layers m-auto text-primary"></i>
+                </div>
+                <h3>Potensi Berbagi</h3>
+                <p class="lead mb-0">Featuring the latest build of the new Bootstrap 4 framework!</p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                <div class="features-icons-icon d-flex">
+                  <i class="icon-check m-auto text-primary"></i>
+                </div>
+                <h3>Kapan saja, dimana saja</h3>
+                <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+  
+    <section class="features-icons bg-trek text-center">
+        <div class="container">
+         <h3 style="padding-bottom:5rem;">Jangan biarkan alat beratmu menggangur<br>bergabunglah bersama jaringan Penyedia Alat Trek<br>dan dapatkan uang lebih dai alat beratmu</h3>
+         <a class="btn btn-white btn-lg"href="">Daftar sebagai Penyedia</a>
+        </div>
+      </section>
+
+    <!-- Image Showcases -->
+
+
+    <!-- Testimonials -->
+    <!-- <section class="testimonials text-center bg-light">
+      <div class="container">
+        <h2 class="mb-5">What people are saying...</h2>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="img/testimonials-1.jpg" alt="">
+              <h5>Margaret E.</h5>
+              <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="img/testimonials-2.jpg" alt="">
+              <h5>Fred S.</h5>
+              <p class="font-weight-light mb-0">"Bootstrap is amazing. I've been using it to create lots of super nice landing pages."</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-3" src="img/testimonials-3.jpg" alt="">
+              <h5>Sarah	W.</h5>
+              <p class="font-weight-light mb-0">"Thanks so much for making these free resources available to us!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- Call to Action -->
+    <!-- <section class="call-to-action text-white text-center">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h2 class="mb-4">Ready to get started? Sign up now!</h2>
+          </div>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <form>
+              <div class="form-row">
+                <div class="col-12 col-md-9 mb-2 mb-md-0">
+                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                </div>
+                <div class="col-12 col-md-3">
+                  <button type="submit" class="btn btn-block btn-lg btn-primary">Sign up!</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="footer bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
+                <a href="#">About</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="#">Contact</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+            </ul>
+            <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2018. All Rights Reserved.</p>
+          </div>
+          <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fa fa-facebook fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fa fa-twitter fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-instagram fa-2x fa-fw"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
