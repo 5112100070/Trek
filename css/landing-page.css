@@ -66,7 +66,7 @@ header.masthead h1 {
 }
 
 .showcase .showcase-img {
-  min-height: 15rem;
+  min-height: 25rem;
   /* min-height: 100%; */
   /* max-height: 20rem; */
   background-size: cover;
@@ -107,7 +107,16 @@ header.masthead h1 {
   font-weight: 1000;
   border-width: 2px;
   color:#000;
-  background-color:rgba(255, 204, 0, 0.73);
+  background-color:rgb(255, 200, 0);
+  /*  */
+  align-self:center;
+  transition:all .5s ease;
+  color:#41403E;
+  outline:none;
+  box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
+  /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
+  /* box-shadow: 100px 38px 34px -26px hsla(0,0%,0%,.2); */
+  /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
 }
 .btn-video{
   font-size: 1rem;
@@ -125,16 +134,23 @@ header.masthead h1 {
 .btn-home:hover{
   color:#000;
   background-color:#ffcc00;
+  box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
-
+.heading-landing{
+  padding:0.2rem;
+  font-weight: bold;
+  font-size: 2.5rem;
+  background-color:rgba(255, 255, 255, 0.822);
+}
 /*.btn-trek:hover{
   color:black;
   background-color:#ffcc00;
   border-color:#ffcc00;
 }*/
+
 .features-icons {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding: 7rem 0;
+
 }
 
 .features-icons .features-icons-item {
