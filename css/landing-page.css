@@ -125,11 +125,17 @@ header.masthead h1 {
   /* border-width: 2px; */
   color:#000;
   background-color:#fff;
-  border-color:black;
+  /* border-color:black; */
+  align-self:center;
+  transition:all .5s ease;
+  color:#41403E;
+  outline:none;
+  box-shadow: 20px 38px 34px -26px rgba(243, 219, 0, 0.596);
 }
 .btn-video:hover{
   color:black;
-  border-width:2px;
+  /* border-width:2px; */
+  box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
 .btn-home:hover{
   color:#000;
