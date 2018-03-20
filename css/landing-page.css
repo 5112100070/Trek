@@ -1,5 +1,5 @@
 body {
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1,
@@ -8,12 +8,33 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat','Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
 }
 #trek-bg{
   background-color: #ffcc00;
 }
+header.provider {
+  position: relative;
+  background-color: #343a40;
+  background: url("../img/provider.jpg") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+header.provider .overlay {
+  position: absolute;
+  /* background-color: #212529; */
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
 header.masthead {
   position: relative;
   background-color: #343a40;
@@ -74,6 +95,22 @@ header.masthead h1 {
   /* border-radius:50%; */
 }
 
+.overlay-trek{
+  position: relative;
+  margin-top:-12rem;
+}
+.trek-img{
+  width: auto;
+  height: 10rem;
+  border-radius: 50%;
+  /* border:2px solid #ffcc00; */
+  padding: 10px;
+  background:#ffcc00;
+  
+}
+.bg-white-trek{
+  background-color: #fefbf7;
+}
 
 
 @media (min-width: 768px) {
@@ -101,6 +138,16 @@ header.masthead h1 {
   padding:0.5rem;
   background-color:#fff;
   border-color:#000;
+  align-self:center;
+  transition:all .5s ease;
+  color:#41403E;
+  outline:none;
+  box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
+}
+.btn-trek:hover{
+  color:black;
+  /* border-width:2px; */
+  box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
 
 .btn-home{
@@ -148,6 +195,12 @@ header.masthead h1 {
   font-size: 2.5rem;
   background-color:rgba(255, 255, 255, 0.822);
 }
+.provider-landing{
+  padding:0.2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  background-color:rgba(255, 255, 255, 0.822);
+}
 /*.btn-trek:hover{
   color:black;
   background-color:#ffcc00;
@@ -181,13 +234,13 @@ header.masthead h1 {
 }
 
 .desc{
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1rem;
   text-align: left;
 }
 @media(min-width:992px){
   .about{
-    font-weight: 300;
+    font-weight: 400;
     font-size: 1rem;
     padding:0 7rem;
   }
