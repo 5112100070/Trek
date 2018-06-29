@@ -11,7 +11,6 @@ start:
 	@./bin/trek
 
 pre-deploy:
-	sudo mv bin/trek /usr/local/bin/.
 	sudo cp -r files/WEB-INF/pages/. /var/www/trek/pages/.
 	sudo cp -r files/WEB-INF/attr/scss/. /var/www/trek/scss/.
 	sudo cp -r files/WEB-INF/attr/css/. /var/www/trek/css/.

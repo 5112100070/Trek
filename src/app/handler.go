@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,4 +29,14 @@ func PolicyPageHandler(c *gin.Context) {
 
 func RequestPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "permintaan.tmpl", nil)
+}
+
+func DetailProductHandler(c *gin.Context) {
+	provider := c.Param("provider")
+	product := c.Param("product")
+
+	fmt.Println(provider)
+	fmt.Println(product)
+
+	c.HTML(http.StatusOK, "detail-product.tmpl", nil)
 }
