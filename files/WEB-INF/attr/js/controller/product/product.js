@@ -1,32 +1,3 @@
-$(document).ready(function(){
-    // Add scrollspy to <body>
-  $('body').scrollspy({target: ".navbar", offset: 50});   
-
-  // Add smooth scrolling on all links inside the navbar
-  $("#myNavbar a").on('click', function(event) {
-    // Make sure this.hash has a value before overriding default behavior
-    if (this.hash !== "") {
-      // Prevent default anchor click behavior
-      event.preventDefault();
-
-      // Store hash
-      var hash = this.hash;
-
-      // Using jQuery's animate() method to add smooth page scroll
-      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-      $('html, body').animate({
-        scrollTop: $(hash).offset().top
-      }, 800, function(){
-   
-        // Add hash (#) to URL when done scrolling (default click behavior)
-        window.location.hash = hash;
-      });
-    }  // End if
-  });
-
-  loadlistProduct();
-});
-
 function loadlistProduct(){
     promise = getProductForMP();
 
@@ -44,11 +15,26 @@ function loadlistProduct(){
                         `</div>` + 
                         `<h5 style="padding-top:1rem">Bor Listrik</h3>` + 
                         `<p class="desc" style="text-align:center;">`+ response.data[i].price_to_sell +`/Minggu` +
+                        `<a class="btn btn-home btn-sm col-lg-12" onClick="javascript:goToDetailSewa(`+ response.data[i].product_id +`)" >SEWA</a>` +
                     `</div>` +
                 `</div>`;
 
             $("#parent-list-products").after($(template_choice));
         }
     });
-    
+}
+
+function loadProductDetail(){
+    promise = getProductDetail();
+
+    promise.done(function(response){
+        $("#product-name").html(response.data.product_name);
+        $("#product-price-to-rent").html(response.data.price_to_sell + '/minggu');
+        $("#product-price-to-buy").html('Harga beli di toko ' + response.data.price_to_buy);
+    })
+}
+
+function goToDetailSewa(idProduct){
+    var url = 'http://127.0.0.1:4000/provider/trek/' + idProduct;
+    window.location.replace(url);
 }

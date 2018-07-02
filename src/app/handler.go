@@ -1,8 +1,8 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,11 +32,17 @@ func RequestPageHandler(c *gin.Context) {
 }
 
 func DetailProductHandler(c *gin.Context) {
-	provider := c.Param("provider")
-	product := c.Param("product")
+	providerStr := "provider"
+	productStr := "product"
 
-	fmt.Println(provider)
-	fmt.Println(product)
+	providerID := c.Param(providerStr)
+	productID, _ := strconv.ParseInt(c.Param(productStr), 10, 64)
 
-	c.HTML(http.StatusOK, "detail-product.tmpl", nil)
+	renderData := gin.H{
+		"title":      "Detail Product",
+		"providerID": providerID,
+		"productID":  productID,
+	}
+
+	c.HTML(http.StatusOK, "detail-product.tmpl", renderData)
 }
