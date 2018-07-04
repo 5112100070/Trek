@@ -35,6 +35,6 @@ function loadProductDetail(){
 }
 
 function goToDetailSewa(idProduct){
-    var url = 'http://127.0.0.1:4000/provider/trek/' + idProduct;
+    var url = 'http://159.65.230.139:4000/provider/trek/' + idProduct;
     window.location.replace(url);
 }
