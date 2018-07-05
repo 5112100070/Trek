@@ -11,9 +11,9 @@ function loadlistProduct(){
                 `<div class="col-lg-3">` + 
                     `<div class="features-icons-item mx-auto">` + 
                         `<div class="features-icons-icon d-flex">` +
-                            `<img src="img/dimanasaja.png" style="min-width:10rem;"alt="kapan saja dimana saja">` +
+                            `<img src="` + base_url + response.data[i].img_url + `" style="min-width:10rem;">` +
                         `</div>` + 
-                        `<h5 style="padding-top:1rem">Bor Listrik</h3>` + 
+                        `<h5 style="padding-top:1rem">` + response.data[i].product_name + `</h3>` + 
                         `<p class="desc" style="text-align:center;">`+ response.data[i].price_to_sell +`/Minggu` +
                         `<a class="btn btn-home btn-sm col-lg-12" onClick="javascript:goToDetailSewa(`+ response.data[i].product_id +`)" >SEWA</a>` +
                     `</div>` +
@@ -35,6 +35,6 @@ function loadProductDetail(){
 }
 
 function goToDetailSewa(idProduct){
-    var url = 'http://159.65.230.139:4000/provider/trek/' + idProduct;
+    var url = base_url + '/provider/trek/' + idProduct;
     window.location.replace(url);
 }

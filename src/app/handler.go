@@ -1,14 +1,20 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/5112100070/Trek/src/conf"
 	"github.com/gin-gonic/gin"
 )
 
 func IndexPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", nil)
+	fmt.Println(conf.GConfig)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "index.tmpl", renderData)
 }
 
 func RentPageHandler(c *gin.Context) {
@@ -42,6 +48,7 @@ func DetailProductHandler(c *gin.Context) {
 		"title":      "Detail Product",
 		"providerID": providerID,
 		"productID":  productID,
+		"config":     conf.GConfig,
 	}
 
 	c.HTML(http.StatusOK, "detail-product.tmpl", renderData)

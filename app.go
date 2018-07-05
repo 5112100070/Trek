@@ -1,10 +1,40 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/app"
+	"github.com/5112100070/Trek/src/conf"
+	"github.com/5112100070/Trek/src/global"
 )
+
+func init() {
+	fmt.Println("Lihat Disini say")
+	// init error logging
+	global.InitLogError(os.Stderr)
+
+	cfgenv := os.Getenv("TKPENV")
+	network := os.Getenv("NETWORK")
+	if cfgenv == "" {
+		log.Println("[trek] No environment set. Using 'development'.")
+		log.Println("[trek] Use 'export TKPENV=[development|alpha|staging|production]' to change.")
+		cfgenv = "development"
+	}
+
+	fileLocation := fmt.Sprintf("/etc/trek/%s.ini", cfgenv)
+	log.Println(fmt.Sprintf("Using configuration : %s", fileLocation))
+	log.Println(fmt.Sprintf("Running in network : %s", network))
+
+	var ok bool
+	conf.GConfig, ok = conf.ReadConfig(fileLocation)
+	if !ok {
+		log.Fatal("Could not find configuration file")
+	}
+}
 
 func main() {
 	r := initEngine()

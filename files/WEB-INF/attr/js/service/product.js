@@ -1,5 +1,5 @@
 function getProductForMP(){
-    var url = 'http://159.65.230.139:3000/product';
+    var url = product_url + '/product';
 
     var promise = $.ajax({
         url: url,
@@ -17,7 +17,7 @@ function getProductForMP(){
 }
 
 function getProductDetail(){
-    var url = 'http://159.65.230.139:3000/product/detail';
+    var url = product_url + '/product/detail';
 
     var promise = $.ajax({
         url: url,
