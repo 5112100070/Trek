@@ -30,7 +30,6 @@ function loadProductDetail(){
     promise.done(function(response){
         $("#product-name").html(response.data.product_name);
         $("#product-price-to-rent").html(response.data.price_to_sell + '/minggu');
-        $("#product-price-to-buy").html('Harga beli di toko ' + response.data.price_to_buy);
         $("#product-img").attr("src", base_url + response.data.img_url);
     })
 }
