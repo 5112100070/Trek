@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,7 +9,6 @@ import (
 )
 
 func IndexPageHandler(c *gin.Context) {
-	fmt.Println(conf.GConfig)
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
@@ -18,23 +16,38 @@ func IndexPageHandler(c *gin.Context) {
 }
 
 func RentPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "sewa.tmpl", nil)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "sewa.tmpl", renderData)
 }
 
 func ProviderPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "penyedia.tmpl", nil)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "penyedia.tmpl", renderData)
 }
 
 func RequirementPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "syarat.tmpl", nil)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "syarat.tmpl", renderData)
 }
 
 func PolicyPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "kebijakan.tmpl", nil)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "kebijakan.tmpl", renderData)
 }
 
 func RequestPageHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "permintaan.tmpl", nil)
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "permintaan.tmpl", renderData)
 }
 
 func DetailProductHandler(c *gin.Context) {

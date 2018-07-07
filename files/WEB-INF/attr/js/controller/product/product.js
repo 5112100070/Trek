@@ -31,10 +31,11 @@ function loadProductDetail(){
         $("#product-name").html(response.data.product_name);
         $("#product-price-to-rent").html(response.data.price_to_sell + '/minggu');
         $("#product-price-to-buy").html('Harga beli di toko ' + response.data.price_to_buy);
+        $("#product-img").attr("src", base_url + response.data.img_url);
     })
 }
 
 function goToDetailSewa(idProduct){
     var url = base_url + '/provider/trek/' + idProduct;
-    window.location.replace(url);
+    window.location.href = url;
 }

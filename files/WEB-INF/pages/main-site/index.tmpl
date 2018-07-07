@@ -1,57 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <title>Trek.id | Sewa alat berat semudah klik</title>
-    <meta name="description" content="Trek.id membuat sewa alat berat menjadi semudah klik. Butuh excavator, dump truck, atau forklift? Reservasi sekarang di Trek.id atau hubungi 0811-136-TREK.">
-    <meta name="keywords" content="sewa alat konstruksi,sewa alat berat,sewa alat,rental alat,alat berat,alat konstruksi,equipment rental Indonesia,sewa dozer,sewa excavator,sewa forklift,sewa dump truck,sewa wheel loader,sewa heavy equipment,forklift Surabaya,dump truck bandung">
-    <meta name="robots" content="index, nofollow">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/x-icon" href="etc/favicon.ico" />
-
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom fonts for this template -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- Custom styles for this template -->
-    <link href="css/landing-page.min.css" rel="stylesheet">
-    
-  </head>
+  {{ template "header.tmpl" .}}
 
   <body data-spy="scroll" data-target=".navbar" data-offset="1">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="myNavbar">
-      
-        <a href="index">
-            <img src="img/logo-trek.png" width="100" height="35" class="d-inline-block align-top" alt="" style="margin-right:20px;">
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item" style="margin:0 10px 0;">
-              <a class="nav-link js-scroll-trigger" href="#tentang-kami"><b>TENTANG KAMI</b> <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item" style="margin:0 10px 0;">
-              <a class="nav-link js-scroll-trigger" href="#keunggulan"><b>KEUNGGULAN</b></a>
-            </li>
-          
-            <li class="nav-item " style="margin:0 10px 0;">
-              <a class="nav-link js-scroll-trigger" href="#penyedia-alat"><b>PENYEDIA ALAT</b></a>
-            </li>
-          </ul>
-          <a class="btn btn-trek" style="margin:0 10px 0; color: rgba(14, 14, 14, 0.68);"href="tel:+628111368735"><i class="fa fa-phone"></i> 0811-136-TREK (8735)</a>
-        </div>
-      </nav>
+    {{ template "main-navigation.tmpl" .}}    
 
     <!-- Masthead -->
     <header class="masthead text-black">
@@ -71,7 +25,7 @@
       </div>
     </header>
 
-    <section class="features-icons bg-white text-center" id="keunggulan">
+    <section class="features-icons bg-white text-center">
         <div class="container">
           <div class="row" >
             <div id="parent-list-products"></div>

@@ -1,4 +1,8 @@
 <script>
     var base_url = {{.config.BaseUrlConfig.BaseDNS}};
     var product_url = {{.config.BaseUrlConfig.ProductDNS}};
+
+    function GoToIndex(path){
+        window.location.href = base_url + '/' + path;
+    } 
 </script>
