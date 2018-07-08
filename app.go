@@ -49,6 +49,8 @@ func main() {
 
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
 
+	r.POST("/send-request-item", app.SendRequestItem)
+
 	r.Run(":4000") // listen and serve on 0.0.0.0:8080
 }
 

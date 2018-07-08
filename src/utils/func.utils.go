@@ -13,3 +13,16 @@ func RenderingScript(g gin.H, datas ...interface{}) {
 	}
 	g["script"] = result
 }
+
+func BuildMessageForRequest(productID int64, productName string, typeDuration string, duration int64, total int64, startDate string, email string) string {
+	var result string
+	result = fmt.Sprintf("Product ID: %d \n", productID)
+	result = fmt.Sprintf("%sProduct NAME: %s \n", result, productName)
+	result = fmt.Sprintf("%sTipe Durasi: %s \n", result, typeDuration)
+	result = fmt.Sprintf("%sDurasi: %d \n", result, duration)
+	result = fmt.Sprintf("%sTotal: %d \n", result, total)
+	result = fmt.Sprintf("%sTanggal Mulai: %s \n", result, startDate)
+	result = fmt.Sprintf("%sEmail: %s \n", result, email)
+
+	return result
+}

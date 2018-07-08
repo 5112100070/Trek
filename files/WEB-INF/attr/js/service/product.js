@@ -31,3 +31,24 @@ function getProductDetail(){
 
     return promise;
 }
+
+function sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, email){
+    var url = base_url + '/send-request-item';
+    var data = {
+        product_id:productID,
+        product_name:productName,
+        type_duration: typeDuration,
+        duration: duration,
+        total: total,
+        start_date: startDate,
+        email: email
+    };
+
+    var promise = $.ajax({
+        url: url,
+        type: 'POST',
+        data: data
+    });
+
+    return promise;
+}

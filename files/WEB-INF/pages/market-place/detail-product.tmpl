@@ -28,13 +28,14 @@
       <div class="row" style="margin: 0 10%;"> <!-- row -->
         <div class="col-lg-12 text-center">
           <h4 id="product-name"></h4>
+          <input id="product-id" style="display: none;">
         </div>
         <div class="col-lg-12 text-center">
               <div id="product-price-to-rent">Harga Sewa: </div>
         </div>
         <div class="col-lg-12 form-group">
-          <label for="duration_type">Tipe Duration</label>
-          <select id="duration_type" class="form-control">
+          <label for="type-duration">Tipe Duration</label>
+          <select id="type-duration" class="form-control">
             <option>Hari</option>
             <option>Minggu</option>
             <option>Bulan</option>
@@ -42,22 +43,22 @@
         </div>
         <div class="col-lg-12 form-group">
           <label for="duration">Duration</label>
-          <input type="number" class="form-control" id="duration">
+          <input type="number" class="form-control" id="duration" value="1">
         </div>
         <div class="col-lg-12 form-group">
           <label for="total">Jumlah yang dibutuhkan</label>
-          <input type="number" class="form-control" id="total">
+          <input type="number" class="form-control" id="total" value="1">
         </div>
         <div class="col-lg-12 form-group">
-          <label for="date_start">Tanggal Mulai Sewa</label>
-          <input class="form-control input-append date form_datetime" size="16" type="text" value="" readonly>
+          <label for="start-date">Tanggal Mulai Sewa</label>
+          <input id="start-date" class="form-control input-append date form_datetime" size="16" type="text" value="" readonly>
         </div>
         <div class="col-lg-12 form-group">
           <label for="user-email">Email</label>
           <input type="email" class="form-control" id="user-email">
         </div>
         <div class="col-lg-12" style="margin-top: 2%;">
-          <a class="col-lg-12 btn btn-home">SEWA SEKARANG</a>
+          <a class="col-lg-12 btn btn-home" onClick="javascript:SendRequestQuot()">SEWA SEKARANG</a>
         </div>
       </div> <!-- end of row -->
 

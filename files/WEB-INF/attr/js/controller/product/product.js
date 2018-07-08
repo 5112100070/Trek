@@ -29,6 +29,7 @@ function loadProductDetail(){
 
     promise.done(function(response){
         $("#product-name").html(response.data.product_name);
+        $("#product-id").val(response.data.product_id);
         $("#product-price-to-rent").html(response.data.price_to_sell + '/minggu');
         $("#product-img").attr("src", base_url + response.data.img_url);
     })
