@@ -57,6 +57,13 @@ func ThankYouPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "thank-you.tmpl", renderData)
 }
 
+func AboutUsPageHandler(c *gin.Context) {
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "about-us.tmpl", renderData)
+}
+
 func DetailProductHandler(c *gin.Context) {
 	providerStr := "provider"
 	productStr := "product"
