@@ -29,9 +29,12 @@ function loadProductDetail(){
 
     promise.done(function(response){
         $("#product-name").html(response.data.product_name);
-        $("#product-id").val(response.data.product_id);
-        $("#product-price-to-rent").html(response.data.price_to_sell + '/minggu');
+        $("#product-id").val(response.data.product_id);        
         $("#product-img").attr("src", base_url + response.data.img_url);
+
+        $("#product-price-to-rent-daily").html(response.data.price_rent_daily + '/hari');
+        $("#product-price-to-rent-weekly").html(response.data.price_rent_weekly + '/minggu');
+        $("#product-price-to-rent-monthly").html(response.data.price_rent_monthly + '/bulan');
     })
 }
 

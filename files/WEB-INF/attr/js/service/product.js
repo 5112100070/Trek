@@ -32,7 +32,7 @@ function getProductDetail(){
     return promise;
 }
 
-function sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, email){
+function sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, email, projectAddress){
     var url = base_url + '/send-request-item';
     var data = {
         product_id:productID,
@@ -41,7 +41,8 @@ function sendRequestProduct(productID, productName, typeDuration, duration, tota
         duration: duration,
         total: total,
         start_date: startDate,
-        email: email
+        email: email,
+        project_address: projectAddress
     };
 
     var promise = $.ajax({

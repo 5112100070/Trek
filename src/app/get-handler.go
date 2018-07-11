@@ -50,6 +50,13 @@ func RequestPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "permintaan.tmpl", renderData)
 }
 
+func ThankYouPageHandler(c *gin.Context) {
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "thank-you.tmpl", renderData)
+}
+
 func DetailProductHandler(c *gin.Context) {
 	providerStr := "provider"
 	productStr := "product"

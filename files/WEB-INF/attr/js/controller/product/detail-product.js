@@ -4,10 +4,8 @@ $(document).ready(function(){
     gtag('js', new Date());
     gtag('config', 'UA-112381262-1');
     
-    $(".form_datetime").datetimepicker({
-        format: "dd MM yyyy",
-        viewMode: 'months',
-        autoclose: true
+    $("#start-date").datetimepicker({
+        format: 'dd/mm/yyyy'
     });
 
     loadProductDetail()
@@ -20,11 +18,20 @@ function SendRequestQuot(){
     var duration = $("#duration").val();
     var total = $("#total").val();
     var startDate = $("#start-date").val();
-    var userEmail = $("#user-email").val()
+    var userEmail = $("#user-email").val();
+    var projectAddress = $("#project-address").val();
 
-    promise = sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, userEmail)
+    promise = sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, userEmail, projectAddress);
 
-    promise.done(function(){
-        console.log("sukses");
+    promise.done(function(response){
+        window.location.href = base_url + '/thank-you'
+    }).fail(function(response){
+        if(response.status==400){
+            $("#request-alert-div").css("display", "block");
+            $("#request-alert").html("mohon isi seluruh data");
+        } else {
+            $("#request-alert-div").css("display", "block");
+            $("#request-alert").html("silahkan mencoba sekali lagi");
+        }
     });
 }

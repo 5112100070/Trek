@@ -2,7 +2,15 @@
     var base_url = {{.config.BaseUrlConfig.BaseDNS}};
     var product_url = {{.config.BaseUrlConfig.ProductDNS}};
 
+    function GoToHome(){
+        GoToIndex('');
+    }
+
     function GoToIndex(path){
-        window.location.href = base_url + '/' + path;
+        if(path==''){
+            window.location.href = base_url;
+        } else{
+            window.location.href = base_url + '/' + path;
+        }
     } 
 </script>

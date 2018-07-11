@@ -46,6 +46,7 @@ func main() {
 	r.GET("/syarat", app.RequirementPageHandler)
 	r.GET("/kebijakan", app.PolicyPageHandler)
 	r.GET("/permintaan", app.RequestPageHandler)
+	r.GET("/thank-you", app.ThankYouPageHandler)
 
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
 

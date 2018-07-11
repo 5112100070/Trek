@@ -13,7 +13,6 @@ import (
 )
 
 func init() {
-	fmt.Println("Lihat Disini say")
 	// init error logging
 	global.InitLogError(os.Stderr)
 
@@ -51,7 +50,7 @@ func main() {
 
 	r.POST("/send-request-item", app.SendRequestItem)
 
-	r.Run(":4000") // listen and serve on 0.0.0.0:8080
+	r.Run(":4000")
 }
 
 func initEngine() *gin.Engine {

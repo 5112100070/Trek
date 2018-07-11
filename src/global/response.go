@@ -4,6 +4,7 @@ import "github.com/gin-gonic/gin"
 
 func OKResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
+		"status_code":    200,
 		"server_message": "Success",
 		"data":           val,
 	}
@@ -12,6 +13,7 @@ func OKResponse(c *gin.Context, val interface{}) {
 
 func CreatedResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
+		"status_code":    201,
 		"server_message": "Success",
 		"data":           val,
 	}
@@ -20,6 +22,7 @@ func CreatedResponse(c *gin.Context, val interface{}) {
 
 func BadRequestResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
+		"status_code":    400,
 		"server_message": "Bad Request",
 		"data":           val,
 	}
@@ -28,6 +31,7 @@ func BadRequestResponse(c *gin.Context, val interface{}) {
 
 func InternalServerErrorResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
+		"status_code":    500,
 		"server_message": "Internal Server Error",
 		"data":           val,
 	}
