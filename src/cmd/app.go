@@ -13,7 +13,6 @@ import (
 )
 
 func init() {
-	fmt.Println("Lihat Disini say")
 	// init error logging
 	global.InitLogError(os.Stderr)
 
@@ -47,6 +46,7 @@ func main() {
 	r.GET("/kebijakan", app.PolicyPageHandler)
 	r.GET("/permintaan", app.RequestPageHandler)
 	r.GET("/thank-you", app.ThankYouPageHandler)
+	r.GET("/about-us", app.AboutUsPageHandler)
 
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
 

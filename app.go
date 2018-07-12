@@ -45,13 +45,14 @@ func main() {
 	r.GET("/syarat", app.RequirementPageHandler)
 	r.GET("/kebijakan", app.PolicyPageHandler)
 	r.GET("/permintaan", app.RequestPageHandler)
+	r.GET("/thank-you", app.ThankYouPageHandler)
 	r.GET("/about-us", app.AboutUsPageHandler)
 
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
 
 	r.POST("/send-request-item", app.SendRequestItem)
 
-	r.Run(":4000")
+	r.Run(":4000") // listen and serve on 0.0.0.0:8080
 }
 
 func initEngine() *gin.Engine {

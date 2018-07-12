@@ -106,8 +106,15 @@ header.masthead h1 {
   /* border:2px solid #ffcc00; */
   padding: 10px;
   background:#ffcc00;
-  
 }
+
+.trek-text-decoration{
+  cursor:pointer;
+  color:#ffcc00; 
+  text-decoration: underline; 
+  text-decoration-color: #ffcc00;
+}
+
 .bg-white-trek{
   background-color: #fefbf7;
 }
@@ -130,6 +137,13 @@ header.masthead h1 {
   }
   
 }
+
+.btn-trek-trans{
+  margin:0 10px 0; 
+  color: rgba(14, 14, 14, 0.68); 
+  padding: 10px 20px;
+}
+
 .btn-trek{
   font-weight: 1000;
   border-radius: 2px;
