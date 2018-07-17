@@ -37,16 +37,17 @@
               </div>
         </div>
         <div class="col-lg-12 form-group">
-          <label for="type-duration">Tipe Durasi</label>
-          <select id="type-duration" class="form-control">
-            <option value="hari">Hari</option>
-            <option value="minggu">Minggu</option>
-            <option value="bulan">Bulan</option>
-          </select>
-        </div>
-        <div class="col-lg-12 form-group">
-          <label for="duration">Satuan Durasi</label>
-          <input type="number" class="form-control" id="duration" value="1" min="0" max="100">
+          <label classs="col-lg-12">Durasi</label>
+          <div class="col-lg-12">
+            <div class="row">
+              <input type="number" class="form-control col-lg-6" id="duration" value="1" min="0" max="100">
+              <select id="type-duration" class="form-control col-lg-6">
+                <option value="hari">Hari</option>
+                <option value="minggu">Minggu</option>
+                <option value="bulan">Bulan</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="col-lg-12 form-group">
           <label for="total">Jumlah yang dibutuhkan</label>
