@@ -48,6 +48,7 @@ func main() {
 	r.GET("/thank-you", app.ThankYouPageHandler)
 	r.GET("/tentang-kami", app.AboutUsPageHandler)
 
+	r.GET("/alat", app.MarketPlacePageHandler)
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
 
 	r.POST("/send-request-item", app.SendRequestItem)

@@ -1,5 +1,5 @@
-function loadlistProduct(){
-    promise = getProductForMP();
+function loadlistProduct(totalRequest = 8){
+    promise = getProductForMP(totalRequest);
 
     promise.done(function(response){
         if(response.data.length == 0){

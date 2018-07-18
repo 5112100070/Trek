@@ -1,4 +1,4 @@
-function getProductForMP(){
+function getProductForMP(totalRequested = 8){
     var url = product_url + '/product';
 
     var promise = $.ajax({
@@ -7,7 +7,7 @@ function getProductForMP(){
         type: 'GET',
         data: {
             start:0,
-            rows:8,
+            rows:totalRequested,
             sort:'ASC'
         },
         headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
