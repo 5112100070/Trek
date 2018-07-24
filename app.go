@@ -47,9 +47,12 @@ func main() {
 	r.GET("/permintaan", app.RequestPageHandler)
 	r.GET("/thank-you", app.ThankYouPageHandler)
 	r.GET("/tentang-kami", app.AboutUsPageHandler)
+	r.GET("/login", app.LoginPageHandler)
 
 	r.GET("/alat", app.MarketPlacePageHandler)
 	r.GET("/provider/:provider/:product", app.DetailProductHandler)
+
+	r.GET("/trek/:product", app.DetailProductHandler)
 
 	r.POST("/send-request-item", app.SendRequestItem)
 

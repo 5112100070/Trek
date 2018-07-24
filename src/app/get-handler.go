@@ -2,7 +2,6 @@ package app
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/5112100070/Trek/src/conf"
 	"github.com/gin-gonic/gin"
@@ -64,6 +63,13 @@ func AboutUsPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "about-us.tmpl", renderData)
 }
 
+func LoginPageHandler(c *gin.Context) {
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "login.tmpl", renderData)
+}
+
 func MarketPlacePageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
@@ -72,17 +78,14 @@ func MarketPlacePageHandler(c *gin.Context) {
 }
 
 func DetailProductHandler(c *gin.Context) {
-	providerStr := "provider"
 	productStr := "product"
 
-	providerID := c.Param(providerStr)
-	productID, _ := strconv.ParseInt(c.Param(productStr), 10, 64)
+	productName := c.Param(productStr)
 
 	renderData := gin.H{
-		"title":      "Detail Product",
-		"providerID": providerID,
-		"productID":  productID,
-		"config":     conf.GConfig,
+		"title":       "Detail Product",
+		"productName": productName,
+		"config":      conf.GConfig,
 	}
 
 	c.HTML(http.StatusOK, "detail-product.tmpl", renderData)
