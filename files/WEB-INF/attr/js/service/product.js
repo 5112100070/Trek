@@ -24,7 +24,7 @@ function getProductDetail(){
         contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
-            product_name:productName
+            path:productPath
         },
         headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
     });

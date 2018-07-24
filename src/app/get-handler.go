@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/5112100070/Trek/src/conf"
@@ -82,9 +83,11 @@ func DetailProductHandler(c *gin.Context) {
 
 	productName := c.Param(productStr)
 
+	productPath := fmt.Sprintf("/trek/%v", productName)
+
 	renderData := gin.H{
 		"title":       "Detail Product",
-		"productName": productName,
+		"productPath": productPath,
 		"config":      conf.GConfig,
 	}
 

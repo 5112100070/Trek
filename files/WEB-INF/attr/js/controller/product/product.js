@@ -20,7 +20,7 @@ function loadlistProduct(totalRequest = 8){
                         `</div>` + 
                         `<h5 style="padding-top:1rem">` + response.data[i].product_name + `</h3>` + 
                         `<p class="desc" style="text-align:center;">`+ priceInWeek +
-                        `<a class="btn btn-home btn-sm col-lg-12" onClick="javascript:goToDetailSewa('`+ response.data[i].product_name +`')" >SEWA</a>` +
+                        `<a class="btn btn-home btn-sm col-lg-12" onClick="javascript:goToDetailSewa('`+ response.data[i].path +`')" >SEWA</a>` +
                     `</div>` +
                 `</div>`;
 
@@ -58,7 +58,7 @@ function loadProductDetail(){
     })
 }
 
-function goToDetailSewa(productName){
-    var url = base_url + '/trek/' + productName;
+function goToDetailSewa(nextPath){
+    var url = base_url + nextPath;
     window.location.href = url;
 }
