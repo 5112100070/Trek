@@ -83,7 +83,7 @@ func DetailProductHandler(c *gin.Context) {
 
 	productName := c.Param(productStr)
 
-	productPath := fmt.Sprintf("/trek/%v", productName)
+	productPath := fmt.Sprintf("/alat/%v", productName)
 
 	renderData := gin.H{
 		"title":       "Detail Product",
