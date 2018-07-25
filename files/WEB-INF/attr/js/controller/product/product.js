@@ -7,19 +7,19 @@ function loadlistProduct(totalRequest = 8){
         }
 
         for(var i=response.data.length-1;i>=0;i--){
-            var priceInWeek = "NEGO"
+            var priceInWeek = "-"
             if(response.data[i].price_to_sell!=""){
                 priceInWeek = response.data[i].price_to_sell +`/Minggu`;
             } 
 
             var template_choice = ``+
-                `<div class="col-lg-3">` + 
+                `<div class="col-lg-3" style="margin-bottom:2%;">` + 
                     `<div class="features-icons-item mx-auto">` + 
                         `<div class="features-icons-icon d-flex">` +
                             `<img src="` + base_url + response.data[i].img_url + `" style="min-width:10rem;">` +
                         `</div>` + 
                         `<h5 style="padding-top:1rem">` + response.data[i].product_name + `</h3>` + 
-                        `<p class="desc" style="text-align:center;">`+ priceInWeek +
+                        `<!-- <p class="desc" style="text-align:center;">`+ priceInWeek + `-->` +
                         `<a class="btn btn-home btn-sm col-lg-12" onClick="javascript:goToDetailSewa('`+ response.data[i].path +`')" >SEWA</a>` +
                     `</div>` +
                 `</div>`;
@@ -53,6 +53,10 @@ function loadProductDetail(){
             $("#product-price-to-rent-monthly").html(response.data.price_rent_monthly + '/bulan');    
         } else{
             $("#product-price-to-rent-monthly").css("display", "none");
+        }
+
+        if(response.data.price_rent_daily=="" && response.data.price_rent_weekly=="" && response.data.price_rent_monthly==""){
+            $("#product-detail").css("display", "none");
         }
 
     })
