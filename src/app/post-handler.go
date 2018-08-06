@@ -1,11 +1,17 @@
 package app
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/5112100070/Trek/src/utils"
 )
@@ -53,4 +59,67 @@ func SendRequestItem(c *gin.Context) {
 	mail.SendMail()
 
 	global.OKResponse(c, nil)
+}
+
+func ProcessMakeLogin(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("secret")
+
+	baseUrl := conf.GConfig.BaseUrlConfig.ProductDNS
+	path := "/make-login"
+	data := url.Values{}
+	data.Set("username", username)
+	data.Set("secret", password)
+
+	u, _ := url.ParseRequestURI(baseUrl)
+	u.Path = path
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", urlStr, strings.NewReader(data.Encode()))
+	if err != nil {
+		global.Error.Println(err)
+		return
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		global.Error.Println(errGetResp)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		global.Error.Println(err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	var resultResp struct {
+		ServerMessage string                 `json:"server_message"`
+		Data          map[string]interface{} `json:"data,omitempty"`
+	}
+
+	errUnMarshal := json.Unmarshal(body, &resultResp)
+	if errUnMarshal != nil {
+		global.Error.Println(errUnMarshal)
+		global.ForbiddenResponse(c, nil)
+		return
+	} else if !resultResp.Data["is_success"].(bool) {
+		global.ForbiddenResponse(c, nil)
+		return
+	} else {
+		cookie := http.Cookie{
+			Name:  global.UserCookie[global.GetEnv()],
+			Value: resultResp.Data["nekot"].(string),
+		}
+		fmt.Println(cookie)
+		http.SetCookie(c.Writer, &cookie)
+
+		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS, http.StatusSeeOther)
+		return
+	}
 }
