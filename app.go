@@ -33,6 +33,9 @@ func init() {
 	if !ok {
 		log.Fatal("Could not find configuration file")
 	}
+
+	db := conf.InitRedis(conf.GConfig)
+	global.InitRepoBundle(db)
 }
 
 func main() {
@@ -55,6 +58,9 @@ func main() {
 
 	r.GET("/login", app.LoginPageHandler)
 	r.POST("/login", app.ProcessMakeLogin)
+
+	r.GET("/admin", app.AdminDashboardPage)
+	r.GET("/admin/index", app.AdminDashboardPage)
 
 	r.Run(":4000") // listen and serve on 0.0.0.0:8080
 }

@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -90,6 +89,7 @@ func ProcessMakeLogin(c *gin.Context) {
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}
+
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -116,7 +116,6 @@ func ProcessMakeLogin(c *gin.Context) {
 			Name:  global.UserCookie[global.GetEnv()],
 			Value: resultResp.Data["nekot"].(string),
 		}
-		fmt.Println(cookie)
 		http.SetCookie(c.Writer, &cookie)
 
 		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS, http.StatusSeeOther)

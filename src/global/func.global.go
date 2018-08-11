@@ -17,3 +17,7 @@ func GetEnv() string {
 	}
 	return cfgenv
 }
+
+func GetServiceSession() SessionService {
+	return Services.Session
+}
