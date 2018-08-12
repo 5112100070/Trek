@@ -120,3 +120,55 @@ func AdminDashboardPage(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "admin-index.tmpl", renderData)
 }
+
+func AdminProductList(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "admin-product-list.tmpl", renderData)
+}
+
+func AdminProductEditPage(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "admin-product-edit.tmpl", renderData)
+}

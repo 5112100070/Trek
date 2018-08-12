@@ -1,9 +1,4 @@
 $(document).ready(function(){
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-112381262-1');
-    
     $("#datetimepicker1").datetimepicker({
         format: 'dd-mm-yyyy',
 			icons: {
@@ -23,23 +18,27 @@ $(document).ready(function(){
 
         $(this).val(date);
     });
-    loadProductDetail()
+
+    var url = new URL(window.location.href);
+    loadProductDetailByID(url.searchParams.get("product-id"));
 });
 
-function SendRequestQuot(){
-    var productName = $("#product-name").html();
-    var productID = $("#product-id").val();
-    var typeDuration = $("#type-duration").val();
-    var duration = $("#duration").val();
-    var total = $("#total").val();
-    var startDate = $("#start-date").val();
-    var userEmail = $("#user-email").val();
-    var projectAddress = $("#project-address").val();
+function ProcessUpdate(){
+    var url = new URL(window.location.href);
 
-    promise = sendRequestProduct(productID, productName, typeDuration, duration, total, startDate, userEmail, projectAddress);
+    var productID = url.searchParams.get("product-id");
+    var productName = $("#product-name").val();
+    var typeProduct = $("#type").val();
+    var status = $("#status").val();
+    var priceRentDaily = $("#price-rent-daily").val();
+    var priceRentWeekly = $("#price-rent-weekly").val();
+    var priceRentMonthly = $("#price-rent-monthly").val();
+    var path = $("#path").val();
+
+    promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
 
     promise.done(function(response){
-        window.location.href = base_url + '/thank-you'
+        location.reload();
     }).fail(function(response){
         if(response.status==400){
             $("#request-alert-div").css("display", "block");

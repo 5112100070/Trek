@@ -60,6 +60,9 @@ func main() {
 	r.POST("/login", app.ProcessMakeLogin)
 
 	r.GET("/admin", app.AdminDashboardPage)
+	r.GET("/admin/product", app.AdminProductList)
+	r.GET("/admin/product/edit", app.AdminProductEditPage)
+
 	r.GET("/admin/index", app.AdminDashboardPage)
 
 	r.Run(":4000") // listen and serve on 0.0.0.0:8080
