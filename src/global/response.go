@@ -20,6 +20,22 @@ func CreatedResponse(c *gin.Context, val interface{}) {
 	sendResponse(c, 201, header)
 }
 
+func UnAuthorizeResponse(c *gin.Context, val interface{}) {
+	header := gin.H{
+		"server_message": "Un Authorize Request",
+		"data":           val,
+	}
+	sendResponse(c, 401, header)
+}
+
+func ForbiddenResponse(c *gin.Context, val interface{}) {
+	header := gin.H{
+		"server_message": "Forbidden",
+		"data":           val,
+	}
+	sendResponse(c, 403, header)
+}
+
 func BadRequestResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
 		"status_code":    400,
