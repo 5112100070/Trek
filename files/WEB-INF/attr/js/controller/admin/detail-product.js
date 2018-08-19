@@ -1,32 +1,16 @@
-$(document).ready(function(){
-    $("#datetimepicker1").datetimepicker({
-        format: 'dd-mm-yyyy',
-			icons: {
-				date: "fa fa-calendar",
-				up: "fa fa-arrow-up",
-				down: "fa fa-arrow-down"
-			}
-		}).find('#start-date').on("blur",function () {
-        // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
-        // update the format if it's yyyy-mm-dd
-        var date = parseDate($(this).val());
-
-        //if (! isValidDate(date)) {
-            //create date based on momentjs (we have that)
-            date = moment(date).format('YYYY-MM-DD');
-        //}
-
-        $(this).val(date);
-    });
-
-    var url = new URL(window.location.href);
-    loadProductDetailByID(url.searchParams.get("product-id"));
-});
+function ProcessSaveNew(){
+    ProcessRequestProductSave()
+}
 
 function ProcessUpdate(){
-    var url = new URL(window.location.href);
+    ProcessRequestProductSave(2)
+}
 
-    var productID = url.searchParams.get("product-id");
+/*
+    1 = save new
+    2 = update
+*/
+function ProcessRequestProductSave(command = 1){
     var productName = $("#product-name").val();
     var typeProduct = $("#type").val();
     var status = $("#status").val();
@@ -35,8 +19,15 @@ function ProcessUpdate(){
     var priceRentMonthly = $("#price-rent-monthly").val();
     var path = $("#path").val();
 
-    promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
-
+    if(command == 1){
+        promise = sendNewProduct(productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+    }
+    if(command == 2){
+        var url = new URL(window.location.href);
+        var productID = url.searchParams.get("product-id");
+        promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+    }
+    
     promise.done(function(response){
         location.reload();
     }).fail(function(response){

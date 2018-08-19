@@ -13,3 +13,16 @@ function makeLogin(username,secret){
 
     return promise;
 }
+
+function makeLogout(){
+    var url = base_url + '/logout';
+    
+    var promise = $.ajax({
+        url: url,
+        type: 'POST',
+        withCredentials: true,
+        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+    });
+
+    return promise;
+}

@@ -42,3 +42,13 @@ func (repo sessionRepo) SetUser(cookie string, user UserSession) error {
 
 	return nil
 }
+
+func (repo sessionRepo) DelUser(cookie string) error {
+	key := fmt.Sprintf("%v%v", redis_key_cookie, cookie)
+
+	err := repo.redis.DEL(key)
+	if err != nil {
+		return err
+	}
+	return nil
+}

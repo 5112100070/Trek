@@ -1,4 +1,4 @@
-function processLogin(){
+function ProcessLogin(){
     username = $("#username").val();
     secret = $("#secret").val();
 
@@ -16,5 +16,15 @@ function processLogin(){
             $("#request-alert-div").css("display", "block");
             $("#request-alert").html("Username atau Password salah");
         }
+    });
+}
+
+function ProcessLogout(){
+    promise = makeLogout();
+
+    promise.done(function(response){
+        window.location.href = base_url;
+    }).fail(function(response){
+        location.reload();
     });
 }

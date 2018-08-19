@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -109,7 +110,7 @@ func ProcessMakeLogin(c *gin.Context) {
 		global.ForbiddenResponse(c, nil)
 		return
 	} else if !resultResp.Data["is_success"].(bool) {
-		global.ForbiddenResponse(c, nil)
+		global.InternalServerErrorResponse(c, nil)
 		return
 	} else {
 		cookie := http.Cookie{
@@ -121,4 +122,29 @@ func ProcessMakeLogin(c *gin.Context) {
 		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS, http.StatusSeeOther)
 		return
 	}
+}
+
+func ProcessMakeLogout(c *gin.Context) {
+	token, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		global.OKResponse(c, nil)
+		return
+	}
+
+	service := global.GetServiceSession()
+	err := service.DelUser(token)
+	if err != nil {
+		global.Error.Println(err)
+		global.OKResponse(c, nil)
+		return
+	}
+
+	newCookie := http.Cookie{
+		Name:    global.UserCookie[global.GetEnv()],
+		Value:   token,
+		Expires: time.Now().Add(time.Duration(0)),
+	}
+
+	http.SetCookie(c.Writer, &newCookie)
 }

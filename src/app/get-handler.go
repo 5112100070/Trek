@@ -13,6 +13,8 @@ func IndexPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "index.tmpl", renderData)
 }
 
@@ -20,6 +22,8 @@ func RentPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "sewa.tmpl", renderData)
 }
 
@@ -27,6 +31,8 @@ func ProviderPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "penyedia.tmpl", renderData)
 }
 
@@ -34,6 +40,8 @@ func RequirementPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "syarat.tmpl", renderData)
 }
 
@@ -41,6 +49,8 @@ func PolicyPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "kebijakan.tmpl", renderData)
 }
 
@@ -48,6 +58,8 @@ func RequestPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "permintaan.tmpl", renderData)
 }
 
@@ -55,6 +67,8 @@ func ThankYouPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "thank-you.tmpl", renderData)
 }
 
@@ -62,6 +76,8 @@ func AboutUsPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "about-us.tmpl", renderData)
 }
 
@@ -69,6 +85,8 @@ func LoginPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "login.tmpl", renderData)
 }
 
@@ -76,6 +94,8 @@ func MarketPlacePageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
+
 	c.HTML(http.StatusOK, "market-place.tmpl", renderData)
 }
 
@@ -91,6 +111,7 @@ func DetailProductHandler(c *gin.Context) {
 		"productPath": productPath,
 		"config":      conf.GConfig,
 	}
+	global.GetDefaultUserAttribute(c, renderData)
 
 	c.HTML(http.StatusOK, "detail-product.tmpl", renderData)
 }
@@ -145,6 +166,32 @@ func AdminProductList(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "admin-product-list.tmpl", renderData)
+}
+
+func AdminProductNew(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "admin-product-new.tmpl", renderData)
 }
 
 func AdminProductEditPage(c *gin.Context) {

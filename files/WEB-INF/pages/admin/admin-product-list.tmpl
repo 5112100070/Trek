@@ -5,10 +5,15 @@
 
   <body data-spy="scroll" data-target=".navbar" data-offset="1">
 
-    {{ template "main-navigation.tmpl" .}}    
+    {{ template "admin-navigation.tmpl" .}}  
 
-    <section class="features-icons bg-white text-center">
+      <section class="features-icons bg-white text-center">
         <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <a class="btn btn-trek col-lg-5" style="color: rgba(14, 14, 14, 0.68);" onclick="javascript:GoToIndex('admin/product/new')">Tambah Jenis Produk</a>
+            </div>
+          </div>
           <div class="row" >
               <div class="col-lg-12">
                 <h2>List Produk yang ditampilkan</h2>

@@ -58,9 +58,11 @@ func main() {
 
 	r.GET("/login", app.LoginPageHandler)
 	r.POST("/login", app.ProcessMakeLogin)
+	r.POST("/logout", app.ProcessMakeLogout)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
+	r.GET("/admin/product/new", app.AdminProductNew)
 	r.GET("/admin/product/edit", app.AdminProductEditPage)
 
 	r.GET("/admin/index", app.AdminDashboardPage)
