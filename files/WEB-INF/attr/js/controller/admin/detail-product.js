@@ -20,7 +20,7 @@ function ProcessRequestProductSave(command = 1){
     var path = $("#path").val();
 
     if(command == 1){
-        promise = sendNewProduct(productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+        promise = sendNewProduct(productName, typeProduct, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
     }
     if(command == 2){
         var url = new URL(window.location.href);
@@ -38,6 +38,21 @@ function ProcessRequestProductSave(command = 1){
             $("#request-alert-div").css("display", "block");
             $("#request-alert").html("silahkan mencoba sekali lagi");
         }
+    });
+}
+
+function ProcessUploadImg(){
+    var url = new URL(window.location.href);
+    
+    var productID = url.searchParams.get("product-id");
+    var blobFile = $("#product-img-new")[0].files[0];
+    
+    promise = sendUpdateImgProduct(productID, blobFile);
+    promise.done(function(response){
+        console.log("selesai");
+    })
+    .fail(function(response){
+        console.log("gagal");
     });
 }
 

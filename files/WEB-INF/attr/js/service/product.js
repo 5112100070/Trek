@@ -70,7 +70,15 @@ function sendRequestProduct(productID, productName, typeDuration, duration, tota
     return promise;
 }
 
+function sendNewProduct(productName, type, priceRentDaily, priceRentWeekly, priceRentMonthly, path){
+    return sendProduct(0, productName, type, 1, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+}
+
 function sendUpdateProduct(productID, productName, type, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path){
+    return sendProduct(productID, productName, type, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+}
+
+function sendProduct(productID, productName, type, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path){
     var url = product_url + '/product/save';
     var data = {
         product_id:productID,
@@ -90,4 +98,22 @@ function sendUpdateProduct(productID, productName, type, status, priceRentDaily,
     });
 
     return promise;
+}
+
+function sendUpdateImgProduct(productID, img){
+    var url = product_url + '/product/upload-image';
+    
+    var data = new FormData();
+    data.append("product_id", productID)
+    data.append("product_img", img)
+
+    var promise = $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+        contentType: false,
+        processData: false,
+     });
+
+     return promise;
 }
