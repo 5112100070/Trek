@@ -1,9 +1,9 @@
 function ProcessSaveNew(){
-    ProcessRequestProductSave()
+    ProcessRequestProductSave();
 }
 
 function ProcessUpdate(){
-    ProcessRequestProductSave(2)
+    ProcessRequestProductSave(2);
 }
 
 /*

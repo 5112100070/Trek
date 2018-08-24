@@ -219,3 +219,82 @@ func AdminProductEditPage(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "admin-product-edit.tmpl", renderData)
 }
+
+func AdminUserList(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+
+	c.HTML(http.StatusOK, "admin-user-list.tmpl", renderData)
+}
+
+func AdminUserNew(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "admin-user-new.tmpl", renderData)
+}
+
+func AdminUserEditPage(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "admin-user-edit.tmpl", renderData)
+}

@@ -64,6 +64,9 @@ func main() {
 	r.GET("/admin/product", app.AdminProductList)
 	r.GET("/admin/product/new", app.AdminProductNew)
 	r.GET("/admin/product/edit", app.AdminProductEditPage)
+	r.GET("/admin/user", app.AdminUserList)
+	r.GET("/admin/user/new", app.AdminUserNew)
+	r.GET("/admin/user/edit", app.AdminUserEditPage)
 
 	r.GET("/admin/index", app.AdminDashboardPage)
 
