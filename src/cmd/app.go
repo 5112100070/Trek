@@ -57,6 +57,7 @@ func main() {
 	r.POST("/send-request-item", app.SendRequestItem)
 
 	r.GET("/login", app.LoginPageHandler)
+	r.GET("/daftar", app.RegisterPageHandler)
 	r.POST("/login", app.ProcessMakeLogin)
 	r.POST("/logout", app.ProcessMakeLogout)
 

@@ -90,6 +90,20 @@ func LoginPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.tmpl", renderData)
 }
 
+func RegisterPageHandler(c *gin.Context) {
+	_, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie == nil {
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "register.tmpl", renderData)
+}
+
 func MarketPlacePageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,

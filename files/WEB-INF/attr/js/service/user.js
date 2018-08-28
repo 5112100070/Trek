@@ -106,3 +106,20 @@ function sendUpdateImgUser(userID, img){
 
      return promise;
 }
+
+function registerUser(fullname, email, password){
+    var url = product_url + '/register';
+    var data = {
+        fullname:fullname,
+        email:email,
+        password:password
+    };
+    
+    var promise = $.ajax({
+        url: url,
+        type: 'POST',
+        data: data
+    });
+
+    return promise;
+}
