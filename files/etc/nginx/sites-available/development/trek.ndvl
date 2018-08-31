@@ -1,0 +1,18 @@
+server {
+        server_name trek.ndvl;
+
+        access_log /var/log/nginx/trek.access.log;
+        error_log /var/log/nginx/trek.error.log;
+
+
+        location / {
+                proxy_set_header HOST $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+                proxy_cookie_domain go.trek.ndvl $http_cookie;
+
+                proxy_pass http://127.0.0.1:4000;
+        }
+}

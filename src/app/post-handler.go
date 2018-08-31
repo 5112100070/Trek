@@ -114,8 +114,9 @@ func ProcessMakeLogin(c *gin.Context) {
 		return
 	} else {
 		cookie := http.Cookie{
-			Name:  global.UserCookie[global.GetEnv()],
-			Value: resultResp.Data["nekot"].(string),
+			Name:   global.UserCookie[global.GetEnv()],
+			Value:  resultResp.Data["nekot"].(string),
+			Domain: ".trek.ndvl",
 		}
 		http.SetCookie(c.Writer, &cookie)
 
@@ -136,8 +137,6 @@ func ProcessMakeLogout(c *gin.Context) {
 	err := service.DelUser(token)
 	if err != nil {
 		global.Error.Println(err)
-		global.OKResponse(c, nil)
-		return
 	}
 
 	newCookie := http.Cookie{

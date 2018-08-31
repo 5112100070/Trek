@@ -3,14 +3,15 @@ function getProductForMP(totalRequested = 8){
 
     var promise = $.ajax({
         url: url,
-        contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
             start:0,
             rows:totalRequested,
             sort:'ASC'
         },
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        xhrFields: {
+            withCredentials: true
+         },
     });
 
     return promise;
@@ -21,12 +22,13 @@ function getProductDetailByID(productID){
 
     var promise = $.ajax({
         url: url,
-        contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
             "product-id":productID
         },
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        xhrFields: {
+            withCredentials: true
+         },
     });
 
     return promise;
@@ -37,12 +39,13 @@ function getProductDetail(){
 
     var promise = $.ajax({
         url: url,
-        contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
             path:productPath
         },
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        xhrFields: {
+            withCredentials: true
+         },
     });
 
     return promise;
@@ -94,7 +97,10 @@ function sendProduct(productID, productName, type, status, priceRentDaily, price
     var promise = $.ajax({
         url: url,
         type: 'POST',
-        data: data
+        data: data,
+        xhrFields: {
+            withCredentials: true
+         },
     });
 
     return promise;
@@ -113,6 +119,9 @@ function sendUpdateImgProduct(productID, img){
         data: data,
         contentType: false,
         processData: false,
+        xhrFields: {
+            withCredentials: true
+         },
      });
 
      return promise;

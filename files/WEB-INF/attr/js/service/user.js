@@ -32,12 +32,13 @@ function getUserByID(userID){
 
     var promise = $.ajax({
         url: url,
-        contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
             user_id:userID
         },
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        xhrFields: {
+            withCredentials: true
+        }
     });
 
     return promise;
@@ -48,14 +49,15 @@ function getUserList(totalRequested = 8, typeSort = 'ASC'){
 
     var promise = $.ajax({
         url: url,
-        contentType: 'application/json; char-set=utf-8',
         type: 'GET',
         data: {
             start:0,
             rows:totalRequested,
             sort:typeSort
         },
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        xhrFields: {
+            withCredentials: true
+        }
     });
 
     return promise;
@@ -83,7 +85,10 @@ function sendUser(userID, fullname, username, password, status, typeUser){
     var promise = $.ajax({
         url: url,
         type: 'POST',
-        data: data
+        data: data,
+        xhrFields: {
+            withCredentials: true
+        }
     });
 
     return promise;
@@ -102,6 +107,9 @@ function sendUpdateImgUser(userID, img){
         data: data,
         contentType: false,
         processData: false,
+        xhrFields: {
+            withCredentials: true
+        }
      });
 
      return promise;
@@ -118,7 +126,10 @@ function registerUser(fullname, email, password){
     var promise = $.ajax({
         url: url,
         type: 'POST',
-        data: data
+        data: data,
+        xhrFields: {
+            withCredentials: true
+        }
     });
 
     return promise;

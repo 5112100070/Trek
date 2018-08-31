@@ -38,12 +38,14 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 		newCookie = http.Cookie{
 			Name:    UserCookie[GetEnv()],
 			Expires: time.Now().Add(time.Duration(0)),
+			Domain:  ".trek.ndvl",
 		}
 	} else {
 		newCookie = http.Cookie{
 			Name:    UserCookie[GetEnv()],
 			Value:   cookie,
 			Expires: time.Now().Add(expire_cookie),
+			Domain:  ".trek.ndvl",
 		}
 	}
 
