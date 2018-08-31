@@ -114,9 +114,10 @@ func ProcessMakeLogin(c *gin.Context) {
 		return
 	} else {
 		cookie := http.Cookie{
-			Name:   global.UserCookie[global.GetEnv()],
-			Value:  resultResp.Data["nekot"].(string),
-			Domain: global.GetDNSNameForCookie(),
+			Name:    global.UserCookie[global.GetEnv()],
+			Value:   resultResp.Data["nekot"].(string),
+			Domain:  global.GetDNSNameForCookie(),
+			Expires: time.Now().Add(global.EXPIRE_COOKIE),
 		}
 		http.SetCookie(c.Writer, &cookie)
 

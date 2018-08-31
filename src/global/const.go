@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	expire_cookie = time.Duration((6 * time.Hour))
+	EXPIRE_COOKIE = time.Duration((6 * time.Hour))
 )
 
 //Error Logger

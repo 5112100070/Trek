@@ -45,7 +45,7 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 		newCookie = http.Cookie{
 			Name:    UserCookie[GetEnv()],
 			Value:   cookie,
-			Expires: time.Now().Add(expire_cookie),
+			Expires: time.Now().Add(EXPIRE_COOKIE),
 			Domain:  GetDNSNameForCookie(),
 		}
 	}
