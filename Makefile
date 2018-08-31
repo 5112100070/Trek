@@ -24,6 +24,7 @@ pre-deploy:
 pre-deploy-nginx:
 	sudo rm -rf /etc/nginx/sites-enabled/*
 	sudo cp -r files/etc/nginx/sites-available/production/. /etc/nginx/sites-available/.
-	sudo ln -s /etc/nginx/sites-available/* /etc/nginx/sites-enabled/
+	sudo ln -s /etc/nginx/sites-available/trek.id /etc/nginx/sites-enabled/trek.id
+	sudo ln -s /etc/nginx/sites-available/go.trek.id /etc/nginx/sites-enabled/go.trek.id
 	sudo nginx -t
 	sudo service nginx reload
