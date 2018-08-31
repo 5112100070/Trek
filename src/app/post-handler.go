@@ -116,7 +116,7 @@ func ProcessMakeLogin(c *gin.Context) {
 		cookie := http.Cookie{
 			Name:   global.UserCookie[global.GetEnv()],
 			Value:  resultResp.Data["nekot"].(string),
-			Domain: ".trek.ndvl",
+			Domain: global.GetDNSNameForCookie(),
 		}
 		http.SetCookie(c.Writer, &cookie)
 

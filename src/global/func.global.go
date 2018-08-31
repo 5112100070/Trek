@@ -1,6 +1,7 @@
 package global
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -38,18 +39,26 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 		newCookie = http.Cookie{
 			Name:    UserCookie[GetEnv()],
 			Expires: time.Now().Add(time.Duration(0)),
-			Domain:  ".trek.ndvl",
+			Domain:  GetDNSNameForCookie(),
 		}
 	} else {
 		newCookie = http.Cookie{
 			Name:    UserCookie[GetEnv()],
 			Value:   cookie,
 			Expires: time.Now().Add(expire_cookie),
-			Domain:  ".trek.ndvl",
+			Domain:  GetDNSNameForCookie(),
 		}
 	}
 
 	http.SetCookie(c.Writer, &newCookie)
 
 	mapper["UserDetail"] = user
+}
+
+func GetDNSName() string {
+	return dns
+}
+
+func GetDNSNameForCookie() string {
+	return fmt.Sprintf(".%s", dns)
 }

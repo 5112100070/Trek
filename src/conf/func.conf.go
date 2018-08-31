@@ -14,6 +14,8 @@ func ReadConfig(filePath string) (Config, bool) {
 		log.Printf("%s\n", err)
 		return Config{}, false
 	}
+
+	global.InitDNSName(c.BaseUrlConfig.BaseDNS)
 	return c, true
 }
 
