@@ -15,7 +15,6 @@ func ReadConfig(filePath string) (Config, bool) {
 		return Config{}, false
 	}
 
-	global.InitDNSName(c.BaseUrlConfig.BaseDNS)
 	return c, true
 }
 

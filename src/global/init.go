@@ -16,7 +16,3 @@ func InitRepoBundle(dbBundle DBBundle) {
 		Session: session.InitSessionRepo(dbBundle.RedisSession),
 	}
 }
-
-func InitDNSName(DnsName string) {
-	dns = DnsName
-}

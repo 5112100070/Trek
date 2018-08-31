@@ -1,7 +1,6 @@
 package global
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -55,10 +54,6 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 	mapper["UserDetail"] = user
 }
 
-func GetDNSName() string {
-	return dns
-}
-
 func GetDNSNameForCookie() string {
-	return fmt.Sprintf(".%s", dns)
+	return DomainCookie[GetEnv()]
 }
