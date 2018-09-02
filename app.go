@@ -50,6 +50,7 @@ func main() {
 	r.GET("/permintaan", app.RequestPageHandler)
 	r.GET("/thank-you", app.ThankYouPageHandler)
 	r.GET("/tentang-kami", app.AboutUsPageHandler)
+	r.GET("/not-found", app.NotFoundPageHandler)
 
 	r.GET("/alat", app.MarketPlacePageHandler)
 	r.GET("/alat/:product", app.DetailProductHandler)
@@ -58,6 +59,7 @@ func main() {
 
 	r.GET("/login", app.LoginPageHandler)
 	r.GET("/daftar", app.RegisterPageHandler)
+	r.GET("/register-confirmation/:register_id", app.RegisterConfirmationPage)
 	r.POST("/login", app.ProcessMakeLogin)
 	r.POST("/logout", app.ProcessMakeLogout)
 

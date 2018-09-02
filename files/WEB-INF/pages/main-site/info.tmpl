@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header.tmpl" .}}
+  <body>
+    
+    {{ template "main-navigation.tmpl" .}}    
+    
+    <section class="col-md-12 bg-trek text-center" style="padding: 10% 0">
+      <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+          <h2>{{ .message }}</h2>
+          <p>Jika anda punya pertanyaan lebih lanjut, silahkan hubungi 0811-136-TREK atau email <u>info@trek.id</u>.
+        </div> 
+        <div class="col-lg-1"></div>
+      </div>
+      <div class="row" style="margin: 2% 0">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+          <a class="col-lg-12 btn btn-home" style="border: 5px solid black" onClick="javascript:GoToHome()">Kembali ke Home</a>
+        </div>
+        <div class="col-lg-4"></div>
+      </div>
+    </section>
+    {{ template  "footer.tmpl" .}}
+
+  <!--End of Tawk.to Script-->
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112381262-1"></script>
+    {{ template "default-script.tmpl" .}}
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-112381262-1');
+    </script>
+  </body>
+
+</html>

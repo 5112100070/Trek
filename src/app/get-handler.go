@@ -1,8 +1,13 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
@@ -81,6 +86,15 @@ func AboutUsPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "about-us.tmpl", renderData)
 }
 
+func NotFoundPageHandler(c *gin.Context) {
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	global.GetDefaultUserAttribute(c, renderData)
+
+	c.HTML(http.StatusOK, "not-found.tmpl", renderData)
+}
+
 func LoginPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,
@@ -102,6 +116,68 @@ func RegisterPageHandler(c *gin.Context) {
 		"config": conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "register.tmpl", renderData)
+}
+
+func RegisterConfirmationPage(c *gin.Context) {
+	registerID := c.Param("register_id")
+
+	baseUrl := conf.GConfig.BaseUrlConfig.ProductDNS
+	path := "/confirmation"
+	data := url.Values{}
+	data.Set("register_id", registerID)
+
+	u, _ := url.ParseRequestURI(baseUrl)
+	u.Path = path
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", urlStr, strings.NewReader(data.Encode()))
+	if err != nil {
+		global.Error.Println(err)
+		return
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		global.Error.Println(errGetResp)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		global.Error.Println(err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	var resultResp struct {
+		ServerMessage string                 `json:"server_message"`
+		Data          map[string]interface{} `json:"data,omitempty"`
+	}
+
+	var message string
+	errUnMarshal := json.Unmarshal(body, &resultResp)
+	if errUnMarshal != nil {
+		global.Error.Println(errUnMarshal)
+		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS+"/not-found", http.StatusSeeOther)
+		return
+	} else if !resultResp.Data["is_success"].(bool) {
+		global.Error.Println(resultResp.Data["error_message"])
+		message = "Terjadi kesalahan pada proses pendaftaran"
+	} else {
+		message = "Terima kasih karena telah melakukan pendaftaran. Silahkan menuju Login untuk memulai Session"
+	}
+
+	renderData := gin.H{
+		"message": message,
+		"config":  conf.GConfig,
+	}
+
+	c.HTML(http.StatusOK, "info.tmpl", renderData)
 }
 
 func MarketPlacePageHandler(c *gin.Context) {
