@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
@@ -96,6 +97,13 @@ func NotFoundPageHandler(c *gin.Context) {
 }
 
 func LoginPageHandler(c *gin.Context) {
+	_, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie == nil {
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
@@ -225,6 +233,12 @@ func AdminDashboardPage(c *gin.Context) {
 		return
 	}
 
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
 	renderData := gin.H{
 		"UserDetail": user,
 		"config":     conf.GConfig,
@@ -248,6 +262,12 @@ func AdminProductList(c *gin.Context) {
 		global.Error.Println(errLogin)
 		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
 	}
 
@@ -277,6 +297,12 @@ func AdminProductNew(c *gin.Context) {
 		return
 	}
 
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
 	renderData := gin.H{
 		"UserDetail": user,
 		"config":     conf.GConfig,
@@ -303,6 +329,12 @@ func AdminProductEditPage(c *gin.Context) {
 		return
 	}
 
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
 	renderData := gin.H{
 		"UserDetail": user,
 		"config":     conf.GConfig,
@@ -326,6 +358,12 @@ func AdminUserList(c *gin.Context) {
 		global.Error.Println(errLogin)
 		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
 	}
 
@@ -356,6 +394,12 @@ func AdminUserNew(c *gin.Context) {
 		return
 	}
 
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
 	renderData := gin.H{
 		"UserDetail": user,
 		"config":     conf.GConfig,
@@ -379,6 +423,12 @@ func AdminUserEditPage(c *gin.Context) {
 		global.Error.Println(errLogin)
 		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_ADMIN_TREK {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
 	}
 

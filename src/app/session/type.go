@@ -9,6 +9,9 @@ import (
 const (
 	redis_key_cookie = "cookie:c_"
 	redis_timeout    = time.Duration((6 * time.Hour))
+
+	USER_TYPE_ADMIN_TREK = 0
+	USER_TYPE_COMMON     = 1
 )
 
 type UserSession struct {
