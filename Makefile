@@ -21,8 +21,7 @@ pre-deploy:
 	sudo cp -r files/WEB-INF/attr/files/. /var/www/trek/files/.
 	sudo cp -r files/etc/trek/. /etc/trek/.
 
-pre-deploy-nginx:
-	sudo rm -rf /etc/nginx/sites-enabled/*
+initiate:
 	sudo cp -r files/etc/nginx/sites-available/production/. /etc/nginx/sites-available/.
 	sudo ln -s /etc/nginx/sites-available/trek.id /etc/nginx/sites-enabled/trek.id
 	sudo ln -s /etc/nginx/sites-available/go.trek.id /etc/nginx/sites-enabled/go.trek.id
