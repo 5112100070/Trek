@@ -126,6 +126,20 @@ func RegisterPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "register.tmpl", renderData)
 }
 
+func ResetPasswordPageHandler(c *gin.Context) {
+	_, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie == nil {
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "reset-password.tmpl", renderData)
+}
+
 func RegisterConfirmationPage(c *gin.Context) {
 	registerID := c.Param("register_id")
 

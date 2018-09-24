@@ -59,6 +59,7 @@ func main() {
 
 	r.GET("/login", app.LoginPageHandler)
 	r.GET("/daftar", app.RegisterPageHandler)
+	r.GET("/reset-password", app.ResetPasswordPageHandler)
 	r.GET("/register-confirmation/:register_id", app.RegisterConfirmationPage)
 	r.POST("/login", app.ProcessMakeLogin)
 	r.POST("/logout", app.ProcessMakeLogout)

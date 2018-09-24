@@ -134,3 +134,21 @@ function registerUser(fullname, email, password){
 
     return promise;
 }
+
+function resetPasssword(email){
+    var url = product_url + '/reset-password';
+    var data = {
+        email:email,
+    };
+    
+    var promise = $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+        xhrFields: {
+            withCredentials: true
+        }
+    });
+
+    return promise;
+}

@@ -64,7 +64,32 @@ function ProcessRegister(){
             $("#request-alert").html("silahkan mencoba sekali lagi");
         } else {
             $("#request-alert-div").css("display", "block");
-            $("#request-alert").html(response.data.error_massage);
+            $("#request-alert").html(response.responseJSON.data.error_message);
+        }
+    });
+    
+}
+
+function ProcessResetPassword(){
+    email = $("#email").val();
+    if(!validateEmail(email)){
+        $("#request-alert-div").css("display", "block");
+        $("#request-alert").html("Email tidak valid");
+        return;
+    }
+
+    promise = resetPasssword(email);
+    promise.done(function(response){
+        window.location.href = base_url;
+    }).fail(function(response){
+        $("#username").val("");
+        $("#secret").val("");
+        if(response.status >= 500){
+            $("#request-alert-div").css("display", "block");
+            $("#request-alert").html("silahkan mencoba sekali lagi");
+        } else {
+            $("#request-alert-div").css("display", "block");
+            $("#request-alert").html(response.responseJSON.data.error_message);
         }
     });
     
