@@ -228,6 +228,99 @@ func DetailProductHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "detail-product.tmpl", renderData)
 }
 
+func DashboardPageHandler(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_COMMON {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "main-dashboard.tmpl", renderData)
+}
+
+func AddMemberPageHandler(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_COMMON {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "dashboard-add-member.tmpl", renderData)
+}
+
+func RegisterCompanyPageHandler(c *gin.Context) {
+	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	if errGetCookie != nil {
+		global.Error.Println(errGetCookie)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	service := global.GetServiceSession()
+	user, errLogin := service.GetUser(cookie)
+	if errLogin != nil {
+		global.Error.Println(errLogin)
+		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		return
+	}
+
+	if user.Type != session.USER_TYPE_COMMON {
+		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": user,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "dashboard-register-company.tmpl", renderData)
+}
+
 func AdminDashboardPage(c *gin.Context) {
 	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
 	if errGetCookie != nil {

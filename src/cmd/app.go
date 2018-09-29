@@ -64,6 +64,10 @@ func main() {
 	r.POST("/login", app.ProcessMakeLogin)
 	r.POST("/logout", app.ProcessMakeLogout)
 
+	r.GET("/dashboard", app.DashboardPageHandler)
+	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
+	r.GET("/dashboard/daftar-perusahaan", app.RegisterCompanyPageHandler)
+
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
 	r.GET("/admin/product/new", app.AdminProductNew)

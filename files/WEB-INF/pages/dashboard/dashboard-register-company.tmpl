@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header.tmpl" .}}
+
+  <body>
+    {{ template "dashboard-navigation.tmpl" .}}
+    <div class="row" style="margin-bottom: 5%">
+      <div class="col-md-12">
+
+      <div class="row" style="margin: 0 10%;"> <!-- row -->
+        <div class="col-lg-12 form-group">
+          <label classs="col-lg-12" for="company-type">Bentuk Perusahaan</label>
+          <div class="col-lg-12">
+            <div class="row">
+              <select id="company-type" class="form-control col-lg-12">
+                <option value="CV">CV</option>
+                <option value="PT">PT</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 form-group">
+            <label for="company-name">Nama Perusahaan</label>
+            <input class="form-control" id="company-name">
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 2%;">
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <a class="col-lg-6 btn btn-home" onClick="javascript:ProcessRegisterCompany()">Daftarkan Perusahaan</a>
+                <div class="col-lg-3"></div>
+            </div>
+        </div>
+      </div> <!-- end of row -->
+
+      </div>
+    </div>
+
+    <div id="request-alert-div" class="alert alert-danger" style="display:none;">
+      <strong>Terjadi kesalahan,</strong> <p id="request-alert">
+    </div>
+    
+    {{ template  "footer.tmpl" .}}
+
+  <!--End of Tawk.to Script-->
+    <!-- Bootstrap core JavaScript -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/datetime-picker/js/moment-with-locales.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/vendor/datetime-picker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>  
+    
+    <script src="/js/controller/dashboard/dashboard.js"></script>
+    <script src="/js/service/company.js"></script>
+
+    {{ template "default-script.tmpl" .}}
+  </body>
+
+</html>
