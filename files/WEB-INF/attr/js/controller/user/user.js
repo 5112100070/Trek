@@ -5,16 +5,36 @@ function ProcessLogin(){
     promise = makeLogin(username, secret);
 
     promise.done(function(response){
-        window.location.href = base_url;
+        swal({
+            title: "Login Berhasil",
+            icon: "success",
+            confirmButtonText: "OK",
+            customClass: "animated tada",
+            animation: false,
+        }).then(function(){
+            window.location.href = base_url;
+        });
     }).fail(function(response){
         $("#username").val("");
         $("#secret").val("");
         if(response.status >= 500){
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("silahkan mencoba sekali lagi");
+            swal({
+                title: "Login Gagal",
+                text: "Terjadi kesalahan. Silahkan coba lagi",
+                icon: "error",
+                confirmButtonText: "Tutup",
+                customClass: "animated tada",
+                animation: false,
+              });
         } else {
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("Username atau Password salah");
+            swal({
+                title: "Login Gagal",
+                text: "Username atau Password salah",
+                icon: "error",
+                confirmButtonText: "Tutup",
+                customClass: "animated tada",
+                animation: false,
+              });
         }
     });
 }
@@ -73,23 +93,49 @@ function ProcessRegister(){
 function ProcessResetPassword(){
     email = $("#email").val();
     if(!validateEmail(email)){
-        $("#request-alert-div").css("display", "block");
-        $("#request-alert").html("Email tidak valid");
-        return;
+        swal({
+            title: "Atur Ulang Password",
+            text: "Email tidak valid",
+            icon: "error",
+            confirmButtonText: "Tutup",
+            customClass: "animated tada",
+            animation: false,
+          });
+          return;
     }
 
     promise = resetPasssword(email);
     promise.done(function(response){
-        window.location.href = base_url;
+        swal({
+            title: "Atur Ulang Password",
+            text: "Sukses mengatur ulang passsword. Silahkan cek email",
+            icon: "success",
+            confirmButtonText: "Kembali ke halaman utama",
+            customClass: "animated tada",
+            animation: false,
+          }).then(function(){
+            window.location.href = base_url;
+          });
     }).fail(function(response){
-        $("#username").val("");
-        $("#secret").val("");
+        $("#email").val("");
         if(response.status >= 500){
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("silahkan mencoba sekali lagi");
+            swal({
+                title: "Atur Ulang Password",
+                text: "Terjadi kesalahan. Silahkan coba lagi",
+                icon: "error",
+                confirmButtonText: "Tutup",
+                customClass: "animated tada",
+                animation: false,
+              });
         } else {
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html(response.responseJSON.data.error_message);
+            swal({
+                title: "Atur Ulang Password",
+                text: response.responseJSON.data.error_message,
+                icon: "error",
+                confirmButtonText: "Tutup",
+                customClass: "animated tada",
+                animation: false,
+              });
         }
     });
     

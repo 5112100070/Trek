@@ -104,52 +104,34 @@
         </div>
       </section>
 
-      <section class="features-icons bg-trek text-center" id="penyedia-alat">
-          <div class="overlay-trek">
-              <img class="trek-img" src="img/trek-roda.png" style="min-width:10rem;"alt="kapan saja dimana saja">
-            </div>
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-12" style="padding-top:2rem;">
-                  <h2 style>Punya alat berat yang mau disewakan?</h2>
-                  <p class="about" style="padding-top:0.2rem;font-size: 1rem;padding-bottom:0.5rem;">Bergabunglah bersama jaringan Penyedia Alat Trek dan dapatkan uang lebih dari alat beratmu.</p>
-                 <a  class="btn btn-trek btn-sm" href="penyedia" >PELAJARI LEBIH LANJUT</a>
-              </div>
-              <div class="modal fade" id="myModal" role="dialog" width="auto" height="auto">
-              <div class="modal-dialog">            
-                <!-- Modal content-->
-                <div class="modal-content" style="background-color: rgba(255, 0, 0, 0); border: none;">
-                  <div class="video-responsive">
-                    <iframe width="560" height="315" frameborder="0" allowfullscreen src="https://www.youtube.com/embed/xuxBl5JWCPo"></iframe>
-                  </div>
+      <section class="py-4" id="penyedia-alat">
+        <div class="container  bg-light-grey" style="padding:6rem 6rem 6rem 0;">
+            <div class="d-flex col-lg-12 bg-white py-5 pr-5">
+                <div class="flex-grow-1">
+                    <h2 class="pb-5">Punya alat berat yang mau disewakan?</h2>
+                    <a  class="btn btn-trek btn-sm " target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSc5zR8SBOi5vmdZmoW_vvRr6I3PfmgHn8K9rkgyGSczX88fHw/viewform?usp=sf_link" >PELAJARI LEBIH LANJUT</a>
                 </div>
-              </div>
-            </div>
+            </div>          
+        </div>
+      </section>
+    
+      <section class="text-center p-5 ">
+          <div class="container justify-content-center d-flex">
+            <div class="col-lg-6 col-sm-offset-12">
+                <p class="p-4">Masukkan email Anda untuk berlangganan berita terbaru dari Trek</p>
+                <form action="https://trek.us17.list-manage.com/subscribe/post?u=2b7fba7aa3db26d3132ece12d&amp;id=40e8dc06ef" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                  <div class="input-group input-group-newsletter">
+                      <input type="email" value="" name="EMAIL" class="form-control email" id="mce-EMAIL" placeholder="Berlangganan berita Trek..." required>
+                      <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_2b7fba7aa3db26d3132ece12d_40e8dc06ef" tabindex="-1" value=""></div>
+                      <span class="input-group-btn">
+                          <button class='btn btn-secondary' type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe">Kirim</button>
+                      </span>
+                  </div>
             
-          </div>
-        </section>
-
-
-        <section class="features-icons bg-light-grey text-center">
-            <div class="container">
-              <div class="col-lg-6">
-                  <h3 style=" text-align: left !important;">Jangan ketinggalan informasi</h3>
-                  <p style="font-weight:bold;text-align: left !important;" >Masukkan email Anda untuk berlangganan berita terbaru dari Trek</p>
-                  <form action="https://trek.us17.list-manage.com/subscribe/post?u=2b7fba7aa3db26d3132ece12d&amp;id=40e8dc06ef" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                    <div class="input-group input-group-newsletter">
-                        <input type="email" value="" name="EMAIL" class="form-control email" id="mce-EMAIL" placeholder="Berlangganan berita Trek..." required>
-                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_2b7fba7aa3db26d3132ece12d_40e8dc06ef" tabindex="-1" value=""></div>
-                        <span class="input-group-btn">
-                            <button class='btn btn-secondary' type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe">Kirim</button>
-                        </span>
-                    </div>
-              
-                  </form> 
-
-              </div>
-
+                </form> 
             </div>
-          </section>
+          </div>
+      </section>
       {{ template  "footer.tmpl" .}}
   </body>
 <script src="vendor/jquery/jquery.min.js"></script>
