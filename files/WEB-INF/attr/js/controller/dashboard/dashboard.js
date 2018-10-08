@@ -52,3 +52,22 @@ function ProcessChangePassword(){
     $("#token").val("");
     $("#token-verification").val("");
 }
+
+function loadCompanyDetail(){
+    promise = getCompanyDetail();
+
+    promise.done(function(response){
+        response = response.data;    
+        $("#company-name").html(response.data.company_name);    
+        $("#company-create-time").html("Terdaftar Sejak :" + response.data.create_time);
+
+        if(response.data.Status == 1){
+            $("#company-status").html("Status : Aktif");
+        } else {
+            $("#company-status").html("Status : Tidak Aktif");
+        }
+        $("#company-name").val(response.data.company_type + response.data.company_name);
+
+        $("#company-img").attr("src", base_url + response.data.logo_url);
+    })
+}
