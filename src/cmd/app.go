@@ -67,6 +67,7 @@ func main() {
 	r.GET("/dashboard", app.DashboardPageHandler)
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
 	r.GET("/dashboard/daftar-perusahaan", app.RegisterCompanyPageHandler)
+	r.GET("/dashboard/ganti-password", app.ChangePasswordPageHandler)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
