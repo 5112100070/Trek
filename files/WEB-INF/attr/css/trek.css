@@ -1,0 +1,21 @@
+.btn-home{
+    font-weight: 1000;
+    border-width: 2px;
+    color:#000;
+    background-color:rgb(255, 200, 0);
+    /*  */
+    align-self:center;
+    transition:all .5s ease;
+    color:#41403E;
+    outline:none;
+    box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
+    /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
+    /* box-shadow: 100px 38px 34px -26px hsla(0,0%,0%,.2); */
+    /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
+  }
+
+  .btn-home:hover{
+    color:#000;
+    background-color:#ffcc00;
+    box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
+  }

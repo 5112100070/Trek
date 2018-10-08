@@ -19,6 +19,7 @@ pre-deploy:
 	sudo cp -r files/WEB-INF/attr/vendor/. /var/www/trek/vendor/.
 	sudo cp -r files/WEB-INF/attr/etc/. /var/www/trek/etc/.
 	sudo cp -r files/WEB-INF/attr/files/. /var/www/trek/files/.
+	sudo cp -r files/WEB-INF/attr-dashboard/. /var/www/trek/dashboard/.
 	sudo cp -r files/etc/trek/. /etc/trek/.
 
 initiate:

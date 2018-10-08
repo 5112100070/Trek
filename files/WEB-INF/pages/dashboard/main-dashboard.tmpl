@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  {{ template "header.tmpl" .}}
+  {{ template "dashboard-header.tmpl" .}}
 
-  <body data-spy="scroll" data-target=".navbar" data-offset="1">
+  <body id="page-top" data-spy="scroll" data-target=".navbar" data-offset="1">
+    {{ template "dashboard-nav.tmpl" .}}
 
-    {{ template "dashboard-navigation.tmpl" .}}
+    <div id="wrapper">
 
-    <header class="masthead text-black">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <span class="heading-landing mb-5">DASHBOARD TREK</span>
-            <br>
-          </div>
-          </div>
-        </div>
-      </div>
-    </header>
+      <!-- Sidebar -->
+      {{ template "dashboard-sidebar.tmpl" .}}
 
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          
+                    <!-- Breadcrumbs-->
+                    <!-- <ol class="breadcrumb">
+                      <li class="breadcrumb-item">
+                        <a href="index.html">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item active">Blank Page</li>
+                    </ol> -->
+          
+                    <!-- Page Content -->
+                    <h1>Dashboard</h1>
+                    <hr>
+                    <p>This is a great starting point for new custom pages.</p>
+          
+                  </div> <!-- /.container-fluid -->
+      </div> <!-- /.content-wrapper -->
+    </div> <!-- /#wrapper -->
+    
+    {{ template "dashboard-footer.tmpl" .}}
+
+    {{ template "default-script.tmpl" .}}
   </body>
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112381262-1"></script>
-<!--Start of Tawk.to Script-->
-{{ template "default-script.tmpl" .}}
 </html>

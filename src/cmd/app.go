@@ -93,5 +93,10 @@ func initEngine() *gin.Engine {
 	r.Static("/etc", "/var/www/trek/etc")
 	r.Static("/js", "/var/www/trek/js")
 
+	r.Static("/dashboard/css", "/var/www/trek/dashboard/css")
+	r.Static("/dashboard/js", "/var/www/trek/dashboard/js")
+	r.Static("/dashboard/scss", "/var/www/trek/dashboard/scss")
+	r.Static("/dashboard/vendor", "/var/www/trek/dashboard/vendor")
+
 	return r
 }
