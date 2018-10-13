@@ -17,3 +17,21 @@ function changePassword(tokenOld, token, tokenVerification){
 
     return promise;
 }
+
+function getCompanyMember(){
+    var url = product_url + '/company/get-member';
+
+    var data = {
+        rows : -1,
+    };
+
+    var promise = $.ajax({
+        url: url,
+        type: 'GET',
+        xhrFields: {
+            withCredentials: true
+        }
+    });
+
+    return promise;
+}

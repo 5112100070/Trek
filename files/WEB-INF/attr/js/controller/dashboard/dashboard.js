@@ -71,3 +71,39 @@ function loadCompanyDetail(){
         $("#company-img").attr("src", base_url + response.data.logo_url);
     })
 }
+
+function initTableMember(){
+    userTable = $('#userTable').DataTable();
+    promise = getCompanyMember();
+    promise.done(function(response){
+        users = response.data.data;
+        var counter = 1;
+
+        users.forEach(element => {
+            var status = "Aktif";
+            if(element.status!=1){
+                status = "Tidak Aktif";
+            }
+
+            var typeUser = "Tidak Terdefinisi";
+            if(element.type==1){
+                typeUser = "Admin";
+            } else if(element.type==2){
+                typeUser = "Pengguna Biasa";
+            }
+
+            var imgUrl = `<img src="` + element.img_url + `" width="50px" height="50px" />`;
+            
+            userTable.row.add([
+                counter,
+                element.fullname,
+                typeUser,
+                status,
+                imgUrl
+            ]).draw(false);
+
+            counter++;
+        });
+    });
+
+}
