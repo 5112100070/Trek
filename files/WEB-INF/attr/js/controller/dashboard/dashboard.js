@@ -2,17 +2,30 @@ function ProcessRegisterCompany(){
     var companyType = $("#company-type").val();
     var companyName = $("#company-name").val();
 
-    var promise = RegisterCompany(companyType, companyName);
-    promise.done(function(response){
-        window.location.href = base_url + "/dashboard";
-    }).fail(function(response){
-        if(response.status >= 500){
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("silahkan mencoba sekali lagi");
-        } else {
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html(response.responseJSON.data);
-        }      
+    if(companyName=="" || companyType==""){
+        SimpleSwal("Gagal melakukan pendaftaran perusahaan", "Pastikan nama dan jenis perusahaan benar", type_error,"tutup");
+        return;
+    }
+
+    var swalConfirm = SwalConfimationProcess("Daftarkan Perusahaan", "Lanjutkan ?", type_question, "Daftarkan", "Batal");
+    swalConfirm.then(function(){
+        var promise = RegisterCompany(companyType, companyName);
+        promise.done(function(response){
+            console.log("Jangan melakukan itu");
+            swal = SimpleSwal("Sukses melakukan pendaftaran perusahaan", "Sistem akan melakukan login ulang", type_success, "tutup");
+            swal.then(function(){
+                ProcessLogout();
+            });
+        }).fail(function(response){
+            var errMessage;
+            if(response.status >= 500){
+                errMessage = "silahkan mencoba sekali lagi"
+            } else {
+                errMessage = response.responseJSON.data
+            }
+
+            SimpleSwal("Gagal melakukan pendaftaran perusahaan", errMessage, type_error, "tutup");
+        });
     });
 
     $("#company-name").val("");

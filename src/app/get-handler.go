@@ -189,7 +189,11 @@ func RegisterConfirmationPage(c *gin.Context) {
 		return
 	} else if !resultResp.Data["is_success"].(bool) {
 		global.Error.Println(resultResp.Data["error_message"])
-		message = "Terjadi kesalahan pada proses pendaftaran"
+		if resultResp.Data["message"].(string) != "" {
+			message = resultResp.Data["message"].(string)
+		} else {
+			message = "Terjadi kesalahan pada proses pendaftaran"
+		}
 	} else {
 		message = "Terima kasih karena telah melakukan pendaftaran. Silahkan menuju Login untuk memulai Session"
 	}
@@ -246,7 +250,7 @@ func DashboardPageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -277,7 +281,7 @@ func AddMemberPageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -308,7 +312,7 @@ func RegisterCompanyPageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -339,7 +343,7 @@ func MemberPageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -370,7 +374,7 @@ func CompanyProfilePageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -401,7 +405,7 @@ func ChangePasswordPageHandler(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_COMMON {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
