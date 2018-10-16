@@ -19,25 +19,40 @@ function ProcessRequestProductSave(command = 1){
     var priceRentMonthly = $("#price-rent-monthly").val();
     var path = $("#path").val();
 
-    if(command == 1){
-        promise = sendNewProduct(productName, typeProduct, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+    if(productName=="" || typeProduct == "" || priceRentDaily == "" || priceRentWeekly == "" || priceRentMonthly == "" || path == ""){
+        SimpleSwal("Gagal menyimpan product baru", "Pastikan lengkapi seluruh keterangan data", type_error, "tutup");
+        return;
     }
-    if(command == 2){
-        var url = new URL(window.location.href);
-        var productID = url.searchParams.get("product-id");
-        promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+
+    var titleCommand = "Daftarkan Produk"
+    if(command==2){
+        titleCommand = "Update Produk"
     }
-    
-    promise.done(function(response){
-        location.reload();
-    }).fail(function(response){
-        if(response.status==400){
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("mohon isi seluruh data");
-        } else {
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("silahkan mencoba sekali lagi");
+
+    var swal = SwalConfimationProcess(titleCommand, "Lanjutkan ?", type_question, "Lanjutkan", "Batalkan");
+    swal.then(function(){
+        if(command == 1){
+            promise = sendNewProduct(productName, typeProduct, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
         }
+        if(command == 2){
+            var url = new URL(window.location.href);
+            var productID = url.searchParams.get("product-id");
+            promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
+        }
+        
+        promise.done(function(response){
+            var successSwal = SimpleSwalWithoutDesc("Berhasil menyimpan product baru", type_success, "Menuju ke list");
+            successSwal.then(function(){
+                GoToIndex('admin/product');
+            });
+            return;
+        }).fail(function(response){
+            if(response.status==400){
+                SimpleSwal("Gagal menyimpan product baru", "Pastikan lengkapi seluruh keterangan data", type_error, "tutup");
+            } else {
+                SimpleSwal("Gagal menyimpan product baru", "Silahkan mencoba sekali lagi", type_error, "tutup");
+            }
+        });
     });
 }
 
@@ -47,12 +62,18 @@ function ProcessUploadImg(){
     var productID = url.searchParams.get("product-id");
     var blobFile = $("#product-img-new")[0].files[0];
     
-    promise = sendUpdateImgProduct(productID, blobFile);
-    promise.done(function(response){
-        console.log("selesai");
-    })
-    .fail(function(response){
-        console.log("gagal");
+    var swal = SwalConfimationProcess("Upload Gambar", "Gambar akan di upload. Lanjutkan ?", type_question, "Lanjutkan", "Batal");
+    swal.then(function(){
+        promise = sendUpdateImgProduct(productID, blobFile);
+        promise.done(function(response){
+            var swal = SimpleSwal("Sukses", "Sukses menyimpan gambar", type_success, "tutup");
+            swal.then(function(){
+                location.reload();
+            });
+        }).fail(function(response){
+            // SimpleSwal("Opps", "Silahkan mencoba sekali lagi", type_error, "tutup");
+            location.reload();
+        });
     });
 }
 

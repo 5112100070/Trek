@@ -1,9 +1,15 @@
 function ProcessSaveNewUser(){
-    ProcessRequestUserSave();
+    var swal = SwalConfimationProcess("Tambah Pengguna", "Tambah pengguna Baru ?", type_question, "Lanjutkan", "Batal");
+    swal.then(function(){
+        ProcessRequestUserSave();
+    });
 }
 
 function ProcessUpdateUser(){
-    ProcessRequestUserSave(2);
+    var swal = SwalConfimationProcess("Konfigurasi Pengguna", "Ubah data pengguna ?", type_question, "Lanjutkan", "Batal");
+    swal.then(function(){
+        ProcessRequestUserSave(2);
+    });
 }
 
 /*
@@ -12,8 +18,7 @@ function ProcessUpdateUser(){
 */
 function ProcessRequestUserSave(command = 1){
     if(command ==1 && ($("#password").val() != $("#password-ver").val())){
-        $("#request-alert-div").css("display", "block");
-        $("#request-alert").html("kesalahan pada verifikasi password");
+        var swal = SimpleSwal("Opps", "kesalahan pada verifikasi password", type_error, "tutup");
         return;
     }
     
@@ -33,14 +38,15 @@ function ProcessRequestUserSave(command = 1){
     }
     
     promise.done(function(response){
-        GoToIndex("admin/user");
+        var swal = SimpleSwal("Sukses", "sukses menyimpan data pengguna", type_success, "tutup");
+        swal.then(function(){
+            GoToIndex("admin/user");
+        });
     }).fail(function(response){
         if(response.status==400){
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("mohon isi seluruh data");
+            var swal = SimpleSwal("Opps", "mohon isi seluruh data", type_error, "tutup");
         } else {
-            $("#request-alert-div").css("display", "block");
-            $("#request-alert").html("silahkan mencoba sekali lagi");
+            var swal = SimpleSwal("Opps", "silahkan mencoba sekali lagi", type_error, "tutup");
         }
     });
 }
@@ -51,12 +57,17 @@ function ProcessUploadImgUser(){
     var userID = url.searchParams.get("user-id");
     var blobFile = $("#user-img-new")[0].files[0];
     
-    promise = sendUpdateImgUser(userID, blobFile);
-    promise.done(function(response){
-        GoToIndex("admin/user");
-    })
-    .fail(function(response){
-        $("#request-alert-div").css("display", "block");
-        $("#request-alert").html("silahkan mencoba sekali lagi");
-    });
+    var swal = SwalConfimationProcess("Upload Gambar", "Gambar akan di upload. Lanjutkan ?", type_question, "Lanjutkan", "Batal");
+    swal.then(function(){
+        promise = sendUpdateImgUser(userID, blobFile);
+        promise.done(function(response){
+            var swal = SimpleSwal("Sukses", "sukses menyimpan gambar", type_success, "tutup");
+            swal.then(function(){
+                location.reload();
+            });
+        })
+        .fail(function(response){
+            SimpleSwal("Opps", "silahkan mencoba sekali lagi", type_error, "tutup");
+        });
+    });    
 }

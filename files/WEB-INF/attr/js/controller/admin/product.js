@@ -16,7 +16,7 @@ function loadlistProduct(totalRequest = 8){
                 `<div class="col-lg-3" style="margin-bottom:2%;">` + 
                     `<div class="features-icons-item mx-auto">` + 
                         `<div class="features-icons-icon d-flex">` +
-                            `<img src="` + base_url + response.data[i].img_url + `" style="min-width:10rem;">` +
+                            `<img src="` + base_url + response.data[i].img_url + `" style="width:100%; height:10rem;">` +
                         `</div>` + 
                         `<h5 style="padding-top:1rem">` + response.data[i].product_name + `</h3>` + 
                         `<!-- <p class="desc" style="text-align:center;">`+ priceInWeek + `-->` +

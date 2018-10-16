@@ -1,0 +1,29 @@
+<script src="/js/sweetalert-main.js"></script>
+
+<script src="/js/controller/admin/user.js"></script>
+<script src="/js/controller/admin/detail-user.js"></script>
+<script src="/js/controller/dashboard/user.js"></script>
+<script src="/js/controller/dashboard/dashboard.js"></script>
+<script src="/js/controller/admin/product.js"></script>
+<script src="/js/controller/admin/detail-product.js"></script>
+
+<script src="/js/service/product.js"></script>
+<script src="/js/service/user.js"></script>
+<script src="/js/service/company.js"></script>
+<script src="/js/service/dashboard.js"></script>
+<script>
+    var base_url = {{.config.BaseUrlConfig.BaseDNS}};
+    var product_url = {{.config.BaseUrlConfig.ProductDNS}};
+
+    function GoToHome(){
+        GoToIndex('');
+    }
+
+    function GoToIndex(path){
+        if(path==''){
+            window.location.href = base_url;
+        } else{
+            window.location.href = base_url + '/' + path;
+        }
+    } 
+</script>

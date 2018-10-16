@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+{{ template "dashboard-header.tmpl" .}}
 
-  {{ template "header.tmpl" .}}
+  <body id="page-top" data-spy="scroll" data-target=".navbar" data-offset="1">
+    {{ template "dashboard-nav.tmpl" .}}
 
-  <body data-spy="scroll" data-target=".navbar" data-offset="1">
+    <div id="wrapper">
 
-    {{ template "admin-navigation.tmpl" .}}  
+      <!-- Sidebar -->
+      {{ template "admin-sidebar.tmpl" .}}
 
-      <section class="features-icons bg-white text-center">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12">
-              <h2>List Produk yang ditampilkan</h2>
-            </div>
-          </div>
-          <div class="row" >
-              <div class="col-lg-12">
-                <a class="btn btn-trek col-lg-5" style="color: rgba(14, 14, 14, 0.68);" onclick="javascript:GoToIndex('admin/product/new')">Tambah Jenis Produk</a>
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          <section class="features-icons bg-white text-center">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h2>List Produk yang ditampilkan</h2>
+                </div>
               </div>
-            <div id="parent-list-products"></div>
-          </div>  
-        </div>
-      </section>
+              <div class="row" >
+                <div id="parent-list-products"></div>
+              </div>  
+            </div>
+          </section>
+        </div> <!-- /.container-fluid -->
+      </div> <!-- /.content-wrapper -->
+    </div> <!-- /#wrapper -->
+    
+    {{ template "dashboard-footer.tmpl" .}}
 
-    {{ template  "footer.tmpl" .}}
+    {{ template "default-script-admin.tmpl" .}}
   </body>
-<script src="/vendor/jquery/jquery.min.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112381262-1"></script>
-<script src="/js/controller/admin/product.js"></script>
-<script src="/js/service/product.js"></script>
-{{ template "default-script.tmpl" .}}
 <script type="text/javascript">
     $(document).ready(function(){    
         loadlistProduct(50);
