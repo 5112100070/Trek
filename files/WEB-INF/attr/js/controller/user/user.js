@@ -1,4 +1,5 @@
 function ProcessLogin(){
+    StartLoading();
     username = $("#username").val();
     secret = $("#secret").val();
 
@@ -9,7 +10,9 @@ function ProcessLogin(){
         swal.then(function(){
             window.location.href = base_url;
         });
+        FinishLoading();
     }).fail(function(response){
+        FinishLoading();
         $("#username").val("");
         $("#secret").val("");
         SimpleSwal("Login Gagal", "Username atau Password salah", type_error, "Tutup");
@@ -17,11 +20,14 @@ function ProcessLogin(){
 }
 
 function ProcessLogout(){
+    StartLoading();
     promise = makeLogout();
 
     promise.done(function(response){
+        FinishLoading();
         window.location.href = base_url;
     }).fail(function(response){
+        FinishLoading();
         location.reload();
     });
 }
@@ -46,17 +52,20 @@ function ProcessRegister(){
         return;
     }
 
+    StartLoading();
     promise = registerUser(fullname, email, password);
     
     var swal = SwalConfimationProcess("Daftar Menjadi Anggota", "Pastikan data yang akan anda daftarkan benar", type_warning, "Daftar!", "Batal");
 
     swal.then(function(){
         promise.done(function(response){
+            FinishLoading();
             var swalDone = SimpleSwal("Daftar Menjadi Anggota", "Silahkan cek email untuk konfirmasi pendaftaran", type_success, "Pindah ke beranda");
             swalDone.then(function(){
                 window.location.href = base_url;
             });
         }).fail(function(response){
+            FinishLoading();
             $("#fullname").val("");
             $("#email").val("");
             $("#password").val("");

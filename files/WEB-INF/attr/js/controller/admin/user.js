@@ -1,7 +1,9 @@
 function loadlistUser(totalRequest = 8){
     promise = getUserList(totalRequest, "DESC");
 
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         if(response.data.length == 0){
             return;
         }
@@ -35,7 +37,9 @@ function loadlistUser(totalRequest = 8){
 function loadUserDetailByID(userID){
     promise = getUserByID(userID);
 
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         $("#fullname").val(response.data.fullname);
         $("#username").val(response.data.username);
         $("#status").val(response.data.status);

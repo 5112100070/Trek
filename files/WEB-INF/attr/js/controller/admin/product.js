@@ -1,7 +1,9 @@
 function loadlistProduct(totalRequest = 8){
     promise = getProductForMP(totalRequest);
 
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         if(response.data.length == 0){
             return;
         }
@@ -32,7 +34,9 @@ function loadlistProduct(totalRequest = 8){
 function loadProductDetailByID(productID){
     promise = getProductDetailByID(productID);
 
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         $("#product-name").val(response.data.product_name);
         $("#status").val(response.data.status);
         $("#type").val(response.data.type);

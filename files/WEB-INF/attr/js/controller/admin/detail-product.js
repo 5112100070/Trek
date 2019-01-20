@@ -40,13 +40,16 @@ function ProcessRequestProductSave(command = 1){
             promise = sendUpdateProduct(productID, productName, typeProduct, status, priceRentDaily, priceRentWeekly, priceRentMonthly, path);
         }
         
+        StartLoading();
         promise.done(function(response){
+            FinishLoading();
             var successSwal = SimpleSwalWithoutDesc("Berhasil menyimpan product baru", type_success, "Menuju ke list");
             successSwal.then(function(){
                 GoToIndex('admin/product');
             });
             return;
         }).fail(function(response){
+            FinishLoading();
             if(response.status==400){
                 SimpleSwal("Gagal menyimpan product baru", "Pastikan lengkapi seluruh keterangan data", type_error, "tutup");
             } else {
@@ -64,15 +67,21 @@ function ProcessUploadImg(){
     
     var swal = SwalConfimationProcess("Upload Gambar", "Gambar akan di upload. Lanjutkan ?", type_question, "Lanjutkan", "Batal");
     swal.then(function(){
+        StartLoading();
         promise = sendUpdateImgProduct(productID, blobFile);
         promise.done(function(response){
+            FinishLoading();
             var swal = SimpleSwal("Sukses", "Sukses menyimpan gambar", type_success, "tutup");
             swal.then(function(){
                 location.reload();
             });
         }).fail(function(response){
-            // SimpleSwal("Opps", "Silahkan mencoba sekali lagi", type_error, "tutup");
+            FinishLoading();
             location.reload();
+            // var swal = SimpleSwal("Opps", "Silahkan mencoba sekali lagi", type_error, "tutup");
+            // swal.then(function(){
+            //     location.reload();
+            // });
         });
     });
 }

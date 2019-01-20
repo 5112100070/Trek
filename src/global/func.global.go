@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/5112100070/Trek/src/app/session"
 	"github.com/gin-gonic/gin"
 )
 
@@ -56,4 +57,12 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 
 func GetDNSNameForCookie() string {
 	return DomainCookie[GetEnv()]
+}
+
+func IsUserCanAccess(user session.UserSession) bool {
+	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON || user.Type == session.USER_TYPE_ADMIN_TREK) {
+		return true
+	} else {
+		return false
+	}
 }

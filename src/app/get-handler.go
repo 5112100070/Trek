@@ -312,7 +312,7 @@ func RegisterCompanyPageHandler(c *gin.Context) {
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
+	if global.IsUserCanAccess(user) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -374,7 +374,7 @@ func CompanyProfilePageHandler(c *gin.Context) {
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
+	if global.IsUserCanAccess(user) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -405,7 +405,7 @@ func ChangePasswordPageHandler(c *gin.Context) {
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
+	if global.IsUserCanAccess(user) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -415,7 +415,12 @@ func ChangePasswordPageHandler(c *gin.Context) {
 		"UserDetail": user,
 		"config":     conf.GConfig,
 	}
-	c.HTML(http.StatusOK, "dashboard-change-password.tmpl", renderData)
+
+	if user.Type == session.USER_TYPE_ADMIN_TREK {
+		c.HTML(http.StatusOK, "admin-change-password.tmpl", renderData)
+	} else {
+		c.HTML(http.StatusOK, "dashboard-change-password.tmpl", renderData)
+	}
 }
 
 func AdminDashboardPage(c *gin.Context) {

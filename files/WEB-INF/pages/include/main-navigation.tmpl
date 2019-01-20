@@ -40,3 +40,18 @@
 
     </div>
 </nav>
+
+<!-- Modal -->
+<div id="loading-pop-up" class="modal-loading">
+    <div class="lds-facebook"><div></div><div></div><div></div></div>
+</div>
+
+<script>
+    function StartLoading(){
+        document.getElementById('loading-pop-up').style.display = "block";
+    }
+
+    function FinishLoading(){
+        document.getElementById('loading-pop-up').style.display = "none";
+    }
+</script>

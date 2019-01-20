@@ -37,12 +37,15 @@ function ProcessRequestUserSave(command = 1){
         promise = sendUpdateUser(userID, fullname, username, password, status, type);
     }
     
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         var swal = SimpleSwal("Sukses", "sukses menyimpan data pengguna", type_success, "tutup");
         swal.then(function(){
             GoToIndex("admin/user");
         });
     }).fail(function(response){
+        FinishLoading();
         if(response.status==400){
             var swal = SimpleSwal("Opps", "mohon isi seluruh data", type_error, "tutup");
         } else {
@@ -59,14 +62,17 @@ function ProcessUploadImgUser(){
     
     var swal = SwalConfimationProcess("Upload Gambar", "Gambar akan di upload. Lanjutkan ?", type_question, "Lanjutkan", "Batal");
     swal.then(function(){
+        StartLoading();
         promise = sendUpdateImgUser(userID, blobFile);
         promise.done(function(response){
+            FinishLoading();
             var swal = SimpleSwal("Sukses", "sukses menyimpan gambar", type_success, "tutup");
             swal.then(function(){
                 location.reload();
             });
         })
         .fail(function(response){
+            FinishLoading();
             SimpleSwal("Opps", "silahkan mencoba sekali lagi", type_error, "tutup");
         });
     });    

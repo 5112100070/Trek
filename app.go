@@ -78,6 +78,7 @@ func main() {
 	r.GET("/admin/user", app.AdminUserList)
 	r.GET("/admin/user/new", app.AdminUserNew)
 	r.GET("/admin/user/edit", app.AdminUserEditPage)
+	r.GET("/admin/ganti-password", app.ChangePasswordPageHandler)
 
 	r.GET("/admin/index", app.AdminDashboardPage)
 

@@ -7,16 +7,18 @@ function ProcessRegisterCompany(){
         return;
     }
 
+    StartLoading();
     var swalConfirm = SwalConfimationProcess("Daftarkan Perusahaan", "Lanjutkan ?", type_question, "Daftarkan", "Batal");
     swalConfirm.then(function(){
         var promise = RegisterCompany(companyType, companyName);
         promise.done(function(response){
-            console.log("Jangan melakukan itu");
+            FinishLoading();
             swal = SimpleSwal("Sukses melakukan pendaftaran perusahaan", "Sistem akan melakukan login ulang", type_success, "tutup");
             swal.then(function(){
                 ProcessLogout();
             });
         }).fail(function(response){
+            FinishLoading();
             var errMessage;
             if(response.status >= 500){
                 errMessage = "silahkan mencoba sekali lagi"
@@ -48,10 +50,13 @@ function ProcessChangePassword(){
 
     var swal = SwalConfimationProcess("Ganti Password", "Lanjutkan ?", type_question, "Ganti Password", "Batal");
     swal.then(function(){
+        StartLoading();
         promise = changePassword(tokenOld, token, tokenVerification);
         promise.done(function(response){
+            FinishLoading();
             SimpleSwal("Ganti Password", "Berhasil melakukan penggantian password", type_success, "OK");
         }).fail(function(response){
+            FinishLoading();
             if(response.responseJSON != undefined){
                 SimpleSwal("Ganti Password", response.responseJSON.data.message, type_error, "Tutup");
             } else {
@@ -69,7 +74,9 @@ function ProcessChangePassword(){
 function loadCompanyDetail(){
     promise = getCompanyDetail();
 
+    StartLoading();
     promise.done(function(response){
+        FinishLoading();
         response = response.data;    
         $("#company-name").html(response.data.company_name);    
         $("#company-create-time").html("Terdaftar Sejak :" + response.data.create_time);
@@ -86,9 +93,11 @@ function loadCompanyDetail(){
 }
 
 function initTableMember(){
+    StartLoading();
     userTable = $('#userTable').DataTable();
     promise = getCompanyMember();
     promise.done(function(response){
+        FinishLoading();
         users = response.data.data;
         var counter = 1;
 
