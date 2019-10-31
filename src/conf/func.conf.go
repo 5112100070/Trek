@@ -27,7 +27,7 @@ func InitRedis(c Config) global.DBBundle {
 
 	_, err := redisSession.PING()
 	if err != nil {
-		log.Fatal("Redis Session data not accessible, please check config")
+		log.Println("Redis Session data not accessible, please check config")
 	}
 
 	return DB
