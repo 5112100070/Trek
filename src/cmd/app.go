@@ -42,14 +42,16 @@ func main() {
 	r := initEngine()
 
 	r.GET("/", app.IndexPageHandler)
+	r.GET("/home", app.IndexPageHandler)
 	r.GET("/index", app.IndexPageHandler)
+	r.GET("/about-us", app.AboutUsPageHandler)
+	r.GET("/faq", app.FaqPageHandler)
 	r.GET("/sewa", app.RentPageHandler)
 	r.GET("/penyedia", app.ProviderPageHandler)
 	r.GET("/syarat", app.RequirementPageHandler)
 	r.GET("/kebijakan", app.PolicyPageHandler)
 	r.GET("/permintaan", app.RequestPageHandler)
 	r.GET("/thank-you", app.ThankYouPageHandler)
-	r.GET("/tentang-kami", app.AboutUsPageHandler)
 	r.GET("/not-found", app.NotFoundPageHandler)
 
 	r.GET("/alat", app.MarketPlacePageHandler)
@@ -82,7 +84,7 @@ func main() {
 
 	r.GET("/admin/index", app.AdminDashboardPage)
 
-	r.Run(":4000") // listen and serve on 0.0.0.0:8080
+	r.Run(":4001") // listen and serve on 0.0.0.0:8080
 }
 
 func initEngine() *gin.Engine {

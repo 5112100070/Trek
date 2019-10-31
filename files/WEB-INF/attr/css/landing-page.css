@@ -37,14 +37,12 @@ header.provider .overlay {
 
 header.masthead {
   position: relative;
-  background-color: #343a40;
-  background: url("../img/bg-trek.jpg") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-top: 8rem;
-  padding-bottom: 8rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 header.masthead .overlay {
@@ -74,8 +72,8 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-top: 12rem;
-    padding-bottom: 12rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
   header.masthead h1 {
     font-size: 3rem;
@@ -184,10 +182,11 @@ header.masthead h1 {
   box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
 }
 .heading-landing{
-  padding:0.2rem;
-  font-weight: bold;
-  font-size: 2.5rem;
-  background-color:rgba(255, 255, 255, 0.822);
+  padding: 0.2rem;
+  margin-bottom: 0.3rem;
+  font-size: 25px;
+  font-weight: bolder;
+  background-color: rgba(255, 255, 255, 0.822);
 }
 .provider-landing{
   padding:0.2rem;
@@ -202,8 +201,7 @@ header.masthead h1 {
 }*/
 
 .features-icons {
-  padding: 7rem 0;
-
+  padding: 2rem 0;
 }
 
 .features-icons .features-icons-item {
@@ -222,6 +220,15 @@ header.masthead h1 {
 .features-icons .features-icons-item:hover .features-icons-icon i {
   font-size: 5rem;
 }
+
+.features-icons-2 {
+  max-height: 6rem;
+  max-width: 6rem;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .about{
   font-weight: 500;
   font-size: 2rem;
@@ -361,4 +368,16 @@ footer.footer {
     height:100%;
     width:100%;
     position:absolute;
+}
+.header-img {
+    background: url("../img/contact-us.png") no-repeat center center;
+    background-size: cover;
+    min-height: 356px;
+}
+
+.header-contact {
+  width:100%;
+  text-align:right;
+  font-weight:bolder;
+  margin-top: 1rem;
 }

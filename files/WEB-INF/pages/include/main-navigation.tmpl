@@ -1,57 +1,19 @@
 <!-- Header -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light  sticky-top">
-    <a style="cursor: pointer;" onClick="javascript:GoToIndex('')">
-        <img src="/img/logo-trek.png" width="100" height="35" class="d-inline-block align-top" alt="" style="margin-right:20px;">
-    </a>            
-    <ul class="navbar-nav ml-0 ml-md-0 border-0 d-flex flex-row-reverse" style="display: flex;">
-        <li class="nav-item dropdown no-arrow  align-items-center d-flex p-0">
-            <button class="navbar-toggler border-0 ml-auto ml-md-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon" style="font-size:0.7rem"></span>
-                </button>
-        </li>
-        <li class="nav-item dropdown no-arrow align-items-center d-flex">
-            <a class="navbar-toggler border-0  nav-link js-scroll-trigger" style="color: rgba(0, 0, 0, 0.68);font-size:0.7rem;"href="tel:+628111368735"><i class="fa fa-phone"></i> 0811-136-TREK (8735)</a>                              
-            </li>
-        </ul>          
+    <a style="cursor: pointer;" onClick="javascript:GoToIndex('home')">
+        <img src="/img/logo-cgx.png" width="100" height="70" class="d-inline-block align-top" alt="" style="margin-right:20px;">
+    </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" style="margin:0 10px 0; cursor: pointer;">
-            <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('sewa')"><b>Sewa Sekarang</b></a>
+                <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('home')"><b>Home</b></a>
             </li>
             <li class="nav-item" style="margin:0 10px 0; cursor: pointer;">
-            <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('penyedia')"><b>Penyedia Alat</b></a>
-            </li>
-        
-            <li class="nav-item " style="margin:0 10px 0; cursor: pointer;">
-            <a class="nav-link js-scroll-trigger" target="_blank" href="http://blog.trek.id"><b>Blog</b></a>
+                <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('faq')"><b>FAQ</b></a>
             </li>
             <li class="nav-item " style="margin:0 10px 0; cursor: pointer;">
-            <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('tentang-kami')"><b>Tentang Kami</b></a>
-            </li>
-            <li class="nav-item d-none d-lg-block" style="margin:0 10px 0; cursor: pointer;">
-            <a class="nav-link js-scroll-trigger" style="color: rgba(14, 14, 14, 0.68);"href="tel:+628111368735"><i class="fa fa-phone"></i> 0811-136-TREK (8735)</a>          
+                <a class="nav-link js-scroll-trigger" onClick="javascript:GoToIndex('about-us')"><b>Contact</b></a>
             </li>
         </ul>
-        {{ if (not .UserDetail) }}
-            <a class="btn btn-trek" style="color: rgba(14, 14, 14, 0.68); font-weight:bolder; margin:0 10px 0;" onClick="javascript:GoToIndex('login')">Login</a>
-        {{ else }}
-            <a class="btn btn-trek" style="color: rgba(14, 14, 14, 0.68); font-weight:bolder; margin:0 10px 0;" onClick="javascript:ProcessLogout()">Logout</a>
-        {{ end }}
-
     </div>
 </nav>
-
-<!-- Modal -->
-<div id="loading-pop-up" class="modal-loading">
-    <div class="lds-facebook"><div></div><div></div><div></div></div>
-</div>
-
-<script>
-    function StartLoading(){
-        document.getElementById('loading-pop-up').style.display = "block";
-    }
-
-    function FinishLoading(){
-        document.getElementById('loading-pop-up').style.display = "none";
-    }
-</script>
