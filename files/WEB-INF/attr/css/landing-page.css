@@ -12,7 +12,7 @@ h6 {
   font-weight: 700;
 }
 #trek-bg{
-  background-color: #ffcc00;
+  background-color: #febe2f;
 }
 header.provider {
   position: relative;
@@ -42,6 +42,7 @@ header.masthead {
   -o-background-size: cover;
   background-size: cover;
   padding-bottom: 1rem;
+  min-height: 35rem;
 }
 
 header.masthead .overlay {
@@ -99,16 +100,16 @@ header.masthead h1 {
   width: auto;
   height: 10rem;
   border-radius: 50%;
-  /* border:2px solid #ffcc00; */
+  /* border:2px solid #febe2f; */
   padding: 10px;
-  background:#ffcc00;
+  background:#febe2f;
 }
 
 .trek-text-decoration{
   cursor:pointer;
-  color:#ffcc00; 
+  color:#febe2f; 
   text-decoration: underline; 
-  text-decoration-color: #ffcc00;
+  text-decoration-color: #febe2f;
 }
 
 .bg-white-trek{
@@ -194,8 +195,8 @@ header.masthead h1 {
 }
 /*.btn-trek:hover{
   color:black;
-  background-color:#ffcc00;
-  border-color:#ffcc00;
+  background-color:#febe2f;
+  border-color:#febe2f;
 }*/
 
 .features-icons {
@@ -317,7 +318,7 @@ footer.footer {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
-  background-image: linear-gradient(#ffcc00, #ffcc00), linear-gradient(#f8f9fa, #f8f9fa);
+  background-image: linear-gradient(#febe2f, #febe2f), linear-gradient(#f8f9fa, #f8f9fa);
   background-size: 0 5px, auto;
   background-repeat: no-repeat;
   background-position: center bottom;
