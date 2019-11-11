@@ -3,267 +3,55 @@
 
   {{ template "header.tmpl" .}}
 
-  <body data-spy="scroll" data-target=".navbar" data-offset="1">
+  <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'Gill Sans'">
 
     {{ template "main-navigation.tmpl" .}}    
 
     <!-- Masthead -->
     <header class="masthead text-black">
       <div class="overlay"></div>
-      <div class="container" style="background-color:#ffcc00">
+      <div class="container">
         <div class="row">
           <div class="col-lg-6">
-            <div class="row">
-              <div class="col-xl-12 mx-left mb-5 pt-5">
-                <span class="heading-landing" style="background-color:#ffcc00">Grow with us!</span>
-                <br>
-                <span>
-                  Let us store, pack, and ship for you
-                  <br>with a plus - analytical evaluation custom to your needs.
-                  <br>So you can focus more on your customer and grow
-                </span>
-              </div>
-              <div class="col-md-10 col-lg-8 col-xl-7 mx-left" style="padding-top:1.5rem">
-                <a class="btn btn-home btn-lg"
-                  target="_blank"
-                  style="border:2px solid black"
-                  onClick="javascript:GoToIndex('home')">Learn More</a>
-              </div>
-            </div>
+            <div class="row"> <!-- row -->
+              <span class="heading-landing">Let's Grow Together !</span>
+                <div class="row"> <!-- row -->
+                  <div class="col-lg-6 form-group">
+                      <label for="fullname">Name</label>
+                      <input class="form-control" id="fullname">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="company">Company</label>
+                      <input class="form-control" id="company">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="phone">Phone Number</label>
+                      <input class="form-control" id="phone">
+                  </div>
+                  <div class="col-lg-12 form-group">
+                      <label for="project">Project Description</label>
+                      <input class="form-control" id="project">
+                  </div>
+
+                  <div class="col-lg-12" style="margin-top: 2%;">
+                      <div class="row">
+                          <div class="col-lg-3"></div>
+                          <a class="col-lg-6 btn btn-home" onClick="javascript:ProcessRegister()">SUBMIT</a>
+                          <div class="col-lg-3"></div>
+                      </div>
+                  </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of row -->
           </div> <!-- end of col -->
           <div class="col-lg-6 header-img" style="width:100%"></div>
+          <div class="col-lg-12 header-contact">Reach out: info@cgxlogistic.co.id</div>
         </div> <!-- end of row -->
       </div>
     </header>
-
-    <section class="features-icons bg-white text-center">
-      <div class="container">
-        <div class="row" >
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder"><h4>WHAT WE DO</h4></div>
-          <div class="col-lg-3">
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <img src="img/store-icon.png" style="min-width:10rem;" alt="Store your products!">
-              </div>
-              <h6 style="padding-top:1rem;text-align:center;">Store your products!</h6>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <img src="img/web_icon.png" style="min-width:10rem;" alt="mudah digunakan">
-              </div>
-              <h6 style="padding-top:1rem;text-align:center;">Yeay! Orders!</h6>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <img src="img/ship_icon.png" style="min-width:10rem;" alt="order professionally!">
-              </div>
-              <h6 style="padding-top:1rem;text-align:center;">We pack your<br>order professionally!</h6>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <img src="img/pack_icon.png" style="min-width:10rem;" alt="We ship them accurately!">
-              </div>
-              <h6 style="padding-top:1rem;text-align:center;">We ship them accurately!</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="features-icons bg-white text-center">
-      <div class="container" style="background-color:#ffcc00">
-        <div class="row" >
-          <div class="col-lg-3" style="margin: auto;">
-            <h5>
-              Save time and
-              <br>enjoy the benefit!
-            </h5>
-          </div>
-          <div class="col-lg-9">
-            <div class="row pt-3">
-              <div class="col-lg-3">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
-                    <img src="img/benefit_secured.png" class="features-icons-2" alt="secure facilities">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-9" style="text-align: left">
-                <span style="font-weight: bolder">Secured Facility</span>
-                <span style="font-weight: 500">
-                  <br>Our facilities are supervise 24 hours 7 days a week!
-                </span>
-              </div>
-            </div> <!-- end of row pt-3-->
-
-            <div class="row pt-3">
-              <div class="col-lg-3">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
-                    <img src="img/benefit_accurate.png" class="features-icons-2" alt="accurate">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-9" style="text-align: left">
-                <span style="font-weight: bolder">Accurate Logical Service</span>
-                <span style="font-weight: 500">
-                  <br>We arrange accurately with the most efficient cost,
-                  <br>whether is island, air flight, sea or multi mode. On time
-                  <br>so your customer is happy
-                </span>
-              </div>
-            </div> <!-- end of row pt-3-->
-
-            <div class="row pt-3">
-              <div class="col-lg-3">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
-                    <img src="img/benefit_analitik.png" class="features-icons-2" alt="analysis evaluation">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-9" style="text-align: left">
-                <span style="font-weight: bolder">Analytical Evaluation</span>
-                <span style="font-weight: 500">
-                  <br>We not just packed and ship, we also giving your insight
-                  <br>which one sells out the most, in which time of the year and more!
-                  <br>letting you know your customer even more.
-                </span>
-              </div>
-            </div> <!-- end of row pt-3-->
-
-            <div class="row pt-3">
-              <div class="col-lg-3">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
-                    <img src="img/benefit_scallable.png" class="features-icons-2" alt="scalable">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-9" style="text-align: left">
-                <span style="font-weight: bolder">Scalability Fulfilment</span>
-                <span style="font-weight: 500">
-                  <br>We store, check for quality control profesionally packed
-                  <br>and manage your inventory
-                  <br>No matter big or small, our space is ready for your growth
-                </span>
-              </div>
-            </div> <!-- end of row pt-3-->
-          </div> <!-- end of col-lg-9 -->
-        </div>
-      </div>
-    </section>
-
-    <section class="features-icons bg-white text-center">
-      <div class="container">
-        <div class="row" >
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder"><h4>CLIENTS</h4></div>
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-airnav.png" class="features-icons-2" alt="air nav">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-akari.png" class="features-icons-2" alt="akari">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-cut-lane.png" class="features-icons-2" alt="cut lane">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-geofreight.png" class="features-icons-2" alt="geofright">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-hafi.png" class="features-icons-2" alt="hafi">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-ikatilo.png" class="features-icons-2" alt="ikatilo">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-ojk-.png" class="features-icons-2" alt="ojk">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-panggung.png" class="features-icons-2" alt="panggung">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3"></div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-rollerover.png" class="features-icons-2" alt="rollerover">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="mx-auto mb-2">
-              <div class="d-flex">
-                <img src="img/partner/bw-transvision.png" class="features-icons-2" alt="transvision">
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="features-icons bg-white text-center">
-      <div class="container">
-        <div class="row" >
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder"><h4>Ready to grow your bussiness with us ?</h4></div>
-          
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-            <a class="btn btn-home btn-lg"
-                  target="_blank"
-                  style="border:2px solid black"
-                  onClick="javascript:GoToIndex('home')">Get in touch!</a>
-          </div>
-        </div>
-      </div>
-    </section>
 
       {{ template  "footer.tmpl" .}}
   </body>

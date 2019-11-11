@@ -41,7 +41,6 @@ header.masthead {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
@@ -72,7 +71,6 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-top: 1rem;
     padding-bottom: 1rem;
   }
   header.masthead h1 {
