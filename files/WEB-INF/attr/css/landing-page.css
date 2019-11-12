@@ -368,10 +368,19 @@ footer.footer {
     width:100%;
     position:absolute;
 }
+
 .header-img {
-    background: url("../img/contact-us.png") no-repeat center center;
+    background: url("../img/home-illo.png") no-repeat center center;
     background-size: cover;
     min-height: 356px;
+} 
+
+.contact-us-img {
+  background: url("../img/contact-us.png") no-repeat center center;
+  background-size: cover;
+  min-height: 356px;
+  max-width: 426px;
+  margin-left: 8rem;
 }
 
 .header-contact {
