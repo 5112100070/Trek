@@ -379,8 +379,8 @@ footer.footer {
   background: url("../img/contact-us.png") no-repeat center center;
   background-size: cover;
   min-height: 356px;
-  max-width: 426px;
-  margin-left: 8rem;
+  /* max-width: 426px; */
+  /* margin-left: 8rem; */
 }
 
 .header-contact {
