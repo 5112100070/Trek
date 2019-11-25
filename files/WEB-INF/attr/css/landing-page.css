@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "gillsans";
+  src: url(/etc/GillSans/gillsans.ttf) format("truetype");
+}
+
 body {
-  font-family: 'Montserrat', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'gillsan', 'Montserrat', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1,
@@ -90,6 +95,16 @@ header.masthead h1 {
   background-size: cover;
   padding-top:2rem;
   /* border-radius:50%; */
+}
+
+.overlay-cgx {
+  position: absolute;
+  background-color: #febe2f;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 0 0 0 60px;
 }
 
 .overlay-trek{
@@ -221,11 +236,22 @@ header.masthead h1 {
 }
 
 .features-icons-2 {
-  max-height: 6rem;
+  max-height: 8rem;
   max-width: 6rem;
   height: 100%;
   width: 100%;
   margin: 0 auto;
+}
+
+.features-image {
+  width: 340px;
+  height: 365px;
+  margin-top: 60px;
+}
+
+.features-image-1 {
+  width: 100%;
+  max-height: 200px;
 }
 
 .about{
@@ -372,7 +398,7 @@ footer.footer {
 .header-img {
     background: url("../img/home-illo.png") no-repeat center center;
     background-size: cover;
-    min-height: 356px;
+    min-height: 565px;
 } 
 
 .contact-us-img {
@@ -388,4 +414,12 @@ footer.footer {
   text-align:right;
   font-weight:bolder;
   margin-top: 1rem;
+}
+
+.index-text {
+    font-size: 30px;
+    line-height: normal;
+    float: left;
+    padding-left: 20px;
+    width: 485px;
 }
