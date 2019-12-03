@@ -1,7 +1,7 @@
 .btn-home{
     font-weight: 500;
     border-width: 1px;
-    background-color:rgb(255, 200, 0);
+    background-color:#febe2f;
     /*  */
     align-self:center;
     transition:all .5s ease;

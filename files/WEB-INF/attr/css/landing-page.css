@@ -47,7 +47,7 @@ header.masthead {
   -o-background-size: cover;
   background-size: cover;
   padding-bottom: 1rem;
-  min-height: 35rem;
+  min-height: 42rem;
 }
 
 header.masthead .overlay {
@@ -215,7 +215,7 @@ header.masthead h1 {
 }*/
 
 .features-icons {
-  padding: 2rem 0;
+  padding: 4rem 0;
 }
 
 .features-icons .features-icons-item {
@@ -404,7 +404,7 @@ footer.footer {
 .contact-us-img {
   background: url("../img/contact-us.png") no-repeat center center;
   background-size: cover;
-  min-height: 356px;
+  min-height: 565px;
   /* max-width: 426px; */
   /* margin-left: 8rem; */
 }
