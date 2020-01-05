@@ -47,7 +47,7 @@ header.masthead {
   -o-background-size: cover;
   background-size: cover;
   padding-bottom: 1rem;
-  min-height: 42rem;
+  /* min-height: 42rem; */
 }
 
 header.masthead .overlay {
@@ -98,12 +98,12 @@ header.masthead h1 {
 }
 
 .overlay-cgx {
-  position: absolute;
   background-color: #febe2f;
   height: 100%;
   width: 100%;
+  /* position: absolute;
   top: 0;
-  left: 0;
+  left: 0; */
   padding: 0 0 0 60px;
 }
 
