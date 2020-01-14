@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/app"
@@ -34,12 +36,29 @@ func init() {
 		log.Fatal("Could not find configuration file")
 	}
 
-	db := conf.InitRedis(conf.GConfig)
-	global.InitRepoBundle(db)
+	redis := conf.InitRedis(conf.GConfig)
+	db := conf.InitDatabase(conf.GConfig.Database)
+
+	repoBundle := global.DBBundle{
+		RedisSession: redis,
+		DB:           db,
+	}
+
+	global.InitRepoBundle(repoBundle)
 }
 
 func main() {
 	r := initEngine()
+
+	config := cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowCredentials: false,
+		MaxAge:           12 * time.Hour,
+	}
+
+	r.Use(cors.New(config))
 
 	r.GET("/", app.IndexPageHandler)
 	r.GET("/home", app.IndexPageHandler)
@@ -57,6 +76,7 @@ func main() {
 	r.GET("/alat", app.MarketPlacePageHandler)
 	r.GET("/alat/:product", app.DetailProductHandler)
 
+	r.POST("/contact/save", app.SaveContact)
 	r.POST("/send-request-item", app.SendRequestItem)
 
 	r.GET("/login", app.LoginPageHandler)
@@ -84,7 +104,7 @@ func main() {
 
 	r.GET("/admin/index", app.AdminDashboardPage)
 
-	r.Run(":4001") // listen and serve on 0.0.0.0:8080
+	r.Run(":4001")
 }
 
 func initEngine() *gin.Engine {

@@ -1,6 +1,8 @@
 package global
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func OKResponse(c *gin.Context, val interface{}) {
 	header := gin.H{

@@ -7,6 +7,7 @@ import (
 type Config struct {
 	BaseUrlConfig BaseUrl
 	RedigoDefault redigo.RedisConfig
+	Database      map[string]*DatabaseConfig
 	Session       SessionConfig
 }
 
@@ -17,4 +18,11 @@ type BaseUrl struct {
 
 type SessionConfig struct {
 	Redis string
+}
+
+// DatabaseConfig database module
+type DatabaseConfig struct {
+	Driver string
+	Master string
+	Slave  []string
 }

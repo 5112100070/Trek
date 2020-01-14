@@ -4,6 +4,8 @@ import (
 	"io"
 	"log"
 
+	"github.com/5112100070/Trek/src/app/public"
+
 	"github.com/5112100070/Trek/src/app/session"
 )
 
@@ -14,5 +16,6 @@ func InitLogError(errorHandle io.Writer) {
 func InitRepoBundle(dbBundle DBBundle) {
 	Services = RepoBundle{
 		Session: session.InitSessionRepo(dbBundle.RedisSession),
+		Public:  public.InitPublicRepo(dbBundle.DB),
 	}
 }
