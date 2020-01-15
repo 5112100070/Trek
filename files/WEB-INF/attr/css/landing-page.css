@@ -46,7 +46,7 @@ header.masthead {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
   /* min-height: 42rem; */
 }
 
@@ -77,7 +77,7 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-bottom: 1rem;
+    /* padding-bottom: 1rem; */
   }
   header.masthead h1 {
     font-size: 3rem;
@@ -104,8 +104,21 @@ header.masthead h1 {
   /* position: absolute;
   top: 0;
   left: 0; */
-  padding: 0 0 0 60px;
+  /* padding: 0 0 0 60px; */
 }
+/* @media (min-width: 576px) { ... } */
+
+/* @media (max-width: 575.98px) { 
+  .overlay-cgx {
+    padding: 0 20px;
+  }
+ } */
+/* 
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { ... } */
+
+/* Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... } */
 
 .overlay-trek{
   position: relative;
@@ -395,11 +408,7 @@ footer.footer {
     position:absolute;
 }
 
-.header-img {
-    background: url("../img/home-illo.png") no-repeat center center;
-    background-size: cover;
-    min-height: 565px;
-} 
+
 
 .contact-us-img {
   background: url("../img/contact-us.png") no-repeat center center;
@@ -420,6 +429,44 @@ footer.footer {
     font-size: 30px;
     line-height: normal;
     float: left;
-    padding-left: 20px;
+    word-spacing: 4.2px;
+    /* margin-right: -20%; */
+    /* padding-left: 20px; */
     /* width: 485px; */
+}
+.header-img {
+  background: url(../img/home-illo.png) no-repeat bottom right;
+    background-size: 100%;
+    right: 0;
+    min-height: 700px;
+    height: auto;
+    width: 100%;
+    /* even more control with max-width */
+    /* max-width: 500px; */
+} 
+#msgErreur {
+  position:absolute;
+  z-index:5;
+}
+#msgErreur > div {
+  position: relative;
+  /* top: 30px; */
+  top:-5rem;
+  /* left: -20rem; */
+  width: 20rem;
+  height: 30px;
+}
+@media (min-width: 992px){
+  .header-img{
+    background-size:auto;
+  }
+  #msgErreur > div {
+    position: relative;
+    top: 30px;
+    top:-5rem;
+    left: -20rem;
+    width: 20rem;
+    height: 30px;
+  }
+
 }
