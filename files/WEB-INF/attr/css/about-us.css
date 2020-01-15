@@ -1,0 +1,13 @@
+.form_error {
+	font-size: 9px;
+	color: red;
+	margin: 4px 0;
+}
+
+.hide {
+	display: none;
+}
+
+.error {
+    background: #FFB9B9;
+}

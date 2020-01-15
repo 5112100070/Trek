@@ -25,6 +25,10 @@ func GetServiceSession() SessionService {
 	return Services.Session
 }
 
+func GetServicePublic() PublicService {
+	return Services.Public
+}
+
 func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 	service := GetServiceSession()
 	cookie, errGetCookie := c.Cookie(UserCookie[GetEnv()])

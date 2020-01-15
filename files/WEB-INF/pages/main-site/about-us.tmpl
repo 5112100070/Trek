@@ -2,6 +2,7 @@
 <html lang="en">
 
   {{ template "header.tmpl" .}}
+  <link href="/css/about-us.css" rel="stylesheet">
 
   <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'Gill Sans'">
 
@@ -19,28 +20,35 @@
                   <div class="col-lg-6 form-group">
                       <label for="fullname">Name</label>
                       <input class="form-control" id="fullname">
+                      <div class="form_error hide" id="fullname-error"></div>
                   </div>
                   <div class="col-lg-6 form-group">
                       <label for="email">Email</label>
                       <input type="email" class="form-control" id="email">
+                      <div class="form_error hide" id="email-error"></div>
                   </div>
                   <div class="col-lg-6 form-group">
                       <label for="company">Company</label>
                       <input class="form-control" id="company">
+                      <div class="form_error hide" id="company-error"></div>
                   </div>
                   <div class="col-lg-6 form-group">
                       <label for="phone">Phone Number</label>
                       <input class="form-control" id="phone">
+                      <div class="form_error hide" id="phone-error"></div>
                   </div>
                   <div class="col-lg-12 form-group">
                       <label for="project">Project Description</label>
                       <input class="form-control" id="project">
+                      <div class="form_error hide" id="project-error">
+                        mohon isi deskripsi project anda
+                      </div>
                   </div>
 
                   <div class="col-lg-12" style="margin-top: 2%;">
                       <div class="row">
                           <div class="col-lg-3"></div>
-                          <a class="col-lg-6 btn btn-home" onClick="javascript:ProcessRegister()">SUBMIT</a>
+                            <button id="process-register" class="col-lg-6 btn btn-home" disabled>SUBMIT</a>
                           <div class="col-lg-3"></div>
                       </div>
                   </div> <!-- end of col -->
@@ -63,4 +71,232 @@
 <script src="js/service/product.js"></script>
 <!--Start of Tawk.to Script-->
 {{ template "default-script.tmpl" .}}
+<script>
+  var processRegBtn = document.getElementById("process-register");
+  var fullnameIn = document.getElementById("fullname");
+  var emailIn = document.getElementById("email");
+  var companyIn = document.getElementById("company");
+  var phoneIn = document.getElementById("phone");
+  var projectIn = document.getElementById("project");
+
+
+  var fullnameErr = document.getElementById("fullname-error");
+  var emailErr = document.getElementById("email-error");
+  var companyErr = document.getElementById("company-error");
+  var phoneErr = document.getElementById("phone-error");
+  var projectErr = document.getElementById("project-error");
+
+  checkProcessBtn()
+
+  fullnameIn.addEventListener("keyup", function(e){
+    checkProcessBtn();
+  });
+
+  fullnameIn.addEventListener("keydown", function(e){
+    checkProcessBtn();
+  });
+
+  emailIn.addEventListener("keyup", function(e){
+    checkProcessBtn();
+  });
+
+  emailIn.addEventListener("keydown", function(e){
+    checkProcessBtn();
+  });
+
+  phoneIn.addEventListener("keyup", function(e){
+    checkProcessBtn();
+  });
+
+  phoneIn.addEventListener("keydown", function(e){
+    checkProcessBtn();
+  });
+
+  projectIn.addEventListener("keyup", function(e){
+    checkProcessBtn();
+  });
+
+  projectIn.addEventListener("keydown", function(e){
+    checkProcessBtn();
+  });
+
+  companyIn.addEventListener("keyup", function(e){
+    checkProcessBtn();
+  });
+
+  companyIn.addEventListener("keydown", function(e){
+    checkProcessBtn();
+  });
+
+  // listener for registration process
+  processRegBtn.addEventListener("click", function(){
+    swal({
+      title: 'Data yang diisikan benar ?',
+      text: "Data akan disimpan dan anda akan dihubungi segera",
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Simpan',
+      cancelButtonText: 'jangan',
+    }).then((result) => {
+      if(result.value) {var data = {
+          fullname: fullnameIn.value,
+          email: emailIn.value,
+          company: companyIn.value,
+          phone: phoneIn.value,
+          project: projectIn.value
+        };
+        
+        var promise = $.ajax({
+          url: product_url + "/contact/save",
+          type: 'POST',
+          beforeSend: function(request) {
+            request.setRequestHeader("Authorization", "test-auth");
+          },
+          data: data,
+        }).then(response => { 
+          if(response.status_code == 200) {
+             swal({
+              title: "Sukses Menyimpan",
+              text: "Terima kasih, data telah tersimpan dan anda akan segera dihubungi",
+              imageUrl: 'img/thumbs-up.jpg'
+            }).then((result) => {
+              GoToIndex('home')
+            });
+          }
+        }).catch(error => {
+          // showToaster("Ada kendala saat memproses pesananmu. Coba Ulangi lagi, ya!", error);
+        });
+      }
+    });
+  });
+
+  function checkProcessBtn() {
+	  processRegBtn.disabled = true;
+
+    // validate fullname
+		if (fullnameIn.value != "" ) {
+			if (fullnameIn.value.length <= 2) {
+				setError(true, fullnameErr, "karakter harus lebih dari 2");
+				processRegBtn.disabled = true
+				return
+			} else if(fullnameIn.value.length > 40){
+        setError(true, fullnameErr, "karakter tidak boleh lebih dari 40");
+				processRegBtn.disabled = true
+				return
+      } else {
+				setError(false, fullnameErr);
+			}
+		} else {
+			processRegBtn.disabled = true;
+			return
+    }
+
+    // validate email
+    if (emailIn.value != "" ) {
+			if (!validateEmail(emailIn.value)) {
+				setError(true, emailErr, "email tidak valid")
+				processRegBtn.disabled = true
+				return
+			} else if (emailIn.value.length <= 5) {
+				setError(true, emailErr, "email tidak valid");
+				processRegBtn.disabled = true
+				return
+			} else if(emailIn.value.length > 40){
+        setError(true, emailErr, "karakter tidak boleh lebih dari 40");
+				processRegBtn.disabled = true
+				return
+      } else {
+				setError(false, emailErr);
+			}
+		} else {
+			processRegBtn.disabled = true;
+			return
+		}
+
+    // validate company
+		if (companyIn.value != "" ) {
+      if (companyIn.value.length <= 2) {
+				setError(true, companyErr, "karakter harus lebih dari 2");
+				processRegBtn.disabled = true
+				return
+			} else if(companyIn.value.length > 40){
+        setError(true, companyErr, "karakter tidak boleh lebih dari 40");
+				processRegBtn.disabled = true
+				return
+      } else {
+				setError(false, companyErr);
+			}
+    }
+    else {
+			processRegBtn.disabled = true;
+			return
+		}
+
+    // validate phone number
+		if (phoneIn.value != "" ) {
+			if (isNaN(phoneIn.value)) {
+				setError(true, phoneErr, "nomor telepon tidak valid")
+        orderBtn.disabled = true
+        return
+			} else if (phoneIn.value.length <= 2) {
+				setError(true, phoneErr, "karakter harus lebih dari 2");
+				processRegBtn.disabled = true
+				return
+			} else if(phoneIn.value.length > 40){
+        setError(true, phoneErr, "karakter tidak boleh lebih dari 40");
+				processRegBtn.disabled = true
+				return
+      }  else {
+        setError(false, phoneErr)
+      }
+		} else {
+			processRegBtn.disabled = true
+			return
+		}
+
+    // validate project
+		if (projectIn.value != "" ) {
+			if (projectIn.value.length <= 10) {
+				setError(true, projectErr, "karakter harus lebih dari 10");
+				processRegBtn.disabled = true
+				return
+			} else if(projectIn.value.length > 150){
+        setError(true, projectErr, "karakter tidak boleh lebih dari 150");
+				processRegBtn.disabled = true
+				return
+      }  else {
+        setError(false, projectErr)
+      }
+		} else {
+			processRegBtn.disabled = true
+			return
+		}
+
+		processRegBtn.disabled = false
+}
+
+function setError(isShow, component, message = "") {
+  console.log(message);
+	component.innerHTML = message;
+	if (isShow) {
+		component.classList.remove("hide");
+		component.classList.add("error");
+	} else {
+		component.classList.add("hide");
+		component.classList.remove("error");
+	}
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function stopBubblingEvent(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+</script>
 </html>
