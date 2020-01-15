@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "header.tmpl" .}}
+
+  <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'Gill Sans'">
+
+    {{ template "main-navigation.tmpl" .}}    
+
+    <section class="features-icons bg-white text-center">
+        <div class="container">
+          <div class="row" style="text-align: left">
+            <div class="col-lg-12" >
+              <h4 style="line-height: 2em;">Frequently Asked Questions</h4>
+            </div>
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Berapa harga layanan pengiriman dan/atau pergudangan yang ditawarkan oleh CGX ?</h6>
+              <span>
+                Kami selalu memiliki daftar harga standart yang dapat di sediakan . 
+                Akan tetapi, harga yang kami berikan dapat menyesuaikan dengan kebutuhan Anda.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Apabila saya ingin menggunakan layanan pengiriman CGX, bagaimana proses pengiriman yang disediakan oleh CGX ?</h6>
+              <span>
+                Pengiriman barang akan dilakukan sesuai dengan moda dan layanan pilihan anda. 
+                Lebih mudah aman dan nyaman. Setelah anda memilih moda dan layanan yang ingin digunakan,
+                tim CGX menangani permintaan anda dari tangan Anda dan/atau gudang CGX ke tangan penerima.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Apa saja layanan pengiriman yang ditawarkan ?</h6>
+              <span>
+                Tim CGX akan memastikan barang yang dikirimkan sampai di tujuan berbagai pilihan jalur 
+                dan moda transportasi mulai dari Moda Darat, Moda Laut, Moda Udara, Kurir, dan Multi Moda di 
+                seluruh wilayah Indonesia. Selain itu, kami juga menerima layanan pengiriman ke luar negeri.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Apabila saya ingin menyewa gudang di CGX, bagaimana proses operasional gudang di CGX ?</h6>
+              <span>
+                Proses operasional gudang yang kami terapkan mulai dari pemeriksaan kualitas barang pada saat 
+                barang masuk ke gudang CGX, penyortiran barang yang akan di simpan di gudang CGX, penyimpannan 
+                barang yang di dukung oleh keamanan dan tim ahli, sampai dengan pemeriksaan barang pada saat barang 
+                keluar dari gudang CGX.
+
+                <br>Selain itu, lokasi gudang dan kantor CGX yang berada di satu area yang sama, sehingga tim CGX dapat selalu 
+                memberikan pelayanan terbaik untuk mengelola dan menjaga kualitas barang anda.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Bagaimana proses fulfillment yang diterapkan di CGX ?</h6>
+              <span>
+                CGX logistik akan membantu tiga aspek krusial dalam operasional yaitu mulai dari pengelolaan stok, 
+                pengiriman barang hingga pencatatan inventarisbarang yang didukung tim ahli, Harga terjangkau, 
+                lokasi strategis, dan segala resiko di pergudangan di tanggung oleh pihak CGX.
+
+                <br>Kerangka kerja layanan yang kami berikan mulai dari pengambilan barang ke pabrik dan/atau warehouse, 
+                penerimaan barang di gudang, pengelolaan stok, packing hingga pengiriman ke end-user.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+            <div class="col-lg-12" style="margin-top: 3em;">
+              <h6>Apa layanan yang ditawarkan sudah termasuk asuransi ?</h6>
+              <span>
+                Segala resiko di pergudangan ditanggung 100% oleh CGX Logistik. Sementara unntuk layanan pengiriman.
+                asuransi akan disediakan sesuai permintaan anda yang mengacu terhadap nilai barang yang ingin di asuransi-kan.
+              </span>
+            </div> <!-- end of col-lg-12 -->
+
+          </div>
+        </div>
+      </section>
+
+      {{ template  "footer.tmpl" .}}
+  </body>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112381262-1"></script>
+<script src="/js/controller/product/index.js"></script>
+<script src="/js/controller/product/product.js"></script>
+<script src="js/service/product.js"></script>
+<!--Start of Tawk.to Script-->
+{{ template "default-script.tmpl" .}}
+</html>

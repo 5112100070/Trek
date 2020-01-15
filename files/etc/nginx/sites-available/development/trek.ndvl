@@ -13,6 +13,6 @@ server {
 
                 proxy_cookie_domain go.trek.ndvl $http_cookie;
 
-                proxy_pass http://127.0.0.1:4000;
+                proxy_pass http://127.0.0.1:4001;
         }
 }

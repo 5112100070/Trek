@@ -87,6 +87,15 @@ func AboutUsPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "about-us.tmpl", renderData)
 }
 
+func FaqPageHandler(c *gin.Context) {
+	renderData := gin.H{
+		"config": conf.GConfig,
+	}
+	global.GetDefaultUserAttribute(c, renderData)
+
+	c.HTML(http.StatusOK, "faq.tmpl", renderData)
+}
+
 func NotFoundPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"config": conf.GConfig,

@@ -3,100 +3,64 @@
 
   {{ template "header.tmpl" .}}
 
-  <body data-spy="scroll" data-target=".navbar" data-offset="1">
+  <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'Gill Sans'">
 
     {{ template "main-navigation.tmpl" .}}    
 
+    <!-- Masthead -->
     <header class="masthead text-black">
       <div class="overlay"></div>
       <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <span class="heading-landing mb-5">Teknologi untuk para kontraktor</span>
-            <br>
-          </div>
-          </div>
-        </div>
+        <div class="row no-gutters h-100">
+          <div class="col-lg-4">
+            <div class=""> <!-- row -->
+              <span class="heading-landing">Let's Grow Together !</span>
+                <div class="row"> <!-- row -->
+                  <div class="col-lg-6 form-group">
+                      <label for="fullname">Name</label>
+                      <input class="form-control" id="fullname">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="company">Company</label>
+                      <input class="form-control" id="company">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                      <label for="phone">Phone Number</label>
+                      <input class="form-control" id="phone">
+                  </div>
+                  <div class="col-lg-12 form-group">
+                      <label for="project">Project Description</label>
+                      <input class="form-control" id="project">
+                  </div>
+
+                  <div class="col-lg-12" style="margin-top: 2%;">
+                      <div class="row">
+                          <div class="col-lg-3"></div>
+                          <a class="col-lg-6 btn btn-home" onClick="javascript:ProcessRegister()">SUBMIT</a>
+                          <div class="col-lg-3"></div>
+                      </div>
+                  </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of row -->
+          </div> <!-- end of col -->
+          <div class="col-lg-8 contact-us-img" style="width:100%"></div>
+          <div class="col-lg-12 header-contact">Reach out: info@cgxlogistic.co.id</div>
+        </div> <!-- end of row -->
       </div>
     </header>
 
-    <section class="features-icons bg-light-grey">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-9" >
-              <h4>Trek ingin mengubah proses sewa-menyewa alat berat menjadi lebih baik</h2>
-              <p>Penyewa sering bingung harus menghubungi siapa untuk mencari peralatan konstruksi 
-              tertentu di lokasi tertentu. Disisi lain, penyedia alat menunggu-nunggu datangnya penyewa.
-              <b>Tidak ada tempat dimana pengguna dan penyedia alat bisa saling bertemu. Trek ingin 
-              menjadi tempat tersebut.</b>
-
-              <br>Trek di pengadaan alat berat konstruksi adalah seperti pramutamu di hotel. 
-              Seorang pramutamu hotel, bisa mengurus hampir semua hal yang berkaitan dengan layanan hotel,
-               mulai dari minta memesankan sarapan ke kamarmu sampai dengan menelpon reservasi taksi yang akan 
-               mengantarkanmu ke bandara. <b>Trek adalah pramutamu untuk pengadaan alat konstruksi</b>. Cukup 
-               beritahu kami apa yang alat berat apa yang kamu butuhkan; kami akan carikan alat tersebut untuk kamu.
-              
-            </div>
-            <div class="col-lg-12">
-              <a data-toggle="modal" data-target="#myModal"  class="btn btn-trek btn-trek-trans" href="">TONTON VIDEO KAMI</a>
-            </div>
-            <div class="modal fade" id="myModal" role="dialog" width="auto" height="auto">
-            <div class="modal-dialog">            
-              <!-- Modal content-->
-              <div class="modal-content" style="background-color: rgba(255, 0, 0, 0); border: none;">
-                <div class="video-responsive">
-                  <iframe width="560" height="315" frameborder="0" allowfullscreen src="https://www.youtube.com/embed/xuxBl5JWCPo"></iframe>
-                </div>
-              </div>
-            </div>
-          </div>          
-        </div>
-      </section>
-
-      <section class="features-icons bg-light-grey">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6"></div>
-            <div class="col-lg-6">
-              <h3>Kami ingin menyewa alat terasa mudah di mata pelanggan</h3>
-              <p>Trek menjebatani pengguna dan penyedia alat berat untuk saling bertemu. Kami 
-              mendesain proses kami supaya terasa sederhana mungkin di hadapan pelanggan sehingga 
-              semua merasa nyaman dalam menggunakan layanan kami.
-            </div>
-            <div class="col-lg-6"></div>
-            <div class="col-lg-6">
-              <a data-toggle="modal" data-target="#myModal"  class="btn btn-trek btn-trek-trans" href="">KIRIM PERTANYAAN</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="features-icons bg-light-grey">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6">
-              <h3>Cerita Trek: pasar dua-arah untuk alat konstruksi.</h3>
-              <p>Trek adalah marketplace untuk alat konstruksi. Platform Trek memungkinkan pemilik 
-              alat berat untuk mendapatkan lebih banyak pemasukan melalui rentalnya dan memudahkan 
-              penggunaan untuk mencari alat yang sesuai dengan kebutuhannya.
-
-              Trek memfasilitasi rental alat konstruksi untuk jangka pendek atau jangka panjang. Baik 
-              sewa harian maupun tahunan, Trek siap memudahkan pelanggan untuk kebutuhan penyedia alat berat 
-              konstruksi mereka.
-
-              Trek berkantor di Tebet, Jakarta Selatan, meskipun saat ini sudah memiliki mitra penyedia 
-              alat tersebar di berbagai kota di Indonesia. Trek saat ini menawarkan berbagai jenis kategori 
-              alat, seperti excavator, boom lift, scissor lift, telehandler, truck crane, dan masih banyak lagi.
-            </div>
-          </div>
-        </div>
-      </section>
-      
       {{ template  "footer.tmpl" .}}
   </body>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112381262-1"></script>
+<script src="/js/controller/product/index.js"></script>
+<script src="/js/controller/product/product.js"></script>
+<script src="js/service/product.js"></script>
 <!--Start of Tawk.to Script-->
 {{ template "default-script.tmpl" .}}
 </html>
