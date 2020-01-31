@@ -386,7 +386,7 @@ footer.footer {
   border-color: transparent;
 }
 
-.nav-tabs .nav-link.active,
+.nav-tabs .nav-link.active
 {
   color: #495057;
   background-color: #fff;
@@ -449,24 +449,76 @@ footer.footer {
   z-index:5;
 }
 #msgErreur > div {
+ 
   position: relative;
   /* top: 30px; */
   top:-5rem;
   /* left: -20rem; */
-  width: 20rem;
+  width: 100% ;
   height: 30px;
 }
+#msgErreur > div > h4 {
+  background-color:#febe2f;
+}
+
+
+
 @media (min-width: 992px){
   .header-img{
     background-size:auto;
   }
   #msgErreur > div {
+   
     position: relative;
     top: 30px;
-    top:-5rem;
-    left: -20rem;
-    width: 20rem;
+    /* top:-5rem; */
+    left: -17rem;
+    width: 32rem;
     height: 30px;
+  }
+  .ht{
+    margin-bottom: 2rem;
+    letter-spacing: 3px;
   }
 
 }
+@media (min-width: 768px) and (max-width: 991.98px) { 
+  .header-img {
+    background: url(../img/home-illo.png) no-repeat bottom right;
+      background-size: 90%;
+      right: 0;
+      min-height: 700px;
+      height: auto;
+      width: 100%;
+      /* even more control with max-width */
+      /* max-width: 500px; */
+  }
+  #msgErreur > div > h4,h1{
+    margin-left: 1.5rem!important;
+    margin-right: 1.5rem!important;
+  }
+
+ }
+
+
+ @media (max-width: 575.98px) { 
+  #msgErreur > div > h4,h1{
+    text-align: center!important;
+  }
+  #msgErreur > div > h4,h1{
+    margin-left: 1.5rem!important;
+    margin-right: 1.5rem!important;
+  }
+  }
+  @media (min-width: 576px) and (max-width: 767.98px) { 
+    #msgErreur > div > h4,h1{
+      text-align: center!important;
+    }
+    #msgErreur > div > h4,h1{
+      margin-left: 1.5rem!important;
+      margin-right: 1.5rem!important;
+    }
+
+   }
+
+ 

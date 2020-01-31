@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+.b12{
+  
+}
 
-  {{ template "header.tmpl" .}}
+</style>  
 
+
+
+{{ template "header.tmpl" .}}
   <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'gillsan'">
     {{ template "main-navigation.tmpl" .}}    
-
-    <!-- Masthead -->
-    <!-- <section style="background: url('https://bootstrapshuffle.com/placeholder/pictures/bg_16-4.svg?primary=007bff');background-size: cover">
-      <div class="container py-5 text-center">
-        <div class="row">
-          <div class="col-md-9 col-lg-6 card border-0 my-5 p-5">
-            <h2 class="mt-4 mb-3">Bringing the Internet to the People.</h2>
-            <p>Our mission is not to outsell Hooli with a product like their latest Box 3. We are not in it for the money - we are in it to make the whole world decentralized.</p><a class="btn btn-primary" href="#">Learn more</a>
-          </div>
-        </div>
-      </div>
-    </section> -->
       <header class="masthead text-black no-gutters" id="trek-bg">
           <div class="container-fluid-width clearfix" id="trek-bg">
             <div class="row no-gutters h-100 ">
               <div class="col-lg-8 offset-lg-4 header-img">
-                  <div id="msgErreur">
-                      <div> <h1 class="pt-5 mt-5">
-                          Grow with us!
+                  <div id="msgErreur" class="justify-content-center">
+                      <div> <h1 class="pt-5 mt-5 ht">
+                          Solutions in need!
                         </h1>
-                        <span class="index-text">
+                        <h4 style="font-weight: 400; letter-spacing: 2px; line-height: 1.6;">
                             Let us store, pick up, and ship for you, plus enjoy our analytical evaluation custom to your needs. So you can focus more on your customer and grow.
-                          </span>
+                        </h4>
                       
                       
                       </div>
@@ -38,21 +33,20 @@
         </header>
   
 
-    <section class="features-icons" style="margin-top: -3rem">
+    <section class="features-icons my-lg-3 py-5">
       <div class="container">
         <div class="row" >
           <div class="col-lg-12 mb-2">
-            <h4
-              style="font-size: 31px; font-weight: bold; color: #4e5053;">
-              WHAT WE DO
-            </h4>
+            <h2>
+             Our Solution
+            </h2>
           </div>
           <div class="col-lg-3">
             <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
               <div class="features-icons-icon d-flex">
                 <img src="img/store-icon.png" class="m-5" style="min-width:10rem;" alt="Store your products!">
               </div>
-              <h6 style="padding-top:1rem;text-align:center;">Store your products!</h6>
+              <h5 style="padding-top:1rem;text-align:center;">Store your products!</h5>
             </div>
           </div>
           <div class="col-lg-3">
@@ -60,7 +54,7 @@
               <div class="features-icons-icon d-flex">
                 <img src="img/web_icon.png" class="m-5" style="min-width:10rem;" alt="mudah digunakan">
               </div>
-              <h6 style="padding-top:1rem;text-align:center;">Yeay! Orders!</h6>
+              <h5 style="padding-top:1rem;text-align:center;">Yeay! Orders!</h5>
             </div>
           </div>
           <div class="col-lg-3">
@@ -68,7 +62,7 @@
               <div class="features-icons-icon d-flex">
                 <img src="img/ship_icon.png" class="m-5" style="min-width:10rem;" alt="order professionally!">
               </div>
-              <h6 style="padding-top:1rem;text-align:center;">We pack your<br>order professionally!</h6>
+              <h5 style="padding-top:1rem;text-align:center;">We pack your<br>order professionally!</h5>
             </div>
           </div>
           <div class="col-lg-3">
@@ -76,106 +70,69 @@
               <div class="features-icons-icon d-flex">
                 <img src="img/pack_icon.png" class="m-5" style="min-width:10rem;" alt="We ship them accurately!">
               </div>
-              <h6 style="padding-top:1rem;text-align:center;">We ship them accurately!</h6>
+              <h5 style="padding-top:1rem;text-align:center;">We ship them accurately!</h5>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <section class="features-icons" style="margin-top: -7rem;">
-      <div style="background-color:#febe2f; padding: 4rem 0 4rem 60px;">
-        <div class="container">
-          <div class="row no-gutters" >
-            <div class="col-lg-3" style="margin: auto; padding-right: 20px;">
-              <h5>
-                Save time and enjoy the benefit!
-              </h5>
-            </div>
-            
-            <div class="col-lg-9">
-              <div class="row pt-3  no-gutters">
-                <div class="col-lg-3">
-                  <div class="mx-auto mb-2">
-                    <div class="d-flex">
-                      <img src="img/benefit_scallable.png" class="features-icons-2" alt="scalable">
-                    </div>
-                  </div>
+    <section class="pt-5 bg-trek" >
+      <div class="container">
+        <div class="row mt-5">
+          <div class="col-md-5 order-1 order-md-1" style="margin: auto;">
+           
+            <h2>Save time and enjoy the benefits!</h2>
+    
+          </div>
+          <div class="col-md-7 order-2 order-md-2">
+            <ul class="list-inline">
+              <li class="d-flex mb-5 py-3"> <img src="img/benefit_scallable.png" class="features-icons-2 mr-4" alt="scalable"></span>
+                <div>
+                    <h5>Scalability Fulfilment  </h5>
+                    <p>
+                        We store, check for quality control profesionally packed
+                        and manage your inventory<br>
+                        No matter big or small, our space is ready for your growth
+                    </p>
                 </div>
-                <div class="col-lg-9" style="text-align: left">
-                  <span style="font-weight: bolder">Scalability Fulfilment</span>
-                  <span style="font-weight: 500">
-                    <br>We store, check for quality control profesionally packed
-                    <br>and manage your inventory
-                    <br>No matter big or small, our space is ready for your growth
-                  </span>
+              </li>
+              <li class="d-flex mb-5 py-3"> <img src="img/benefit_analitik.png" class="features-icons-2 mr-4" alt="analysis evaluation"></span>
+                <div>
+                  <h5>Analytical Evaluation</h5>
+                  <p>
+                      We not just packed and ship, we also giving your insight
+                     which one sells out the most, in which time of the year and more!
+                    letting you know your customer even more.
+                  </p>
                 </div>
-              </div> <!-- end of row pt-3-->
-              
-              <div class="row pt-3 no-gutters">
-                <div class="col-lg-3">
-                  <div class="mx-auto mb-2">
-                    <div class="d-flex">
-                      <img src="img/benefit_analitik.png" class="features-icons-2" alt="analysis evaluation">
-                    </div>
-                  </div>
+              </li>
+              <li class="d-flex mb-5 py-3"><img src="img/benefit_accurate.png" class="features-icons-2 mr-4" alt="accurate"></span>
+                <div>
+                    <h5>Accurate Logistic Service</h5>
+                    <p> We arrange accurately with the most efficient cost,
+                        whether is island, air flight, sea or multi mode. On time
+                       so your customer is happy</p>
                 </div>
-                <div class="col-lg-9" style="text-align: left">
-                  <span style="font-weight: bolder">Analytical Evaluation</span>
-                  <span style="font-weight: 500">
-                    <br>We not just packed and ship, we also giving your insight
-                    <br>which one sells out the most, in which time of the year and more!
-                    <br>letting you know your customer even more.
-                  </span>
+              </li>
+              <li class="d-flex mb-5 py-3"> <img src="img/benefit_secured.png" class="features-icons-2 mr-4" style="margin: 0 0;" alt="secure facilities"></span>
+                <div>
+                    <h5>Secured Facility</h5>
+                    <p> Our facilities are supervise 24 hours 7 days a week!</p>
                 </div>
-              </div> <!-- end of row pt-3-->
-
-              <div class="row pt-3 no-gutters">
-                <div class="col-lg-3">
-                  <div class="mx-auto mb-2">
-                    <div class="d-flex">
-                      <img src="img/benefit_accurate.png" class="features-icons-2" alt="accurate">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-9" style="text-align: left">
-                  <span style="font-weight: bolder">Accurate Logical Service</span>
-                  <span style="font-weight: 500">
-                    <br>We arrange accurately with the most efficient cost,
-                    <br>whether is island, air flight, sea or multi mode. On time
-                    <br>so your customer is happy
-                  </span>
-                </div>
-              </div> <!-- end of row pt-3-->
-
-              <div class="row pt-3 no-gutters" style="margin-top: 15px">
-                <div class="col-lg-3">
-                  <div class="mx-auto mb-2">
-                    <div class="d-flex">
-                      <img src="img/benefit_secured.png" class="features-icons-2" alt="secure facilities">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-9" style="text-align: left">
-                  <span style="font-weight: bolder">Secured Facility</span>
-                  <span style="font-weight: 500">
-                    <br>Our facilities are supervise 24 hours 7 days a week!
-                  </span>
-                </div>
-              </div> <!-- end of row pt-3-->
-
-            </div> <!-- end of col-lg-9 -->
-          </div> <!-- end of row -->
-        </div> <!-- end of container -->
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
+  
 
-    <section class="features-icons text-center">
+    <section class="features-icons text-center mt-4">
       <div class="container">
         <div class="row" >
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder"><h4>CLIENTS</h4></div>
+          <div class="col-lg-12 mb-2"><h2 class="mb-5 text-center">Clients</h2></div>
           <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-            <div class="row">
+            <div class="row py-4">
 
               <div class="col-lg-2">
                 <div class="mx-auto mb-2">
@@ -286,7 +243,80 @@
       </div>
     </section>
 
-    <section class="features-icons text-center">
+
+    <section class="py-5 my-4">
+        <div class="container">
+          <h2 class="mb-5 text-center">Frequently Asked Questions</h2>
+          <div class="accordion" id="faq-01">
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading1-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse1-01" aria-expanded="false" aria-controls="faq-collapse1-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Berapa harga layanan pengiriman dan/atau pergudangan yang ditawarkan oleh CGX ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse1-01" aria-labelledby="faq-heading1-01" data-parent="#faq-01">
+                <p> Kami selalu memiliki daftar harga standart yang dapat di sediakan.<br>
+                    Akan tetapi, harga yang kami berikan dapat menyesuaikan dengan kebutuhan Anda.</p>
+              </div>
+            </div>
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading2-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse2-01" aria-expanded="false" aria-controls="faq-collapse2-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">Apabila saya ingin menggunakan layanan pengiriman CGX, bagaimana proses pengiriman yang disediakan oleh CGX ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse2-01" aria-labelledby="faq-heading2-01" data-parent="#faq-01">
+                <p> Pengiriman barang akan dilakukan sesuai dengan moda dan layanan pilihan anda. 
+                    Lebih mudah aman dan nyaman. Setelah anda memilih moda dan layanan yang ingin digunakan,
+                    tim CGX menangani permintaan anda dari tangan Anda dan/atau gudang CGX ke tangan penerima.</p>
+              </div>
+            </div>
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading3-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse3-01" aria-expanded="false" aria-controls="faq-collapse3-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">Apa saja layanan pengiriman yang ditawarkan?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse3-01" aria-labelledby="faq-heading3-01" data-parent="#faq-01">
+                <p> Tim CGX akan memastikan barang yang dikirimkan sampai di tujuan berbagai pilihan jalur 
+                    dan moda transportasi mulai dari Moda Darat, Moda Laut, Moda Udara, Kurir, dan Multi Moda di 
+                    seluruh wilayah Indonesia. Selain itu, kami juga menerima layanan pengiriman ke luar negeri.</p>
+              </div>
+            </div>
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading4-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse4-01" aria-expanded="false" aria-controls="faq-collapse4-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Apabila saya ingin menyewa gudang di CGX, bagaimana proses operasional gudang di CGX?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse4-01" aria-labelledby="faq-heading4-01" data-parent="#faq-01">
+                <p>Proses operasional gudang yang kami terapkan mulai dari pemeriksaan kualitas barang pada saat 
+                    barang masuk ke gudang CGX, penyortiran barang yang akan di simpan di gudang CGX, penyimpannan 
+                    barang yang di dukung oleh keamanan dan tim ahli, sampai dengan pemeriksaan barang pada saat barang 
+                    keluar dari gudang CGX.
+    
+                    <br>Selain itu, lokasi gudang dan kantor CGX yang berada di satu area yang sama, sehingga tim CGX dapat selalu 
+                    memberikan pelayanan terbaik untuk mengelola dan menjaga kualitas barang anda.</p>
+              </div>
+            </div>
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading5-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse5-01" aria-expanded="false" aria-controls="faq-collapse5-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Bagaimana proses fulfillment yang diterapkan di CGX?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse5-01" aria-labelledby="faq-heading5-01" data-parent="#faq-01">
+                <p> CGX logistik akan membantu tiga aspek krusial dalam operasional yaitu mulai dari pengelolaan stok, 
+                    pengiriman barang hingga pencatatan inventarisbarang yang didukung tim ahli, Harga terjangkau, 
+                    lokasi strategis, dan segala resiko di pergudangan di tanggung oleh pihak CGX.
+    
+                    <br>Kerangka kerja layanan yang kami berikan mulai dari pengambilan barang ke pabrik dan/atau warehouse, 
+                    penerimaan barang di gudang, pengelolaan stok, packing hingga pengiriman ke end-user.</p>
+              </div>
+            </div>
+            <div class="mb-2 border-bottom">
+              <h5 id="faq-heading6-01">
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse6-01" aria-expanded="false" aria-controls="faq-collapse6-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Apakah layanan yang ditawarkan sudah termasuk asuransi ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+              </h5>
+              <div class="collapse" id="faq-collapse6-01" aria-labelledby="faq-heading6-01" data-parent="#faq-01">
+                <p> Segala resiko di pergudangan ditanggung 100% oleh CGX Logistik. Sementara unntuk layanan pengiriman.
+                    asuransi akan disediakan sesuai permintaan anda yang mengacu terhadap nilai barang yang ingin di asuransi-kan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- <section class="features-icons text-center">
       <div class="container">
         <div class="row" >
           <div class="col-lg-12">
@@ -307,9 +337,84 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
-      {{ template  "footer.tmpl" .}}
+      <section class="py-5  bg-trek">
+          <div class="container">
+            <h2 class="my-3 text-center">Ready to grow business with us?</h2>
+            <div class="row pt-md-5">
+              <div class="col-md-6 my-3 mb-md-0">
+                <h5>Let's talk about the future of the internet</h5>
+                <p class="mb-5 text-muted">We're here to answer your questions and discuss the decentralized future of the internet.</p>
+                <div>
+                  <div class="d-flex"><img class="mb-3 mr-3" src="img/map-marker.svg" alt="">
+                    <p>Office :<br>
+                        Jalan Raya Pondok Gede No. I 8R,
+                        Jakarta Timur, Indonesia I 3810<br>
+                        Warehouse :<br>
+                        Jalan Wibawa Mukti No.90,
+                        Jati Asih, Bekasi, Indonesia</p>
+                  </div>
+                  <div class="d-flex"><img class="mb-3 mr-3" src="img/phone.svg" alt="">
+                    <p>Phone: 021 8243 5678<br><br>
+                      Mobile: +62 813-8595-4267
+                    
+                    </p>
+                  </div>
+                  <div class="d-flex"><img class="mb-3 mr-3" src="img/envelope.svg" alt="">
+                    <p>info@cgxlogistic.co.id</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <form>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fullname"><h6>Name</h6></label>
+                        <input class="form-control" id="fullname">
+                        <div class="form_error hide" id="fullname-error"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="company"><h6>Company</h6></label>
+                        <input class="form-control" id="company">
+                        <div class="form_error hide" id="company-error"></div>
+                    </div>
+                  </div>
+                  <div class="row ">
+                      <div class="col-md-6 mb-3">
+                          <label for="email"><h6>Email</h6></label>
+                      <input type="email" class="form-control" id="email">
+                      <div class="form_error hide" id="email-error"></div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="phone"><h6>Phone</h6></label>
+                          <input class="form-control" id="phone">
+                          <div class="form_error hide" id="phone-error"></div>
+                      </div>
+                    </div>
+                  <label class="sr-only" for="textarea-contacts-01">Project description</label>
+                  <textarea class="form-control mb-3" id="project" rows="5" placeholder="Project description...."></textarea>
+                  <div class="form_error hide" id="project-error">
+                      <!-- mohon isi deskripsi project anda -->
+                    </div>
+                  <button class="btn btn-trek btn-block" type="submit">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      <footer class="py-5 bg-trek">
+          <div class="container">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+              <!-- <h5 class="mb-3"><a href="#">CGX</a></h5> -->
+              <img src="/img/logo-cgx.png" width="100" height="100" alt="" >
+              <div class="d-flex mb-3"><a href="#"><img class="mr-3" src="img/twitter.svg" alt=""></a><a href="#"><img class="mr-3" src="img/facebook-f.svg" alt=""></a><a href="#"><img class="mr-3" src="img/instagram.svg" alt=""></a><a href="#"><img src="img/linkedin-in.svg" alt=""></a></div>
+              <div class="d-flex">
+                <p class="mb-0 small text-muted">&copy; 2020 CGX. All right reserved.</p>
+              </div>
+            </div>
+          </div>
+      </footer>
   </body>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
