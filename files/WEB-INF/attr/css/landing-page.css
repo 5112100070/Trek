@@ -1,10 +1,10 @@
 @font-face {
-  font-family: "gillsans";
+  font-family: 'Nunito', 'gillsans';
   src: url(/etc/GillSans/gillsans.ttf) format("truetype");
 }
 
 body {
-  font-family: 'gillsan', 'Montserrat', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Nunito', 'Montserrat', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1,
@@ -13,7 +13,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Montserrat','Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Nunito', 'Montserrat','Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
 }
 #trek-bg{

@@ -1,8 +1,11 @@
+body {
+  font-family: 'Nunito', 'Gill Sans', 'sans-serif';
+}
+
 .btn-home{
     font-weight: 500;
     border-width: 1px;
     background-color:#febe2f;
-    /*  */
     align-self:center;
     transition:all .5s ease;
     color:#41403E;

@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-.b12{
-  
-}
-
-</style>  
-
-
-
 {{ template "header.tmpl" .}}
-  <body data-spy="scroll" data-target=".navbar" data-offset="1" style="font-family:'gillsan'">
+  <body data-spy="scroll" data-target=".navbar" data-offset="1">
     {{ template "main-navigation.tmpl" .}}    
       <header class="masthead text-black no-gutters" id="trek-bg">
           <div class="container-fluid-width clearfix" id="trek-bg">
@@ -250,67 +241,93 @@
           <div class="accordion" id="faq-01">
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading1-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse1-01" aria-expanded="false" aria-controls="faq-collapse1-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Berapa harga layanan pengiriman dan/atau pergudangan yang ditawarkan oleh CGX ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse1-01" aria-expanded="false" aria-controls="faq-collapse1-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
+                  How much it cost for Shipment and Warehouse in CGX ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse1-01" aria-labelledby="faq-heading1-01" data-parent="#faq-01">
-                <p> Kami selalu memiliki daftar harga standart yang dapat di sediakan.<br>
-                    Akan tetapi, harga yang kami berikan dapat menyesuaikan dengan kebutuhan Anda.</p>
+                <p>
+                  We have our standard published rate.
+                  <br>However, we also have a price that can be customized according to your needs.
+                </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading2-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse2-01" aria-expanded="false" aria-controls="faq-collapse2-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">Apabila saya ingin menggunakan layanan pengiriman CGX, bagaimana proses pengiriman yang disediakan oleh CGX ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse2-01" aria-expanded="false" aria-controls="faq-collapse2-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">
+                  How is the shipment process ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse2-01" aria-labelledby="faq-heading2-01" data-parent="#faq-01">
-                <p> Pengiriman barang akan dilakukan sesuai dengan moda dan layanan pilihan anda. 
-                    Lebih mudah aman dan nyaman. Setelah anda memilih moda dan layanan yang ingin digunakan,
-                    tim CGX menangani permintaan anda dari tangan Anda dan/atau gudang CGX ke tangan penerima.</p>
+                <p>
+                  Our shipment will be proceed based on type of services and type of transportation that you choose. 
+                  After we receive a delivery order, our operational team will be delivery order, our operational team 
+                  will be deliver your package safely.
+                </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading3-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse3-01" aria-expanded="false" aria-controls="faq-collapse3-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">Apa saja layanan pengiriman yang ditawarkan?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse3-01" aria-expanded="false" aria-controls="faq-collapse3-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">
+                  What kind of service that CGX offered ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse3-01" aria-labelledby="faq-heading3-01" data-parent="#faq-01">
-                <p> Tim CGX akan memastikan barang yang dikirimkan sampai di tujuan berbagai pilihan jalur 
-                    dan moda transportasi mulai dari Moda Darat, Moda Laut, Moda Udara, Kurir, dan Multi Moda di 
-                    seluruh wilayah Indonesia. Selain itu, kami juga menerima layanan pengiriman ke luar negeri.</p>
+                <p> 
+                  CGX will ensure that your goods are delivered to the destination with various choices of lines and 
+                  types mode of transportation ranging from Land Transportations, Sea Transportations, Air Transportations, Multi Modes 
+                  and last but not least, Courier.  In addition, we also accept overseas shipping services.
+                </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading4-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse4-01" aria-expanded="false" aria-controls="faq-collapse4-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Apabila saya ingin menyewa gudang di CGX, bagaimana proses operasional gudang di CGX?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse4-01" aria-expanded="false" aria-controls="faq-collapse4-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
+                    If I want to rent a space at CGX warehouse, how is the operational process at CGX ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse4-01" aria-labelledby="faq-heading4-01" data-parent="#faq-01">
-                <p>Proses operasional gudang yang kami terapkan mulai dari pemeriksaan kualitas barang pada saat 
-                    barang masuk ke gudang CGX, penyortiran barang yang akan di simpan di gudang CGX, penyimpannan 
-                    barang yang di dukung oleh keamanan dan tim ahli, sampai dengan pemeriksaan barang pada saat barang 
-                    keluar dari gudang CGX.
-    
-                    <br>Selain itu, lokasi gudang dan kantor CGX yang berada di satu area yang sama, sehingga tim CGX dapat selalu 
-                    memberikan pelayanan terbaik untuk mengelola dan menjaga kualitas barang anda.</p>
+                <p>
+                  The operational process that we implement is starting from
+                  handling in and out by checking the quality and quantity when the goods arrived, sorting and
+                  storing goods on our warehouse.
+                </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading5-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse5-01" aria-expanded="false" aria-controls="faq-collapse5-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Bagaimana proses fulfillment yang diterapkan di CGX?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse5-01" aria-expanded="false" aria-controls="faq-collapse5-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
+                    How is the fulfillment process ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse5-01" aria-labelledby="faq-heading5-01" data-parent="#faq-01">
-                <p> CGX logistik akan membantu tiga aspek krusial dalam operasional yaitu mulai dari pengelolaan stok, 
-                    pengiriman barang hingga pencatatan inventarisbarang yang didukung tim ahli, Harga terjangkau, 
-                    lokasi strategis, dan segala resiko di pergudangan di tanggung oleh pihak CGX.
-    
-                    <br>Kerangka kerja layanan yang kami berikan mulai dari pengambilan barang ke pabrik dan/atau warehouse, 
-                    penerimaan barang di gudang, pengelolaan stok, packing hingga pengiriman ke end-user.</p>
+                <p>
+                    CGX Logistics will assist three crucial aspects of operations, 
+                    from managing stock, shipping goods supported by expertise with an affordable location, 
+                    and 100% guarantee. Our framework that we offer starts from pick up the
+                    to stock checking price, goods strategic from factory, warehousing, managing stock, 
+                    packing and deliver it to your
+                </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading6-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse6-01" aria-expanded="false" aria-controls="faq-collapse6-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">Apakah layanan yang ditawarkan sudah termasuk asuransi ?<img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt=""></button>
+                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse6-01" aria-expanded="false" aria-controls="faq-collapse6-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
+                    Does the service offered include insurance ?
+                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
+                </button>
               </h5>
               <div class="collapse" id="faq-collapse6-01" aria-labelledby="faq-heading6-01" data-parent="#faq-01">
-                <p> Segala resiko di pergudangan ditanggung 100% oleh CGX Logistik. Sementara unntuk layanan pengiriman.
-                    asuransi akan disediakan sesuai permintaan anda yang mengacu terhadap nilai barang yang ingin di asuransi-kan.</p>
+                <p> 
+                    All risks in warehousing are covered 100% As by for CGX Logistics. 
+                    shipping services, insurance will provided according to be your request, 
+                    which refers to the value of the item you wish to insure.
+                </p>
               </div>
             </div>
           </div>
