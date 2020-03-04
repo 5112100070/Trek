@@ -6298,6 +6298,11 @@ button.bg-dark:focus {
   display: flex !important;
 }
 
+.d-flex-custom {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+}
+
 .d-inline-flex {
   display: -webkit-inline-box !important;
   display: -ms-inline-flexbox !important;
