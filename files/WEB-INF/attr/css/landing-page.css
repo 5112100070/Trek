@@ -464,9 +464,6 @@ footer.footer {
 
 
 @media (min-width: 992px){
-  .header-img{
-    background-size:auto;
-  }
   #msgErreur > div {
    
     position: relative;
@@ -521,4 +518,8 @@ footer.footer {
 
    }
 
- 
+   @media (min-width: 1300px){
+    .header-img{
+      background-size:auto;
+    }
+  }
