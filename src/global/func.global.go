@@ -10,7 +10,7 @@ import (
 )
 
 func SetCookie(c *gin.Context, key string, value string, base_url string) {
-	c.SetCookie(key, value, (5 * 3600), "/", base_url, true, true)
+	// c.SetCookie(key, value, (5 * 3600), "/", base_url, true, true)
 }
 
 func GetEnv() string {
