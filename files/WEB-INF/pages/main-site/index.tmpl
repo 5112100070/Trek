@@ -3,8 +3,9 @@
 {{ template "header.tmpl" .}}
   <body data-spy="scroll" data-target=".navbar" data-offset="1">
     {{ template "main-navigation.tmpl" .}}    
-      <header class="masthead text-black no-gutters" id="trek-bg">
-          <div class="container-fluid-width clearfix" id="trek-bg">
+     
+    <!-- <header class="masthead text-black no-gutters cgx-bg">
+          <div class="container-fluid-width clearfix cgx-bg">
             <div class="row no-gutters h-100 ">
               <div class="col-lg-8 offset-lg-4 header-img">
                   <div id="msgErreur" class="justify-content-center">
@@ -19,10 +20,52 @@
                       </div>
                   </div>
               </div>
-            </div> <!-- end of row -->
+            </div> 
           </div>
-        </header>
-  
+        </header> -->
+         <header class="masthead text-black no-gutters cgx-bg">
+            <div class="jumbotron jumbotron-fluid mb-0 py-0 px-lg-5" id="home">
+                <div id="parallax-hero">
+                    <div class="layer-0">
+                        <picture>
+                            <source srcset="img/image.svg" type="image/webp">
+                            <img src="/img/image.svg" alt="WildPress Hero Layer 0">
+                        </picture>
+                    </div>
+                </div>
+                <div class="container-at container py-3
+                 py-lg-5 clearfix">
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                            <h1 class="mb-2 mt-4 line-height-1 text-center text-lg-left ">
+                                <span class="display-3 header-t d-block mb-0 pt-lg-5">Solution In Need</span>
+                            </h1>
+                            <section class="header-p mt-4" id="text-section">
+                                <h4 style="font-weight: 400; letter-spacing: 2px; line-height: 1.5em;">
+                                    CGX offers you logistic solutions for every type of business out there. Let us store, pick up, and ship for you! Plus, receive our analytical evaluation custom to your needs, so you can focus on your customer and growth.
+                                  </h4>                            
+                              </section>
+                        </div>
+                        </div>
+                    </div>
+                    <img id="hero-image" src="/img/image.svg" class="img-fluid" alt="Responsive image" style="width:100%;position:right bottom;">
+            </div>
+          </header>   
+  <!-- Getbutton.io widget -->
+<script type="text/javascript">
+  (function () {
+      var options = {
+          whatsapp: "+62 813-1186-9937", // WhatsApp number
+          call_to_action: "Hello, how may we help you? ", // Call to action
+          position: "right", // Position may be 'right' or 'left'
+      };
+      var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+      s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+      var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+  })();
+</script>
+<!-- /Getbutton.io widget -->
 
     <section class="features-icons my-lg-3 py-5">
       <div class="container">
@@ -67,7 +110,7 @@
         </div>
       </div>
     </section>
-    <section class="pt-5 bg-trek" >
+    <section class="pt-5 cgx-bg" >
       <div class="container">
         <div class="row">
           <div class="col-md-5 order-1 order-md-1" style="margin: auto;">
@@ -330,40 +373,17 @@
           </div>
         </div>
     </section>
-    <!-- <section class="features-icons text-center">
-      <div class="container">
-        <div class="row" >
-          <div class="col-lg-12">
-            <div class="row">
-              <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-                <h4>
-                  Ready to grow your bussiness
-                  <br>with us ?</h4>
-              </div>
-          
-              <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder;">
-                <a class="btn btn-lg"
-                      target="_blank"
-                      style="border:2px solid black; border-radius: 25px;"
-                      onClick="javascript:GoToIndex('home')">Get in touch!</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-      <section class="py-5 bg-trek">
+      <section class="py-5 cgx-bg">
           <div class="container">
             <h2 class="my-3 text-center">
               Ready To Grow Your Business With Us?
             </h2>
             <div class="row pt-md-5">
-              <div class="col-md-6 my-3 mb-md-0">
+              <div class="col-6 my-3 mb-md-0">
                 <h5>Drop in your questions!</h5>
                 <p class="mb-5 text-muted"> For any inquiries feel free to contact us, we're here to help!</p>
                 <div>
-                  <div class="d-flex-custom"><img class="mb-3 mr-3" src="img/map-marker.svg" alt="">
+                  <div>
                     <p>Office :<br>
                         Jalan Raya Pondok Gede No. I 8R,
                         Jakarta Timur, Indonesia I 3810<br>
@@ -385,7 +405,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-6">
                 <form>
                   <div class="row">
                     <div class="col-md-6 mb-3">
@@ -422,12 +442,12 @@
             </div>
           </div>
         </section>
-      <footer class="bg-trek">
+      <footer class="cgx-bg">
           <div class="container">
             <div class="d-flex justify-content-center align-items-center flex-column">
               <!-- <h5 class="mb-3"><a href="#">CGX</a></h5> -->
               <img src="/img/logo-cgx.png" width="100" height="100" alt="" >
-              <div class="d-flex mb-3"><a href="#"><img class="mr-3" src="img/twitter.svg" alt=""></a><a href="#"><img class="mr-3" src="img/facebook-f.svg" alt=""></a><a href="#"><img class="mr-3" src="img/instagram.svg" alt=""></a><a href="#"><img src="img/linkedin-in.svg" alt=""></a></div>
+              <div class="d-flex mb-3"><a href="#"><img class="mr-3" src="img/facebook-f.svg" alt=""></a><a href="#"><img class="mr-3" src="img/instagram.svg" alt=""></a><a href="#"><img src="img/linkedIN.svg" style=" width:20px;" alt=""></a></div>
               <div class="d-flex">
                 <p class="mb-0 small text-muted">&copy; 2020 CGX. All right reserved.</p>
               </div>
