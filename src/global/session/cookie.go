@@ -21,7 +21,7 @@ func SetSessionCookie(token string) http.Cookie {
 }
 
 func SetExpireSessionCookieGin(c *gin.Context) {
-	c.SetCookie(UserCookie[getEnv()], "", -1, "/", DomainCookie[getEnv()], http.SameSiteDefaultMode, true, true)
+	// c.SetCookie(UserCookie[getEnv()], "", -1, "/", DomainCookie[getEnv()], http.SameSiteDefaultMode, true, true)
 }
 
 func SetExpireSessionCookie() http.Cookie {
