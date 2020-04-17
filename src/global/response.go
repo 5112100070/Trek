@@ -1,16 +1,23 @@
 package global
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func OKResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
-		"status_code":    200,
-		"server_message": "Success",
-		"data":           val,
+		"data": val,
 	}
-	sendResponse(c, 200, header)
+	sendResponse(c, http.StatusOK, header)
+}
+
+func ErrorResponse(c *gin.Context, val interface{}) {
+	header := gin.H{
+		"error": val,
+	}
+	sendResponse(c, http.StatusOK, header)
 }
 
 func CreatedResponse(c *gin.Context, val interface{}) {

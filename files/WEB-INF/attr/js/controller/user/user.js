@@ -1,22 +1,39 @@
+var login_error_field = document.getElementById("login_error");
+
 function ProcessLogin(){
     StartLoading();
-    username = $("#username").val();
-    secret = $("#secret").val();
+    email = $("#email").val();
+    password = $("#password").val();
 
-    promise = makeLogin(username, secret);
+    promise = makeLogin(email, password);
 
     promise.done(function(response){
-        var swal = SimpleSwalWithoutDesc("Login Berhasil", type_success, "Ke Beranda");
-        swal.then(function(){
-            window.location.href = base_url;
-        });
         FinishLoading();
+        if(response.error!=null){
+            setErrorLogin(true, response.error.massage);
+            $("#password").val("");
+        } else {
+            var swal = SimpleSwalWithoutDesc("Login Berhasil", type_success, "Ke Beranda");
+            swal.then(function(){
+                window.location.href = base_url + '/dashboard';
+            });
+        }
     }).fail(function(response){
         FinishLoading();
-        $("#username").val("");
-        $("#secret").val("");
-        SimpleSwal("Login Gagal", "Username atau Password salah", type_error, "Tutup");
+        $("#password").val("");
+        SimpleSwal("Login Gagal", "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.", type_error, "Tutup");
     });
+}
+
+function setErrorLogin(isShow, message = "") {
+    $("#login_error").html(message);
+  if (isShow) {
+    $("#login_error").addClass("error");
+    $("#login_error").removeClass("hide");
+  } else {
+    $("#login_error").addClass("hide");
+    $("#login_error").removeClass("error");
+  }
 }
 
 function ProcessLogout(){

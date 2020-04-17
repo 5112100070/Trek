@@ -1,19 +1,11 @@
-package global
+package session
 
-import (
-	"log"
-	"time"
-)
+import "time"
 
 const (
-	EXPIRE_COOKIE = time.Duration((2 * 24 * time.Hour))
+	EXPIRE_COOKIE        = time.Duration((2 * 24 * time.Hour))
+	EXPIRE_COOKIE_IN_SEC = 2 * 24 * 60 * 60
 )
-
-//Error Logger
-var Error *log.Logger
-
-//All Repository Access
-var Services RepoBundle
 
 var UserCookie = map[string]string{
 	"production":  "_CGX_",

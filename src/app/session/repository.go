@@ -2,8 +2,17 @@ package session
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"strings"
 
+	"github.com/5112100070/Trek/src/conf"
+	headerConst "github.com/5112100070/Trek/src/constants/header"
+	urlConst "github.com/5112100070/Trek/src/constants/url"
 	redigo "github.com/5112100070/Trek/src/global/redis"
 )
 
@@ -13,24 +22,50 @@ func InitSessionRepo(sessionRedis redigo.Redis) *sessionRepo {
 	}
 }
 
-func (repo sessionRepo) GetUser(cookie string) (UserSession, error) {
-	var user UserSession
-	key := fmt.Sprintf("%v%v", redis_key_cookie, cookie)
+func (repo sessionRepo) GetUser(sessionID string) (AccountResponse, error) {
+	var result AccountResponse
 
-	result, err := repo.redis.GET(key)
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_GET_USER_PROFILE
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", urlStr, strings.NewReader(""))
 	if err != nil {
-		return user, err
+		log.Println(err)
+		return result, err
 	}
 
-	err = json.Unmarshal([]byte(result), &user)
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+
+	resp, errGetResp := client.Do(req)
 	if err != nil {
-		return user, err
+		log.Println(errGetResp)
+		return result, errGetResp
 	}
 
-	return user, nil
+	if resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	return result, nil
 }
 
-func (repo sessionRepo) SetUser(cookie string, user UserSession) error {
+func (repo sessionRepo) SetUser(cookie string, user Account) error {
 	key := fmt.Sprintf("%v%v", redis_key_cookie, cookie)
 
 	m, _ := json.Marshal(user)

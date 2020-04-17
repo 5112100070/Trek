@@ -12,7 +12,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/conf"
+	urlConst "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
+	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/5112100070/Trek/src/utils"
 )
 
@@ -62,17 +64,20 @@ func SendRequestItem(c *gin.Context) {
 }
 
 func ProcessMakeLogin(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("secret")
+	// make sure not too fast when give response
+	defer func() {
+		time.Sleep(4 * time.Second)
+	}()
 
-	baseUrl := conf.GConfig.BaseUrlConfig.ProductDNS
-	path := "/make-login"
+	email := c.PostForm("email")
+	password := c.PostForm("password")
+
 	data := url.Values{}
-	data.Set("username", username)
-	data.Set("secret", password)
+	data.Set("email", email)
+	data.Set("password", password)
 
-	u, _ := url.ParseRequestURI(baseUrl)
-	u.Path = path
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_REQUEST_LOGIN
 	urlStr := u.String()
 
 	client := &http.Client{}
@@ -99,31 +104,56 @@ func ProcessMakeLogin(c *gin.Context) {
 		return
 	}
 
+	/*
+		Example response from go.cgx.co.id
+		success without error
+				{
+			    "data": {
+			        "message": "success generate token",
+			        "token": "eyJleHAiOjE1ODY5MDY4MTksImlhdCI6MTU4Njg4ODgxOSwia"
+			    },
+			    "server_process_time": "253.438488ms"
+			}
+
+		success with error
+			{
+			    "error": {
+			        "code": 4000,
+			        "massage": "invalid email or password"
+			    },
+			    "server_process_time": "9.102529ms"
+			}
+	*/
+
 	var resultResp struct {
-		ServerMessage string                 `json:"server_message"`
-		Data          map[string]interface{} `json:"data,omitempty"`
+		ServerProcessTime string                 `json:"server_process_time"`
+		Data              map[string]interface{} `json:"data,omitempty"`
+		Error             map[string]interface{} `json:"error,omitempty"`
 	}
 
 	errUnMarshal := json.Unmarshal(body, &resultResp)
 	if errUnMarshal != nil {
 		global.Error.Println(errUnMarshal)
-		global.ForbiddenResponse(c, nil)
-		return
-	} else if !resultResp.Data["is_success"].(bool) {
 		global.InternalServerErrorResponse(c, nil)
 		return
-	} else {
-		cookie := http.Cookie{
-			Name:    global.UserCookie[global.GetEnv()],
-			Value:   resultResp.Data["nekot"].(string),
-			Domain:  global.GetDNSNameForCookie(),
-			Expires: time.Now().Add(global.EXPIRE_COOKIE),
-		}
-		http.SetCookie(c.Writer, &cookie)
+	}
 
-		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS, http.StatusSeeOther)
+	//  return error cause from service server
+	if resultResp.Error != nil {
+		global.ErrorResponse(c, resultResp.Error)
 		return
 	}
+
+	// return response from service server and keep to cookie
+	if resultResp.Data != nil {
+		cookie := gSession.SetSessionCookie(resultResp.Data["token"].(string))
+
+		http.SetCookie(c.Writer, &cookie)
+		return
+	}
+
+	// return internal server error if not caught response from service server
+	global.InternalServerErrorResponse(c, nil)
 }
 
 func ProcessMakeLogout(c *gin.Context) {

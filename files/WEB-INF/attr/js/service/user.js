@@ -1,8 +1,8 @@
-function makeLogin(username,secret){
+function makeLogin(email,password){
     var url = base_url + '/login';
     var data = {
-        username:username,
-        secret:secret
+        email:email,
+        password:password
     };
 
     var promise = $.ajax({

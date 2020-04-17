@@ -11,7 +11,9 @@ import (
 
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/conf"
+	errorConst "github.com/5112100070/Trek/src/constants/error"
 	"github.com/5112100070/Trek/src/global"
+	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/gin-gonic/gin"
 )
 
@@ -106,17 +108,42 @@ func NotFoundPageHandler(c *gin.Context) {
 }
 
 func LoginPageHandler(c *gin.Context) {
-	_, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	// all login user cannot see login page and redirected to main page
+	// all not login user can see login page
+
+	authToken, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
 	if errGetCookie == nil {
-		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS
-		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		// all login user cannot see login page
+
+		accountResp, errGetResponse := global.GetServiceSession().GetUser(authToken)
+		if errGetResponse != nil {
+			global.Error.Println(errGetResponse)
+
+			// TODO: redirect to problem page
+			// ====================== REMOVE / NEED CHANGES ======================
+			renderData := gin.H{
+				"config": conf.GConfig,
+			}
+			c.HTML(http.StatusOK, "login.tmpl", renderData)
+			// ====================================================================
+			return
+		}
+
+		// expire - we remove cookie and redirect it
+		if accountResp.Error != nil {
+			handleSessionErrorPage(c, *accountResp.Error, false)
+			return
+		}
+
+		baseUrl := conf.GConfig.BaseUrlConfig.BaseDNS
+		http.Redirect(c.Writer, c.Request, baseUrl, http.StatusSeeOther)
 		return
 	}
 
+	// all login user can see login page
 	renderData := gin.H{
 		"config": conf.GConfig,
 	}
-	global.GetDefaultUserAttribute(c, renderData)
 
 	c.HTML(http.StatusOK, "login.tmpl", renderData)
 }
@@ -242,31 +269,42 @@ func DetailProductHandler(c *gin.Context) {
 }
 
 func DashboardPageHandler(c *gin.Context) {
-	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
+	var loginUrl = conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+
+	authToken, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
 	if errGetCookie != nil {
 		global.Error.Println(errGetCookie)
-		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
 		return
 	}
 
-	service := global.GetServiceSession()
-	user, errLogin := service.GetUser(cookie)
-	if errLogin != nil {
-		global.Error.Println(errLogin)
-		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+	accountResp, errGetResponse := global.GetServiceSession().GetUser(authToken)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		// TODO: redirect to problem page
+		// ====================== REMOVE / NEED CHANGES ======================
+		global.Error.Println(errGetResponse)
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		// ====================================================================
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
-		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
-		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
 	}
+
+	// TODO:
+	// ONLY ROLE CGX ADMIN CAN USE THIS PAGE
+	// if !(user.Data.Role == session.USER_TYPE_ADMIN || user.Data.Role == session.USER_TYPE_COMMON) {
+	// 	notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+	// 	http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+	// 	return
+	// }
 
 	renderData := gin.H{
-		"UserDetail": user,
+		"UserDetail": accountResp.Data,
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "main-dashboard.tmpl", renderData)
@@ -290,7 +328,7 @@ func AddMemberPageHandler(c *gin.Context) {
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
+	if !(user.Data.Role == session.USER_TYPE_ADMIN || user.Data.Role == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -321,11 +359,11 @@ func RegisterCompanyPageHandler(c *gin.Context) {
 		return
 	}
 
-	if global.IsUserCanAccess(user) {
-		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
-		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
-		return
-	}
+	// if global.IsUserCanAccess(user) {
+	// 	notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+	// 	http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+	// 	return
+	// }
 
 	renderData := gin.H{
 		"UserDetail": user,
@@ -352,7 +390,7 @@ func MemberPageHandler(c *gin.Context) {
 		return
 	}
 
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON) {
+	if !(user.Data.Role == session.USER_TYPE_ADMIN || user.Data.Role == session.USER_TYPE_COMMON) {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -383,11 +421,11 @@ func CompanyProfilePageHandler(c *gin.Context) {
 		return
 	}
 
-	if global.IsUserCanAccess(user) {
-		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
-		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
-		return
-	}
+	// if global.IsUserCanAccess(user) {
+	// 	notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+	// 	http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+	// 	return
+	// }
 
 	renderData := gin.H{
 		"UserDetail": user,
@@ -414,18 +452,18 @@ func ChangePasswordPageHandler(c *gin.Context) {
 		return
 	}
 
-	if global.IsUserCanAccess(user) {
-		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
-		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
-		return
-	}
+	// if global.IsUserCanAccess(user) {
+	// 	notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
+	// 	http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
+	// 	return
+	// }
 
 	renderData := gin.H{
 		"UserDetail": user,
 		"config":     conf.GConfig,
 	}
 
-	if user.Type == session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role == session.USER_TYPE_ADMIN_TREK {
 		c.HTML(http.StatusOK, "admin-change-password.tmpl", renderData)
 	} else {
 		c.HTML(http.StatusOK, "dashboard-change-password.tmpl", renderData)
@@ -451,7 +489,7 @@ func AdminDashboardPage(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -483,7 +521,7 @@ func AdminProductList(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -515,7 +553,7 @@ func AdminProductNew(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -547,7 +585,7 @@ func AdminProductEditPage(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -579,7 +617,7 @@ func AdminUserList(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -612,7 +650,7 @@ func AdminUserNew(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -644,7 +682,7 @@ func AdminUserEditPage(c *gin.Context) {
 		return
 	}
 
-	if user.Type != session.USER_TYPE_ADMIN_TREK {
+	if user.Data.Role != session.USER_TYPE_ADMIN_TREK {
 		notFoundUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/not-found"
 		http.Redirect(c.Writer, c.Request, notFoundUrl, http.StatusSeeOther)
 		return
@@ -655,4 +693,55 @@ func AdminUserEditPage(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "admin-user-edit.tmpl", renderData)
+}
+
+func handleSessionErrorPage(c *gin.Context, sessionErr session.Error, needRedirect bool) {
+	// invalid or expire session will force to delete cookie
+	if sessionErr.Code == errorConst.ERROR_CODE_SESSION_EXPIRE || sessionErr.Code == errorConst.ERROR_CODE_TOKEN_SESSION {
+		// set cookie to expire
+		cookie := gSession.SetExpireSessionCookie()
+		http.SetCookie(c.Writer, &cookie)
+
+		if !needRedirect {
+			renderData := gin.H{
+				"config": conf.GConfig,
+			}
+			c.HTML(http.StatusOK, "login.tmpl", renderData)
+		} else {
+			loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+			http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		}
+
+		return
+	} else if sessionErr.Code == errorConst.ERROR_CODE_USER_NOT_REGISTER_ON_COMPANY {
+		// TODO: redirect to user not register on any company
+		if !needRedirect {
+			// ====================== REMOVE / NEED CHANGES ======================
+			renderData := gin.H{
+				"config": conf.GConfig,
+			}
+			c.HTML(http.StatusOK, "login.tmpl", renderData)
+			// ====================================================================
+		} else {
+			loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+			http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		}
+
+		return
+	} else {
+		// TODO: Error Internal server - redirect to problem page
+		if !needRedirect {
+			// ====================== REMOVE / NEED CHANGES ======================
+			renderData := gin.H{
+				"config": conf.GConfig,
+			}
+			c.HTML(http.StatusOK, "login.tmpl", renderData)
+			// ====================================================================
+		} else {
+			loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
+			http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
+		}
+
+		return
+	}
 }
