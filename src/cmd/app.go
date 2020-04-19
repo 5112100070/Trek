@@ -140,8 +140,7 @@ func initEngineDevelopment() *gin.Engine {
 
 	r.Static("/dashboard/css", "files/WEB-INF/attr-dashboard/css")
 	r.Static("/dashboard/js", "files/WEB-INF/attr-dashboard/js")
-	r.Static("/dashboard/scss", "files/WEB-INF/attr-dashboard/scss")
-	r.Static("/dashboard/vendor", "files/WEB-INF/attr-dashboard/vendor")
+	r.Static("/dashboard/assets", "files/WEB-INF/attr-dashboard/assets")
 
 	return r
 }

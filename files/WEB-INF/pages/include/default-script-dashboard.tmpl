@@ -1,4 +1,10 @@
-<script src="/js/sweetalert-main.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/dashboard/assets/demo/chart-area-demo.js"></script>
+<script src="/dashboard/assets/demo/chart-bar-demo.js"></script>
+<script src="/dashboard/js/scripts.js"></script>
+
 
 <script src="/js/controller/dashboard/user.js"></script>
 <script src="/js/controller/dashboard/dashboard.js"></script>
@@ -20,5 +26,13 @@
         } else{
             window.location.href = base_url + '/' + path;
         }
-    } 
+    }
+
+    function StartLoading(){
+        document.getElementById('loading-pop-up').style.display = "block";
+    }
+    
+    function FinishLoading(){
+        document.getElementById('loading-pop-up').style.display = "none";
+    }
 </script>

@@ -1,69 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link href="/css/user/login.css" rel="stylesheet">
-  <link href="/css/about-us.css" rel="stylesheet">
-  {{ template "header.tmpl" .}}
+    <link href="/css/about-us.css" rel="stylesheet">
+    <link href="/css/loading.css" rel="stylesheet">
+    {{ template "dashboard-header.tmpl" .}}
 
-  <body class="hold-transition login-page">
-    {{ template "main-navigation.tmpl" .}}
-    
-    <!-- Modal -->
-    <div id="loading-pop-up" class="modal-loading">
-      <div class="lds-facebook"><div></div><div></div><div></div></div>
-    </div>
-
-    <div class="login-box"> <!-- login-box -->
-        <div class="login-logo">
-            <a href="#">
-                <b>CGX</b> LOGIN
-            </a>
+    <body class="bg-primary">
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header justify-content-center"><h3 class="font-weight-light my-4">Sign in to start your session</h3></div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="email">
+                                                    Email
+                                                </label>
+                                                <input id="email" class="form-control py-4" type="email" placeholder="Enter email address" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="password">
+                                                    Password
+                                                </label>
+                                                <input id="password" class="form-control py-4" type="password" placeholder="Enter password" />
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form_error hide" id="login_error"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                                                    <label class="custom-control-label" for="rememberPasswordCheck">
+                                                        Remember password
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                <a class="small" href="reset-password">
+                                                    Forgot Password ?
+                                                </a>
+                                                <a class="btn btn-primary" onClick="javascript:ProcessLogin()" style="color: #ffff;">
+                                                    Login
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div id="layoutAuthentication_footer">
+                <footer class="footer mt-auto footer-dark">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 small">Copyright &copy; CGX 2020</div>
+                            <div class="col-md-6 text-md-right small">
+                                <a href="#!">Privacy Policy</a>
+                                &middot;
+                                <a href="#!">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- Modal -->
+            <div id="loading-pop-up" class="modal-loading">
+                <div class="lds-facebook"><div></div><div></div><div></div></div>
+            </div>
         </div>
-        <div class="login-box-body">
-            <p class="login-box-msg">Sign in to start your session</p>
-            <div class="form-group has-feedback">
-                <input id="email" class="form-control" placeholder="email">
-            </div>
-            <div class="form-group has-feedback">
-                <input id="password" class="form-control" placeholder="password" type="password">
-            </div>
-            <div class="row">
-                <div class="col-sm-8"></div> <!-- /.col -->
-                <div class="col-sm-4">
-                    <button class="btn btn-primary btn-block btn-flat" onClick="javascript:ProcessLogin()">Sign In</button>
-                </div> <!-- /.col -->
-                <div class="col-sm-12">
-                    <div class="form_error hide" id="login_error"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <a href="reset-password">Forget Password ?</a>
-                </div> <!-- /.col -->
-                <div class="col-sm-4"></div> <!-- /.col -->
-            </div>
-        </div>
-    </div> <!-- end of login-box -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="dashboard/js/scripts.js"></script>
+        <script>
+          function StartLoading(){
+              document.getElementById('loading-pop-up').style.display = "block";
+          }
+          function FinishLoading(){
+              document.getElementById('loading-pop-up').style.display = "none";
+          }
+        </script>
 
-    {{ template  "footer.tmpl" .}}
-
-  <!--End of Tawk.to Script-->
-    <!-- Bootstrap core JavaScript -->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/datetime-picker/js/moment-with-locales.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendor/datetime-picker/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-      function StartLoading(){
-          document.getElementById('loading-pop-up').style.display = "block";
-      }
-      function FinishLoading(){
-          document.getElementById('loading-pop-up').style.display = "none";
-      }
-    </script>
-
-    {{ template "default-script.tmpl" .}}
-  </body>
-
+        {{ template "default-script.tmpl" .}}
+    </body>
 </html>

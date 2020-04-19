@@ -13,27 +13,25 @@ function ProcessLogin(){
             setErrorLogin(true, response.error.massage);
             $("#password").val("");
         } else {
-            var swal = SimpleSwalWithoutDesc("Login Berhasil", type_success, "Ke Beranda");
-            swal.then(function(){
-                window.location.href = base_url + '/dashboard';
-            });
+            setErrorLogin(false, "");
+            window.location.href = base_url + '/dashboard';
         }
     }).fail(function(response){
         FinishLoading();
-        $("#password").val("");
-        SimpleSwal("Login Gagal", "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.", type_error, "Tutup");
+        setErrorLogin(true,  "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.");
     });
 }
 
 function setErrorLogin(isShow, message = "") {
-    $("#login_error").html(message);
-  if (isShow) {
-    $("#login_error").addClass("error");
-    $("#login_error").removeClass("hide");
-  } else {
-    $("#login_error").addClass("hide");
-    $("#login_error").removeClass("error");
-  }
+    if (isShow) {
+        $("#login_error").addClass("form_error");
+        $("#login_error").removeClass("hide");
+        $("#login_error").html(message);
+    } else {
+        $("#login_error").addClass("hide");
+        $("#login_error").removeClass("form_error");
+        $("#login_error").html("");
+    }
 }
 
 function ProcessLogout(){
