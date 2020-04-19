@@ -1,29 +1,31 @@
-function ProcessLogin(){
-    username = $("#username").val();
-    secret = $("#secret").val();
-
-    promise = makeLogin(username, secret);
-
-    promise.done(function(response){
-        var swal = SimpleSwalWithoutDesc("Login Berhasil", type_success, "Ke Beranda");
-        swal.then(function(){
-            window.location.href = base_url;
-        });
-    }).fail(function(response){
-        $("#username").val("");
-        $("#secret").val("");
-        SimpleSwal("Login Gagal", "Username atau Password salah", type_error, "Tutup");
-    });
-}
-
 function ProcessLogout(){
+    StartLoading();
     promise = makeLogout();
 
     promise.done(function(response){
-        window.location.href = base_url;
+        FinishLoading();
+        if(response.error!=null){
+            setErrorMessage(true, response.error.massage);
+        } else {
+            setErrorMessage(false, "");
+            window.location.href = base_url;
+        }
     }).fail(function(response){
-        location.reload();
+        FinishLoading();
+        setErrorMessage(true,  "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.");
     });
+}
+
+function setErrorMessage(isShow, message = "") {
+    if (isShow) {
+        $("#error_message").addClass("form_error");
+        $("#error_message").removeClass("hide");
+        $("#error_message").html(message);
+    } else {
+        $("#error_message").addClass("hide");
+        $("#error_message").removeClass("form_error");
+        $("#error_message").html("");
+    }
 }
 
 function ProcessRegister(){

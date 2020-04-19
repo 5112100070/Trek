@@ -20,6 +20,8 @@ type RepoBundle struct {
 
 type SessionService interface {
 	GetUser(string) (session.AccountResponse, error)
+	RequestLogin(string, string) (session.LoginResponse, error)
+	RequestLogout(string) (*session.Error, error)
 	SetUser(string, session.Account) error
 	DelUser(string) error
 }

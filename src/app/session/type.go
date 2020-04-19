@@ -21,6 +21,12 @@ type AccountResponse struct {
 	ServerProcessTime string   `json:"server_process_time"`
 }
 
+type LoginResponse struct {
+	Data              *LoginDataResponse `json:"data", omitempty`
+	Error             *Error             `json:"error", omitempty`
+	ServerProcessTime string             `json:"server_process_time"`
+}
+
 type Account struct {
 	ID         int64          `json:"user_id"`
 	Fullname   string         `json:"fullname"`
@@ -28,6 +34,11 @@ type Account struct {
 	CreateTime string         `json:"create_time"`
 	Role       int            `json:"role"`
 	Company    CompanyProfile `json:"company"`
+}
+
+type LoginDataResponse struct {
+	Message string `json:"message"`
+	Token   string `json:"token"`
 }
 
 type CompanyProfile struct {

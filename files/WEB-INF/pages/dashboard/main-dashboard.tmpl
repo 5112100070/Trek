@@ -4,9 +4,9 @@
   {{ template "dashboard-header.tmpl" .}}
 
     <body class="nav-fixed">
-        <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
-          <a class="navbar-brand d-none d-sm-block" href="index.html">CGX</a><button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
-          <ul class="navbar-nav align-items-center ml-auto">
+      <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+        <a class="navbar-brand d-none d-sm-block" href="index.html">CGX</a><button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
+        <ul class="navbar-nav align-items-center ml-auto">
               <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
                   <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
                   <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
@@ -40,15 +40,18 @@
               </li>
               <!-- Header Nav Bar -->
               {{ template "dashboard-nav.tmpl" .}}
-          </ul>
-        </nav>
+        </ul>
+      </nav>
 
-        <div id="layoutSidenav">
+      <div id="layoutSidenav">
           <!-- Sidebar -->
           {{ template "dashboard-sidebar.tmpl" .}}
           <div id="layoutSidenav_content">
               <main>
                   <div class="container-fluid mt-5">
+                      <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                        <div class="form_error hide" id="error_message" style="background: white;padding: 1rem; width: 100%;"></div>
+                      </div>
                       <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
                           <div class="mr-4 mb-3 mb-sm-0">
                               <h1 class="mb-0">Dashboard</h1>
@@ -64,7 +67,7 @@
                                       <p class="text-gray-700">Great job, your affiliate dashboard is ready to go! You can view sales, generate links, prepare coupons, and download affiliate reports using this dashboard.</p>
                                       <a class="btn btn-teal" href="#!">Get started<i class="ml-1" data-feather="arrow-right"></i></a>
                                   </div>
-                                  <div class="col d-none d-md-block text-right pt-3"><img class="img-fluid mt-n5" src="assets/img/drawkit/color/drawkit-content-man-alt.svg" style="max-width: 25rem;" /></div>
+                                  <div class="col d-none d-md-block text-right pt-3"><img class="img-fluid mt-n5" src="dashboard/assets/img/drawkit/color/drawkit-content-man-alt.svg" style="max-width: 25rem;" /></div>
                               </div>
                           </div>
                       </div>
@@ -74,6 +77,12 @@
               {{ template "dashboard-footer.tmpl" .}}
           </div>
       </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
 </html>

@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/5112100070/Trek/src/conf"
@@ -30,7 +31,7 @@ func (repo sessionRepo) GetUser(sessionID string) (AccountResponse, error) {
 	urlStr := u.String()
 
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", urlStr, strings.NewReader(""))
+	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
 	if err != nil {
 		log.Println(err)
 		return result, err
@@ -44,7 +45,7 @@ func (repo sessionRepo) GetUser(sessionID string) (AccountResponse, error) {
 		return result, errGetResp
 	}
 
-	if resp.Body == nil {
+	if resp == nil || resp.Body == nil {
 		log.Println("no response from cgx service")
 		return result, errors.New("no response from cgx service")
 	}
@@ -55,6 +56,102 @@ func (repo sessionRepo) GetUser(sessionID string) (AccountResponse, error) {
 		return result, err
 	}
 	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	return result, nil
+}
+
+func (repo sessionRepo) RequestLogout(sessionID string) (*Error, error) {
+	cgxResponse := struct {
+		SuccessResp *struct {
+			IsSuccess bool   `json:"is_success"`
+			Message   string `json:"message"`
+		} `json:"data"`
+		ErrResp           *Error `json:"error"`
+		ServerProcessTime string `json:"server_process_time"`
+	}{}
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_REQUEST_LOGOUT
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, urlStr, strings.NewReader(""))
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return nil, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return nil, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &cgxResponse)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return nil, errUnMarshal
+	}
+
+	return cgxResponse.ErrResp, nil
+}
+
+func (repo sessionRepo) RequestLogin(email, password string) (LoginResponse, error) {
+	var result LoginResponse
+
+	data := url.Values{}
+	data.Set("email", email)
+	data.Set("password", password)
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_REQUEST_LOGIN
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, urlStr, strings.NewReader(data.Encode()))
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		return result, errors.New("no response from cgx service")
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
 
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {

@@ -1,18 +1,14 @@
 package app
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/5112100070/Trek/src/conf"
-	urlConst "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/5112100070/Trek/src/utils"
@@ -72,81 +68,23 @@ func ProcessMakeLogin(c *gin.Context) {
 	email := c.PostForm("email")
 	password := c.PostForm("password")
 
-	data := url.Values{}
-	data.Set("email", email)
-	data.Set("password", password)
-
-	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
-	u.Path = urlConst.URL_REQUEST_LOGIN
-	urlStr := u.String()
-
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", urlStr, strings.NewReader(data.Encode()))
-	if err != nil {
-		global.Error.Println(err)
-		return
-	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-
-	resp, errGetResp := client.Do(req)
-	if err != nil {
-		global.Error.Println(errGetResp)
-		global.InternalServerErrorResponse(c, nil)
-		return
-	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		global.Error.Println(err)
-		global.InternalServerErrorResponse(c, nil)
-		return
-	}
-
-	/*
-		Example response from go.cgx.co.id
-		success without error
-				{
-			    "data": {
-			        "message": "success generate token",
-			        "token": "eyJleHAiOjE1ODY5MDY4MTksImlhdCI6MTU4Njg4ODgxOSwia"
-			    },
-			    "server_process_time": "253.438488ms"
-			}
-
-		success with error
-			{
-			    "error": {
-			        "code": 4000,
-			        "massage": "invalid email or password"
-			    },
-			    "server_process_time": "9.102529ms"
-			}
-	*/
-
-	var resultResp struct {
-		ServerProcessTime string                 `json:"server_process_time"`
-		Data              map[string]interface{} `json:"data,omitempty"`
-		Error             map[string]interface{} `json:"error,omitempty"`
-	}
-
-	errUnMarshal := json.Unmarshal(body, &resultResp)
-	if errUnMarshal != nil {
-		global.Error.Println(errUnMarshal)
+	service := global.GetServiceSession()
+	loginResp, errResp := service.RequestLogin(email, password)
+	if errResp != nil {
+		log.Println(errResp)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}
 
 	//  return error cause from service server
-	if resultResp.Error != nil {
-		global.ErrorResponse(c, resultResp.Error)
+	if loginResp.Error != nil {
+		global.ErrorResponse(c, loginResp.Error)
 		return
 	}
 
 	// return response from service server and keep to cookie
-	if resultResp.Data != nil {
-		cookie := gSession.SetSessionCookie(resultResp.Data["token"].(string))
+	if loginResp.Data != nil {
+		cookie := gSession.SetSessionCookie(loginResp.Data.Token)
 
 		http.SetCookie(c.Writer, &cookie)
 		return
@@ -165,16 +103,20 @@ func ProcessMakeLogout(c *gin.Context) {
 	}
 
 	service := global.GetServiceSession()
-	err := service.DelUser(token)
+	errResp, err := service.RequestLogout(token)
 	if err != nil {
+		// internal server error from go.cgx.co.id
 		global.Error.Println(err)
+		global.InternalServerErrorResponse(c, nil)
 	}
 
-	newCookie := http.Cookie{
-		Name:    global.UserCookie[global.GetEnv()],
-		Value:   token,
-		Expires: time.Now().Add(time.Duration(0)),
+	if errResp != nil {
+		// error response from go.cgx.co.id
+		global.ErrorResponse(c, errResp)
+		return
 	}
+
+	newCookie := gSession.SetExpireSessionCookie()
 
 	http.SetCookie(c.Writer, &newCookie)
 }
