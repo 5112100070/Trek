@@ -10,6 +10,7 @@ import (
 	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/conf"
 	errorConst "github.com/5112100070/Trek/src/constants/error"
+	roleConst "github.com/5112100070/Trek/src/constants/role"
 	statusConst "github.com/5112100070/Trek/src/constants/status"
 	"github.com/5112100070/Trek/src/global"
 	gSession "github.com/5112100070/Trek/src/global/session"
@@ -75,9 +76,36 @@ func UserListPageHandler(c *gin.Context) {
 		// need internal page error handler
 	}
 
+	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/users"
+	totalPage := listUserResp.Data.Total / int(rows)
+
+	// get additional page
+	// total data 22 row 10
+	// must result 3 pages
+	if listUserResp.Data.Total%int(rows) > 0 {
+		totalPage++
+	}
+
+	// wording for type user
+	for i, u := range listUserResp.Data.Accounts {
+		listUserResp.Data.Accounts[i].RoleWording = roleConst.ROLE_ACCOUNT_WORDING[u.Role]
+	}
+
+	// handle pagination
+	pagination := entity.Pagination{
+		Template:  templatePage,
+		Page:      int(page),
+		NextPage:  int(page) + 1,
+		PrevPage:  int(page) - 1,
+		Rows:      int(rows),
+		TotalPage: totalPage,
+		ListPage:  global.GenerateListPage(totalPage),
+	}
+
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"accounts":   listUserResp.Data.Accounts,
+		"pagination": pagination,
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "list-user.tmpl", renderData)

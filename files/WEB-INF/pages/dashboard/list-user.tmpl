@@ -64,22 +64,24 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Email</th>
-                                                <th>Phone number</th>
-                                                <th>Type</th>
-                                                <th>Actions</th>
+                                                <th style="text-align: center;">Name</th>
+                                                <th style="text-align: center;">Email</th>
+                                                <th style="text-align: center;">Phone number</th>
+                                                <th style="text-align: center;">Type</th>
+                                                <th style="text-align: center;">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{ range $index, $account := .accounts }}
                                             <tr>
                                                 <td>{{ $account.Fullname }}</td>
-                                                <td>BELUM ADA</td>
                                                 <td>{{ $account.Email }}</td>
-                                                <td>BELUM ADA</td>
-                                                <td><div class="badge badge-primary badge-pill">Admin</div></td>
+                                                <td>{{ $account.PhoneNumber }}</td>
+                                                <td style="text-align: center;">
+                                                    <div class="badge badge-primary badge-pill">
+                                                        {{ $account.RoleWording }}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="user.html"><i data-feather="more-vertical"></i></a>
                                                 </td>
@@ -88,6 +90,39 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <nav aria-label="...">
+                                  <ul class="pagination">
+                                    {{ $pagination := .pagination }}
+                                    <li class="page-item {{ if (le $pagination.Page 1 ) }} disable {{ end }}">
+                                        <a 
+                                            class="page-link"
+                                            {{ if (gt $pagination.Page 1 ) }} 
+                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
+                                            {{ end }}>
+                                            Sebelumnnya
+                                        </a>
+                                    </li>
+                                    {{ range $_, $index := .pagination.ListPage }}
+                                    <li class="page-item  
+                                        {{ if (eq $pagination.Page $index) }} active {{ end }}">
+                                        <a class="page-link" 
+                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
+                                            {{ $index }}
+                                        </a>
+                                    </li>
+                                    {{ end }}
+                                    <li class="page-item {{ if (ge $pagination.Page $pagination.TotalPage ) }}disable{{ end }}">
+                                        <a 
+                                            class="page-link" 
+                                            {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
+                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
+                                            {{ end }}
+                                        >
+                                            Selanjutnya
+                                        </a>
+                                    </li>
+                                  </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>

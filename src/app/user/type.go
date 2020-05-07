@@ -9,16 +9,18 @@ type MainListAccountResponse struct {
 type ListAccountsResponse struct {
 	Accounts       []User `json:"accounts", omitempty`
 	IsHaveNextPage bool   `json:"have_next_page", omitempty`
-	Total          int64  `json:"total", omitempty`
+	Total          int    `json:"total", omitempty`
 }
 
 type User struct {
-	ID         int64         `json:"user_id"`
-	Fullname   string        `json:"fullname"`
-	Email      string        `json:"email"`
-	CreateTime string        `json:"create_time"`
-	Role       int           `json:"role"`
-	Attribute  UserAttribute `json:"attribute"`
+	ID          int64         `json:"user_id"`
+	Fullname    string        `json:"fullname"`
+	PhoneNumber string        `json:"phone_number"`
+	Email       string        `json:"email"`
+	CreateTime  string        `json:"create_time"`
+	Role        int           `json:"role"`
+	RoleWording string        `json:"role_wording"`
+	Attribute   UserAttribute `json:"attribute"`
 }
 
 type UserAttribute struct {
