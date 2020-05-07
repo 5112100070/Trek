@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/5112100070/Trek/src/app/session"
+	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/entity"
 	redigo "github.com/5112100070/Trek/src/global/redis"
 	"github.com/5112100070/publib/storage/database"
@@ -16,6 +17,7 @@ type DBBundle struct {
 type RepoBundle struct {
 	Session SessionService
 	Public  PublicService
+	User    UserService
 }
 
 type SessionService interface {
@@ -28,4 +30,9 @@ type SessionService interface {
 
 type PublicService interface {
 	SaveSubscriber(user entity.UserSubscriber) error
+}
+
+type UserService interface {
+	GetListUsers(sessionID string, param user.ListUserParam) (user.MainListAccountResponse, error)
+	GetListCompany(sessionID string, param user.ListCompanyParam) (user.MainListCompanyResponse, error)
 }

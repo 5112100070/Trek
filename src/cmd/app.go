@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/app"
+	"github.com/5112100070/Trek/src/app/page/dashboard"
 	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/5112100070/publib/constants/env"
@@ -96,10 +97,11 @@ func main() {
 	r.POST("/login", app.ProcessMakeLogin)
 	r.POST("/logout", app.ProcessMakeLogout)
 
-	r.GET("/dashboard", app.DashboardPageHandler)
+	r.GET("/dashboard", dashboard.MainPageHandler)
+	r.GET("/dashboard/users", dashboard.UserListPageHandler)
+	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
 	r.GET("/dashboard/daftar-perusahaan", app.RegisterCompanyPageHandler)
-	r.GET("/dashboard/list-anggota", app.MemberPageHandler)
 	r.GET("/dashboard/company-profile", app.CompanyProfilePageHandler)
 	r.GET("/dashboard/ganti-password", app.ChangePasswordPageHandler)
 

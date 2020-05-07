@@ -44,7 +44,6 @@ type LoginDataResponse struct {
 type CompanyProfile struct {
 	ID          int64  `json:"company_id"`
 	CompanyName string `json:"company_name"`
-	SecretKey   string `json:"secret_key"`
 	IsEnabled   bool   `json:"is_enabled"`
 	Role        int    `json:"role"`
 }
