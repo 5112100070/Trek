@@ -111,6 +111,39 @@ func UserListPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "list-user.tmpl", renderData)
 }
 
+// UserCreatePagehandler is hadler for show form create user
+func UserCreatePagehandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	listCompResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
+		Page:             1,
+		Rows:             20,
+		OrderType:        "desc",
+		FilterByIsEnable: "1",
+	})
+	if err != nil {
+		// need internal page error handler
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"companies":  listCompResp.Data.Companies,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "create-user.tmpl", renderData)
+}
+
 // CompaniesListPageHandler is handler for show list company for admin or company user
 func CompaniesListPageHandler(c *gin.Context) {
 	// Check user session
@@ -130,11 +163,13 @@ func CompaniesListPageHandler(c *gin.Context) {
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
+	isEnabled := c.Query("is_enabled")
 
 	listUserResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
-		Page:      int(page),
-		Rows:      int(rows),
-		OrderType: orderType,
+		Page:             int(page),
+		Rows:             int(rows),
+		OrderType:        orderType,
+		FilterByIsEnable: isEnabled,
 	})
 	if err != nil {
 		// need internal page error handler
