@@ -55,3 +55,47 @@ func CreateNewAccount(c *gin.Context) {
 
 	global.OKResponse(c, response)
 }
+
+// CreateNewCompany is endpoint handler to create new user account
+func CreateNewCompany(c *gin.Context) {
+	companyName := c.PostForm("name")
+	address := c.PostForm("address")
+	phone := c.PostForm("phone")
+
+	role, _ := strconv.Atoi(c.PostForm("role"))
+
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// define service user
+	userService := global.GetServiceUser()
+	param := user.CreateCompanyParam{
+		Name:    companyName,
+		Phone:   phone,
+		Address: address,
+		Role:    role,
+	}
+	resp, err := userService.CreateCompany(token, param)
+	if err != nil {
+		log.Println("cannot save subscriber. Err", err)
+		global.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"error": resp,
+	}
+
+	global.OKResponse(c, response)
+}

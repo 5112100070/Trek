@@ -51,8 +51,8 @@
                     <div class="container-fluid mt-5">
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
                             <div class="mr-4 mb-3 mb-sm-0">
-                                <h1 class="mb-0">Tambah Akun Pengguna</h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Back</button>                        
+                                <h1 class="mb-0">Tambah Akun Perusahaan</h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Back</button>                        
                             </div>
                             <div id="success-alert" class="alert alert-success hide" role="alert"></div>
                             <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
@@ -62,16 +62,16 @@
                                 <form action="">
                                     <form>
                                         <div class="form-group">
-                                            <label for="fullname">Nama Lengkap</label>
-                                            <input class="form-control form-control-sm" id="fullname" placeholder="nama pengguna baru" />
+                                            <label for="company-name">Nama Perusahaan</label>
+                                            <input class="form-control form-control-sm" id="company-name" placeholder="nama Perusahaan" />
                                         </div>
                                         <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input class="form-control form-control-sm" id="email" type="email" placeholder="email pengguna" />
+                                            <label for="address">Alamat Perusahaan</label>
+                                            <input class="form-control form-control-sm" id="address" placeholder="alamat lengkap perusahaan" />
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone">Phone Number</label>
-                                            <input class="form-control form-control-sm" id="phone" type="phone" placeholder="nomor telepon" />
+                                            <label for="phone">Nomor Telepon</label>
+                                            <input class="form-control form-control-sm" id="phone" type="phone" placeholder="nomor telepon perusahaan" />
                                         </div>
                                         <div class="form-group">
                                             <label for="role">Role</label>
@@ -80,15 +80,8 @@
                                                 <option value="2">Operator</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="company-id">Akun Perusahaan</label>
-                                            <select class="form-control form-control-sm" id="company-id">
-                                                {{ range $_, $company := .companies }}
-                                                <option value="{{ $company.ID }}">{{ $company.CompanyName }}</option>
-                                                {{ end }}
-                                            </select>
-                                        </div>
-                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessRegister()" type="button">Add User</button>
+                                        
+                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessRegister()" type="button">Tambah Perusahaan Baru</button>
                                 </form>
                             </div>
                         </div>
@@ -111,14 +104,13 @@
         function ProcessRegister(){
             setError(false, "");
 
-            var fullname = $("#fullname").val();
-            var email = $("#email").val();
+            var companyName = $("#company-name").val();
+            var address = $("#address").val();
             var phone = $("#phone").val();
             var role = $('#role :selected').val();
-            var companyID = $('#company-id :selected').val();
 
             StartLoading();
-            var promise = Register(fullname,email,phone,role,companyID);
+            var promise = Register(companyName,address,phone,role);
             promise.done(function(response){
                 response = response.data;
 
@@ -130,12 +122,10 @@
                     $("#success-alert").html("Sukses membuat akun baru");
 
                     // set default value
-                    $("#fullname").val("");
-                    $("#email").val("");
+                    $("#company-name").val("");
+                    $("#address").val("");
                     $("#phone").val("");
                     $('#role :selected').val(1);
-                    $('#company-id :selected').val(1);
-                    
                 }
                 FinishLoading();
             }).fail(function(response){
@@ -144,14 +134,13 @@
             });
         }
     
-        function Register(fullname, email, phone, role, companyID){
-            var url = base_url + '/dashboard/user/register';
+        function Register(companyName, address, phone, role){
+            var url = base_url + '/dashboard/company/register';
             var data = {
-                fullname: fullname,
-                email: email,
+                name: companyName,
+                address: address,
                 phone: phone,
-                role: role,
-                company_id: companyID
+                role: role
             };
             
             var promise = $.ajax({

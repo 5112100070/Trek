@@ -111,7 +111,7 @@ func UserListPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "list-user.tmpl", renderData)
 }
 
-// UserCreatePagehandler is hadler for show form create user
+// UserCreatePagehandler is handler for show form create user
 func UserCreatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -142,6 +142,28 @@ func UserCreatePagehandler(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "create-user.tmpl", renderData)
+}
+
+// func CompanyCreatePagehandler is handler for show form create company
+func CompanyCreatePagehandler(c *gin.Context) {
+	// Check user session
+	accountResp, _, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "create-company.tmpl", renderData)
 }
 
 // CompaniesListPageHandler is handler for show list company for admin or company user

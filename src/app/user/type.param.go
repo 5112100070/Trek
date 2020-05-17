@@ -25,3 +25,11 @@ type CreateAccountParam struct {
 	Role      int    `json:"role"`
 	CompanyID int64  `json:"company_id"`
 }
+
+// CreateCompanyParam This struct is used as parameter to create new company
+type CreateCompanyParam struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Phone   string `json:"phone_number"`
+	Role    int    `json:"role"`
+}
