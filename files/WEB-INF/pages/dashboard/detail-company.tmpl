@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+        <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+            <a class="navbar-brand d-none d-sm-block" href="index.html">CGX</a><button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
+            <ul class="navbar-nav align-items-center ml-auto">
+                <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+                        <h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>Alerts Center</h6>
+                        <a class="dropdown-item dropdown-notifications-item" href="#!"
+                            ><div class="dropdown-notifications-item-icon bg-warning"><i data-feather="activity"></i></div>
+                            <div class="dropdown-notifications-item-content">
+                                <div class="dropdown-notifications-item-content-details">December 29, 2019</div>
+                                <div class="dropdown-notifications-item-content-text">This is an alert message. It's nothing serious, but it requires your attention.</div>
+                            </div></a
+                        ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                            ><div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
+                            <div class="dropdown-notifications-item-content">
+                                <div class="dropdown-notifications-item-content-details">December 22, 2019</div>
+                                <div class="dropdown-notifications-item-content-text">A new monthly report is ready. Click here to view!</div>
+                            </div></a
+                        ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                            ><div class="dropdown-notifications-item-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="dropdown-notifications-item-content">
+                                <div class="dropdown-notifications-item-content-details">December 8, 2019</div>
+                                <div class="dropdown-notifications-item-content-text">Critical system failure, systems shutting down.</div>
+                            </div></a
+                        ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                            ><div class="dropdown-notifications-item-icon bg-success"><i data-feather="user-plus"></i></div>
+                            <div class="dropdown-notifications-item-content">
+                                <div class="dropdown-notifications-item-content-details">December 2, 2019</div>
+                                <div class="dropdown-notifications-item-content-text">New user request. Woody has requested access to the organization.</div>
+                            </div></a
+                        ><a class="dropdown-item dropdown-notifications-footer" href="#!">View All Alerts</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown no-caret mr-3 dropdown-user">
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"/></a>
+                    <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                        <h6 class="dropdown-header d-flex align-items-center">
+                            <img class="dropdown-user-img" src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
+                            <div class="dropdown-user-details">
+                                <div class="dropdown-user-details-name">Valerie Luna</div>
+                                <div class="dropdown-user-details-email">vluna@aol.com</div>
+                            </div>
+                        </h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#!"
+                            ><div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                            Akun</a
+                        ><a class="dropdown-item" href="#!"
+                            ><div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                            Logout</a
+                        >
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            {{ template "dashboard-sidebar.tmpl" .}}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="page-header pb-10">
+                        <div class="container-fluid">
+                            <div class="page-header-content">
+                                <h1 class="page-header-title">
+                                    <div class="page-header-icon"><i data-feather="users"></i></div>
+                                    <span>{{ .company.CompanyName }}</span>        
+                                </h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Back</button>   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-n10">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <div id="sizing">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Data Perusahaan</div>
+                                        <div class="card-body">
+                                            <div class="position-relative">
+                                                <div class="row align-items-center justify-content-between">
+                                                    <div class="col position-relative">
+                                                        <p class="text-gray-700">Nama Perusahaan: {{ .company.CompanyName }}</p>
+                                                        <p class="text-gray-700">Alamat: {{ .company.Address }}</p>
+                                                        <p class="text-gray-700">Telepon Perusahaan: {{ .company.PhoneNumber }}</p>
+                                                        <p class="text-gray-700">Status Aktivasi: {{ .company.StatusActivation }}</p>
+                                                        
+                                                        {{ if not .company.IsEnabled }}
+                                                        <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                                                            Aktifkan Akun
+                                                        </button>
+                                                        {{ end }}
+
+                                                        {{ if .company.IsEnabled }}
+                                                        <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                                                            Non Aktifkan Akun
+                                                        </button>
+                                                        {{ end }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div id="status">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Kunci API </div>
+                                        <div class="card-body">
+                                            <div class="datatable table-responsive">
+                                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Kunci API</th>
+                                                            <th>Edit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Ecommerce<br>
+                                                            <b>ID:</b>5e8485f03d9b184119af6421
+                                                            
+                                                            </td>
+                                                            <td> <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModalCenter">  <i data-feather="eye"></i></button>
+                                                             </td>
+                                                            <td>
+                                                                <button class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="trash-2"></i></button>
+                                                            </td>
+                                                        </tr>                                                   
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <!-- List Modals -->
+                            <div class="modal fade" id="toggle-account-activation" tabindex="-1" role="dialog" aria-labelledby="toggle-account-activation-title" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="toggle-account-activation-title">
+                                                {{ if .company.IsEnabled }}
+                                                    Konfirmasi untuk mematikan akun
+                                                {{ end }}
+                                                {{ if not .company.IsEnabled }}
+                                                    Konfirmasi untuk mengaktifkan akun
+                                                {{ end }}
+                                            </h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body">                               
+                                            {{ if .company.IsEnabled }}
+                                                    Apakah anda yakin untuk mematikan akun dari perusahaan {{ .company.CompanyName }} ?
+                                            {{ end }}
+
+                                            {{ if not .company.IsEnabled }}
+                                                    Apakah anda yakin untuk mengaktifkan akun dari perusahaan {{ .company.CompanyName }} ?
+                                            {{ end }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
+                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal">Konfirmasi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="nav-sticky">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <ul class="nav flex-column" id="stickyNav">
+                                                <li class="nav-item"><a class="nav-link" href="company-edit.html">Edit Data Perusahaan</a></li>
+                                                <li class="nav-item"><a class="nav-link" href="company-create-api.html">Tambah Kunci API</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="footer mt-auto footer-light">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 small">Copyright &copy; CGX 2020</div>
+    
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+         <!-- Modal -->
+        <div id="loading-pop-up" class="modal-loading">
+          <div class="lds-facebook"><div></div><div></div><div></div></div>
+        </div>
+    </body>
+
+    {{ template "default-script-dashboard.tmpl" .}}
+</html>

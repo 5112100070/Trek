@@ -99,13 +99,18 @@ func main() {
 
 	r.GET("/dashboard", dashboard.MainPageHandler)
 	r.GET("/dashboard/users", dashboard.UserListPageHandler)
+	r.GET("/dashboard/user", dashboard.UserDetailPageHandler)
 	r.GET("/dashboard/create-user", dashboard.UserCreatePagehandler)
 	r.GET("/dashboard/create-company", dashboard.CompanyCreatePagehandler)
 	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
+	r.GET("/dashboard/company", dashboard.CompanyDetailPageHandler)
+
+	// need to be removed
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
 	r.GET("/dashboard/daftar-perusahaan", app.RegisterCompanyPageHandler)
 	r.GET("/dashboard/company-profile", app.CompanyProfilePageHandler)
 	r.GET("/dashboard/ganti-password", app.ChangePasswordPageHandler)
+	// border need to be removed
 
 	r.POST("/dashboard/user/register", dashboard.CreateNewAccount)
 	r.POST("/dashboard/company/register", dashboard.CreateNewCompany)

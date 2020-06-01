@@ -21,6 +21,104 @@ func InitUserRepo() *userRepo {
 	return &userRepo{}
 }
 
+func (repo userRepo) GetDetailAccount(sessionID string, accountID int64) (MainDetailAccountResponse, error) {
+	var result MainDetailAccountResponse
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_GET_DETAIL_ACCOUNT
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	// set query param
+	q := req.URL.Query()
+	q.Add("id", strconv.FormatInt(accountID, 10))
+
+	req.URL.RawQuery = q.Encode()
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	return result, nil
+}
+
+func (repo userRepo) GetDetailCompany(sessionID string, companyID int64) (MainDetailCompanyResponse, error) {
+	var result MainDetailCompanyResponse
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_GET_DETAIL_COMPANY
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	// set query param
+	q := req.URL.Query()
+	q.Add("id", strconv.FormatInt(companyID, 10))
+
+	req.URL.RawQuery = q.Encode()
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	return result, nil
+}
+
 func (repo userRepo) GetListUsers(sessionID string, param ListUserParam) (MainListAccountResponse, error) {
 	var result MainListAccountResponse
 

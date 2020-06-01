@@ -3,6 +3,7 @@ package dashboard
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/5112100070/Trek/src/entity"
 
@@ -144,6 +145,37 @@ func UserCreatePagehandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "create-user.tmpl", renderData)
 }
 
+// UserDetailPageHandler is handler for show detail company for admin
+func UserDetailPageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// get list param
+	accountID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
+
+	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
+	if err != nil {
+		// need internal page error handler
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"account":    accDetail.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "detail-user.tmpl", renderData)
+}
+
 // func CompanyCreatePagehandler is handler for show form create company
 func CompanyCreatePagehandler(c *gin.Context) {
 	// Check user session
@@ -230,6 +262,41 @@ func CompaniesListPageHandler(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "list-companies.tmpl", renderData)
+}
+
+// CompanyDetailPageHandler is handler for show detail company for admin
+func CompanyDetailPageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// get list param
+	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
+
+	companyDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
+	if err != nil {
+		// need internal page error handler
+	}
+
+	companyDetail.Data.StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[companyDetail.Data.IsEnabled]
+	companyDetail.Data.CompanyName = strings.ToUpper(companyDetail.Data.CompanyName)
+	companyDetail.Data.StatusActivation = strings.ToUpper(companyDetail.Data.StatusActivation)
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"company":    companyDetail.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "detail-company.tmpl", renderData)
 }
 
 // getUserProfile -- get detail user based on active cookie
