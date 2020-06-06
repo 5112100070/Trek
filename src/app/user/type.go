@@ -28,6 +28,7 @@ type User struct {
 	CreateTime  string        `json:"create_time"`
 	Role        int           `json:"role"`
 	RoleWording string        `json:"role_wording"`
+	RoleColor   string        `json:"role_color"`
 	Attribute   UserAttribute `json:"attribute"`
 }
 

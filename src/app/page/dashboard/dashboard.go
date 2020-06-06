@@ -90,6 +90,7 @@ func UserListPageHandler(c *gin.Context) {
 	// wording for type user
 	for i, u := range listUserResp.Data.Accounts {
 		listUserResp.Data.Accounts[i].RoleWording = roleConst.ROLE_ACCOUNT_WORDING[u.Role]
+		listUserResp.Data.Accounts[i].RoleColor = roleConst.ROLE_ACCOUNT_COLOR[u.Role]
 	}
 
 	// handle pagination
@@ -143,6 +144,35 @@ func UserCreatePagehandler(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "create-user.tmpl", renderData)
+}
+
+// UserUpdatePagehandler is handler for show update user form
+func UserUpdatePagehandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	accountID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
+	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
+	if err != nil {
+		// need internal page error handler
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"account":    accDetail.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "update-user.tmpl", renderData)
 }
 
 // UserDetailPageHandler is handler for show detail company for admin

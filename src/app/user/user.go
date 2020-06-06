@@ -276,6 +276,60 @@ func (repo userRepo) CreateUser(sessionID string, param CreateAccountParam) (*Er
 	return result, nil
 }
 
+func (repo userRepo) UpdateUser(sessionID string, param UpdateAccountParam) (*Error, error) {
+	var result *Error
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_UPDATE_ACCOUNT
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(param)
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, urlStr, bytes.NewBuffer(bodyReq))
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	req.Header.Add(headerConst.CONTENT_TYPE, "application/json")
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return nil, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return nil, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var resultResp = struct {
+		Error             *Error `json:"error", omitempty`
+		ServerProcessTime string `json:"server_process_time"`
+	}{}
+
+	errUnMarshal := json.Unmarshal(body, &resultResp)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return nil, errUnMarshal
+	}
+
+	result = resultResp.Error
+
+	return result, nil
+}
+
 func (repo userRepo) CreateCompany(sessionID string, param CreateCompanyParam) (*Error, error) {
 	var result *Error
 

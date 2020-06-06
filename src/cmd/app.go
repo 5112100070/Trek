@@ -101,6 +101,7 @@ func main() {
 	r.GET("/dashboard/users", dashboard.UserListPageHandler)
 	r.GET("/dashboard/user", dashboard.UserDetailPageHandler)
 	r.GET("/dashboard/create-user", dashboard.UserCreatePagehandler)
+	r.GET("/dashboard/update-user", dashboard.UserUpdatePagehandler)
 	r.GET("/dashboard/create-company", dashboard.CompanyCreatePagehandler)
 	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
 	r.GET("/dashboard/company", dashboard.CompanyDetailPageHandler)
@@ -113,6 +114,7 @@ func main() {
 	// border need to be removed
 
 	r.POST("/dashboard/user/register", dashboard.CreateNewAccount)
+	r.POST("/dashboard/user/update", dashboard.UpdateAccount)
 	r.POST("/dashboard/company/register", dashboard.CreateNewCompany)
 
 	r.GET("/admin", app.AdminDashboardPage)
