@@ -257,6 +257,7 @@ func CompaniesListPageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+		return
 	}
 
 	// define status activation company
@@ -327,6 +328,34 @@ func CompanyDetailPageHandler(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-company.tmpl", renderData)
+}
+
+func CompanyUpdatePagehandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
+	accDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
+	if err != nil {
+		// need internal page error handler
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"company":    accDetail.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "update-company.tmpl", renderData)
 }
 
 // getUserProfile -- get detail user based on active cookie

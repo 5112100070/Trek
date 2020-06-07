@@ -103,6 +103,7 @@ func main() {
 	r.GET("/dashboard/create-user", dashboard.UserCreatePagehandler)
 	r.GET("/dashboard/update-user", dashboard.UserUpdatePagehandler)
 	r.GET("/dashboard/create-company", dashboard.CompanyCreatePagehandler)
+	r.GET("/dashboard/update-company", dashboard.CompanyUpdatePagehandler)
 	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
 	r.GET("/dashboard/company", dashboard.CompanyDetailPageHandler)
 
@@ -116,6 +117,7 @@ func main() {
 	r.POST("/dashboard/user/register", dashboard.CreateNewAccount)
 	r.POST("/dashboard/user/update", dashboard.UpdateAccount)
 	r.POST("/dashboard/company/register", dashboard.CreateNewCompany)
+	r.POST("/dashboard/company/update", dashboard.UpdateCompany)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)

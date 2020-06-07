@@ -51,8 +51,8 @@
                     <div class="container-fluid mt-5">
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
                             <div class="mr-4 mb-3 mb-sm-0">
-                                <h1 class="mb-0">Update Akun {{ .account.Fullname }}</h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Back</button>                        
+                                <h1 class="mb-0">Update Akun Perusahaan {{ .company.CompanyName }}</h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Back</button>                        
                             </div>
                             <div id="success-alert" class="alert alert-success hide" role="alert"></div>
                             <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
@@ -62,18 +62,22 @@
                                 <form action="">
                                     <form>
                                         <div class="form-group">
-                                            <label for="fullname">Nama Lengkap</label>
-                                            <input class="form-control form-control-sm" id="fullname" value="{{ .account.Fullname }}" />
+                                            <label for="company-name">Nama Perusahaan</label>
+                                            <input class="form-control form-control-sm" id="company-name" value="{{ .company.CompanyName }}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company-address">Alamat Perusahaan</label>
+                                            <input class="form-control form-control-sm" id="company-address" value="{{ .company.Address }}" />
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Nomor Telepon</label>
-                                            <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .account.PhoneNumber }}" />
+                                            <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .company.PhoneNumber }}" />
                                         </div>
                                         <div class="form-group">
                                             <label for="role">Role</label>
                                             <select class="form-control form-control-sm" id="role">
-                                                <option value="1" {{ if eq .account.Role 1 }}selected{{ end }}>Admin</option>
-                                                <option value="2" {{ if eq .account.Role 2 }}selected{{ end }}>Operator</option>
+                                                <option value="1" {{ if eq .company.Role 1 }}selected{{ end }}>Admin</option>
+                                                <option value="2" {{ if eq .company.Role 2 }}selected{{ end }}>Client</option>
                                             </select>
                                         </div>
                                         <button class="btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">Update User</button>
@@ -99,13 +103,14 @@
         function ProcessUpdate(){
             setError(false, "");
 
-            var id = {{ .account.ID }};
-            var fullname = $("#fullname").val();
+            var id = {{ .company.ID }};
+            var companyName = $("#company-name").val();
+            var companyAddress =$("#company-address").val();
             var phone = $("#phone").val();
             var role = $('#role :selected').val();
 
             StartLoading();
-            var promise = Update(id,fullname,phone,role);
+            var promise = Update(id, companyName, companyAddress, phone, role);
             promise.done(function(response){
                 response = response.data;
 
@@ -123,11 +128,12 @@
             });
         }
     
-        function Update(id, fullname, phone, role){
-            var url = base_url + '/dashboard/user/update';
+        function Update(id, companyName, companyAddress, phone, role){
+            var url = base_url + '/dashboard/company/update';
             var data = {
                 id: id,
-                fullname: fullname,
+                company_name: companyName,
+                company_address: companyAddress,
                 phone: phone,
                 role: role
             };

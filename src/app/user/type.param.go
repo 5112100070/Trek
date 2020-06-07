@@ -28,17 +28,24 @@ type CreateAccountParam struct {
 
 // UpdateAccountParam This struct is used as parameter to update account
 type UpdateAccountParam struct {
-	ID        int64  `json:"id"`
-	Fullname  string `json:"fullname"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone_number"`
-	Role      int    `json:"role"`
-	CompanyID int64  `json:"company_id"`
+	ID       int64  `json:"id"`
+	Fullname string `json:"fullname"`
+	Phone    string `json:"phone_number"`
+	Role     int    `json:"role"`
 }
 
 // CreateCompanyParam This struct is used as parameter to create new company
 type CreateCompanyParam struct {
 	Name    string `json:"name"`
+	Address string `json:"address"`
+	Phone   string `json:"phone_number"`
+	Role    int    `json:"role"`
+}
+
+// UpdateCompanyParam This struct is used as parameter to update company
+type UpdateCompanyParam struct {
+	ID      int64  `json:"id"`
+	Name    string `json:"company_name"`
 	Address string `json:"address"`
 	Phone   string `json:"phone_number"`
 	Role    int    `json:"role"`
