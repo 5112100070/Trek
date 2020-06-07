@@ -338,6 +338,37 @@ func (repo userRepo) ChangePassword(sessionID string, param ChangePasswordParam)
 	return result, nil
 }
 
+func (repo userRepo) ChangeStatusAccount(sessionID string, param ChangeStatusAccParam) (*Error, error) {
+	var result *Error
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_CHANGE_CHANGE_STATUS_ACTIVATION
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(param)
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
+	if err != nil {
+		log.Printf("func Change Status Account error send request: err: %v\n", err)
+		return result, err
+	}
+
+	var resultResp = struct {
+		Error             *Error `json:"error", omitempty`
+		ServerProcessTime string `json:"server_process_time"`
+	}{}
+
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return nil, errUnMarshal
+	}
+
+	result = resultResp.Error
+
+	return result, nil
+}
+
 func (repo userRepo) CreateCompany(sessionID string, param CreateCompanyParam) (*Error, error) {
 	var result *Error
 

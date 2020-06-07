@@ -141,6 +141,61 @@ func AdminChangePassword(c *gin.Context) {
 
 	resp, err := userService.ChangePassword(token, param)
 	if err != nil {
+		log.Println("cannot change password account. Err", err)
+		global.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"error": resp,
+	}
+
+	global.OKResponse(c, response)
+}
+
+// AdminChangeActivation is endpoint to change status activation account
+func AdminChangeActivation(c *gin.Context) {
+	userID, errparse := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
+	if errparse != nil {
+		global.BadRequestResponse(c, nil)
+		return
+	}
+
+	var isEnabled bool
+	payloadStatus := c.PostForm("is_enabled")
+	if payloadStatus == "true" {
+		isEnabled = true
+	} else if payloadStatus == "false" {
+		isEnabled = false
+	} else {
+		log.Printf("func AdminChangeActivation error when parse status. payload: %v \n", payloadStatus)
+		global.BadRequestResponse(c, nil)
+		return
+	}
+
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// define service user
+	userService := global.GetServiceUser()
+	param := user.ChangeStatusAccParam{
+		UserID:    userID,
+		IsEnabled: isEnabled,
+	}
+
+	resp, err := userService.ChangeStatusAccount(token, param)
+	if err != nil {
 		log.Println("cannot update company. Err", err)
 		global.InternalServerErrorResponse(c, err.Error())
 		return

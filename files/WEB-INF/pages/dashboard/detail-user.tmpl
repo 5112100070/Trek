@@ -71,7 +71,7 @@
                                     <div class="page-header-icon"><i data-feather="users"></i></div>
                                     <span>{{ .account.Fullname }}</span>        
                                 </h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'">
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'">
                                     <i data-feather="chevron-left"></i>Back
                                 </button>   
                             </div>
@@ -135,16 +135,16 @@
                                         </div>
                                         <div class="modal-body">                               
                                             {{ if .account.Attribute.IsEnabled }}
-                                                    Apakah anda yakin untuk mematikan akun dari perusahaan {{ .company.CompanyName }} ?
+                                                    Apakah anda yakin untuk mematikan akun {{ .account.Fullname }} ?
                                             {{ end }}
 
                                             {{ if not .account.Attribute.IsEnabled }}
-                                                    Apakah anda yakin untuk mengaktifkan akun dari perusahaan {{ .company.CompanyName }} ?
+                                                    Apakah anda yakin untuk mengaktifkan akun {{ .account.Fullname }} ?
                                             {{ end }}
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
-                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal">Konfirmasi</button>
+                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal" onclick="javascript:ProcessChangeStatus()">Konfirmasi</button>
                                         </div>
                                     </div>
                                 </div>
@@ -230,10 +230,12 @@
 
     {{ template "default-script-dashboard.tmpl" .}}
     <script>
+        var userID = {{ .account.ID }};
+        var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
+        
         function ProcessChangePassword(){
             setError(false, "");
 
-            var userID = {{ .account.ID }};
             var password = $("#field-new-password").val();
             var passwordConfirm =$("#field-new-password-confirm").val();
 
@@ -275,6 +277,57 @@
             var data = {
                 user_id: userID,
                 new_password: password,
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function ProcessChangeStatus(){
+            setError(false, "");
+
+            var toggleIsEnabledAccount = !isEnabledAccount;
+
+            StartLoading();
+            var promise = UpdateStatusActivation(userID, toggleIsEnabledAccount);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.massage);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+
+                    if(toggleIsEnabledAccount == true) {
+                        $("#success-alert").html("Sukses melakukan update. Akun sekarang telah di non aktifkan");
+                    } else {
+                        $("#success-alert").html("Sukses melakukan update akun. Akun sekarang telah di aktifkan");
+                    }
+                    
+                }
+
+                FinishLoading();
+                window.location.reload();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+
+        function UpdateStatusActivation(userID, isEnabled){
+            var url = base_url + '/admin/change-account-activation';
+            var data = {
+                user_id: userID,
+                is_enabled: isEnabled,
             };
             
             var promise = $.ajax({
