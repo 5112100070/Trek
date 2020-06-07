@@ -71,8 +71,12 @@
                                     <div class="page-header-icon"><i data-feather="users"></i></div>
                                     <span>{{ .account.Fullname }}</span>        
                                 </h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Back</button>   
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'">
+                                    <i data-feather="chevron-left"></i>Back
+                                </button>   
                             </div>
+                            <div id="success-alert" class="alert alert-success hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>
+                            <div id="failed-alert" class="alert alert-danger hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>
                         </div>
                     </div>
                     <div class="container-fluid mt-n10">
@@ -102,6 +106,10 @@
                                                             Non Aktifkan Akun
                                                         </button>
                                                         {{ end }}
+
+                                                        <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
+                                                            Ubah Password
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,6 +150,35 @@
                                 </div>
                             </div>
 
+                            <div class="modal fade" id="toggle-change-password" tabindex="-1" role="dialog" aria-labelledby="toggle-change-password-title" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="toggle-change-password-title">
+                                                Konfirmasi ubah password
+                                            </h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body">                               
+                                            <div class="form-group">
+                                                <label for="field-new-password">Password baru untuk {{ .account.Fullname }}</label>
+                                                <input class="form-control form-control-sm" id="field-new-password" type="password" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="field-new-password-confirm">Konfirmasi Password</label>
+                                                <input class="form-control form-control-sm" id="field-new-password-confirm" type="password" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
+                                            <button class="btn btn-danger btn-secondary" type="button" onclick="javascript:ProcessChangePassword()" data-dismiss="modal">Simpan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of List Modals -->
+                            
                             <div class="col-lg-9">
                                 <div id="sizing">
                                     <div class="card mb-4">
@@ -192,4 +229,74 @@
     </body>
 
     {{ template "default-script-dashboard.tmpl" .}}
+    <script>
+        function ProcessChangePassword(){
+            setError(false, "");
+
+            var userID = {{ .account.ID }};
+            var password = $("#field-new-password").val();
+            var passwordConfirm =$("#field-new-password-confirm").val();
+
+            if(password != passwordConfirm){
+                setError(true, "password baru dan password  konfirmasi berbeda"); 
+                return
+            }
+
+            if(password == ""){
+                setError(true, "password baru tidak boleh kosong"); 
+                return
+            }
+
+            StartLoading();
+            var promise = UpdatePassword(userID, password);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.massage);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+                    $("#success-alert").html("Sukses melakukan update akun");
+                }
+
+                $("#field-new-password").val("");
+                $("#field-new-password-confirm").val("");
+
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+    
+        function UpdatePassword(userID, password){
+            var url = base_url + '/admin/change-password';
+            var data = {
+                user_id: userID,
+                new_password: password,
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+    </script>
 </html>

@@ -285,41 +285,49 @@ func (repo userRepo) UpdateUser(sessionID string, param UpdateAccountParam) (*Er
 
 	bodyReq, _ := json.Marshal(param)
 
-	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodPost, urlStr, bytes.NewBuffer(bodyReq))
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
 	if err != nil {
-		log.Println(err)
-		return nil, err
+		log.Printf("func Update User error send request: err: %v\n", err)
+		return result, err
 	}
-
-	// set header
-	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
-	req.Header.Add(headerConst.CONTENT_TYPE, "application/json")
-
-	resp, errGetResp := client.Do(req)
-	if err != nil {
-		log.Println(errGetResp)
-		return nil, errGetResp
-	}
-
-	if resp == nil || resp.Body == nil {
-		log.Println("no response from cgx service")
-		return nil, errors.New("no response from cgx service")
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	defer resp.Body.Close()
 
 	var resultResp = struct {
 		Error             *Error `json:"error", omitempty`
 		ServerProcessTime string `json:"server_process_time"`
 	}{}
 
-	errUnMarshal := json.Unmarshal(body, &resultResp)
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return nil, errUnMarshal
+	}
+
+	result = resultResp.Error
+
+	return result, nil
+}
+
+func (repo userRepo) ChangePassword(sessionID string, param ChangePasswordParam) (*Error, error) {
+	var result *Error
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_CHANGE_PASSWORD
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(param)
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
+	if err != nil {
+		log.Printf("func Update User error send request: err: %v\n", err)
+		return result, err
+	}
+
+	var resultResp = struct {
+		Error             *Error `json:"error", omitempty`
+		ServerProcessTime string `json:"server_process_time"`
+	}{}
+
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
 	if errUnMarshal != nil {
 		log.Println(errUnMarshal)
 		return nil, errUnMarshal
@@ -436,4 +444,37 @@ func (repo userRepo) UpdateCompany(sessionID string, param UpdateCompanyParam) (
 	result = resultResp.Error
 
 	return result, nil
+}
+
+func (repo userRepo) doRequest(param []byte, sessionID, url, method string) ([]byte, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(param))
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	req.Header.Add(headerConst.CONTENT_TYPE, "application/json")
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return nil, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return nil, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	return body, nil
 }

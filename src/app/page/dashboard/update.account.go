@@ -107,3 +107,48 @@ func UpdateCompany(c *gin.Context) {
 
 	global.OKResponse(c, response)
 }
+
+// AdminChangePassword is endpoint to changes all user password
+func AdminChangePassword(c *gin.Context) {
+	userID, errparse := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
+	if errparse != nil {
+		global.BadRequestResponse(c, nil)
+		return
+	}
+
+	newPassword := c.PostForm("new_password")
+
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// define service user
+	userService := global.GetServiceUser()
+	param := user.ChangePasswordParam{
+		UserID:      userID,
+		NewPassword: newPassword,
+	}
+
+	resp, err := userService.ChangePassword(token, param)
+	if err != nil {
+		log.Println("cannot update company. Err", err)
+		global.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"error": resp,
+	}
+
+	global.OKResponse(c, response)
+}

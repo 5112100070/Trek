@@ -50,3 +50,9 @@ type UpdateCompanyParam struct {
 	Phone   string `json:"phone_number"`
 	Role    int    `json:"role"`
 }
+
+// ChangePasswordParam This struct is used as parameter to change password user accounts
+type ChangePasswordParam struct {
+	UserID      int64  `json:"user_id"`
+	NewPassword string `json:"new_password"`
+}

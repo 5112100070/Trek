@@ -118,6 +118,7 @@ func main() {
 	r.POST("/dashboard/user/update", dashboard.UpdateAccount)
 	r.POST("/dashboard/company/register", dashboard.CreateNewCompany)
 	r.POST("/dashboard/company/update", dashboard.UpdateCompany)
+	r.POST("/admin/change-password", dashboard.AdminChangePassword)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)

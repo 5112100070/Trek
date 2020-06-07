@@ -41,4 +41,5 @@ type UserService interface {
 	UpdateUser(sessionID string, param user.UpdateAccountParam) (*user.Error, error)
 	CreateCompany(sessionID string, param user.CreateCompanyParam) (*user.Error, error)
 	UpdateCompany(sessionID string, param user.UpdateCompanyParam) (*user.Error, error)
+	ChangePassword(sessionID string, param user.ChangePasswordParam) (*user.Error, error)
 }
