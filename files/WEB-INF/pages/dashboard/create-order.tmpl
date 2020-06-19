@@ -52,7 +52,7 @@
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
                             <div class="mr-4 mb-3 mb-sm-0">
                                 <h1 class="mb-0">Buat Order Baru</h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard'"><i data-feather="chevron-left"></i>Back</button>                        
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/admin/orders'"><i data-feather="chevron-left"></i>Back</button>                        
                                 <button id="reload-button" class="btn btn-success btn-sm hide" onClick="javascript:window.location.reload()" type="button">Reload untuk membuat order baru</button>
                             </div>
                             <div id="success-alert" class="alert alert-success hide" role="alert"></div>
@@ -106,7 +106,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Alamat Penerima</label>
-                                                <input class="form-control form-control-sm" id="pickup-details-reciever" />
+                                                <input class="form-control form-control-sm" id="pickup-details-receiver" />
                                             </div>
                                             <div class="form-group">
                                                 <label for="phone">Phone Number</label>
@@ -198,7 +198,7 @@
 
         var defaultFormatPickupDetailsPic = "pickup-details-pic";
         var defaultFormatPickupDetailsName = "pickup-details-name";
-        var defaultFormatPickupDetailsReciever = "pickup-details-reciever";
+        var defaultFormatPickupDetailsreceiver = "pickup-details-receiver";
         var defaultFormatPickupDetailsPhone = "pickup-details-phone";
         var defaultFormatPickupDetailsNotes = "pickup-details-notes";
 
@@ -262,7 +262,7 @@
             
             var newPickupDetailPic = defaultFormatPickupDetailsPic + "-" + totalgeneratedPickup;
             var newPickupDetailName = defaultFormatPickupDetailsName + "-" + totalgeneratedPickup;
-            var newPickupDetailReciever = defaultFormatPickupDetailsReciever + "-" + totalgeneratedPickup;
+            var newPickupDetailreceiver = defaultFormatPickupDetailsreceiver + "-" + totalgeneratedPickup;
             var newPickupDetailPhone = defaultFormatPickupDetailsPhone + "-" + totalgeneratedPickup;
             var newPickupDetailNotes = defaultFormatPickupDetailsNotes + "-" + totalgeneratedPickup;
 
@@ -309,7 +309,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Alamat Penerima</label>
-                                    <input class="form-control form-control-sm" id="` + newPickupDetailReciever + `" />
+                                    <input class="form-control form-control-sm" id="` + newPickupDetailreceiver + `" />
                                 </div>
                                 <div class="form-group">
                                     <label for="phone">Phone Number</label>
@@ -516,7 +516,7 @@
         // gathering all information and send it to server
         function ProcessOrder(){
             let mainPayload = {
-                reciever: {
+                receiver: {
                      name: $("#" + defaultFormatClientName).val(),
                      address: $("#" + defaultFormatClientAddress).val(),
                      phone_number: $("#" + defaultFormatClientPhone).val(),
@@ -530,19 +530,19 @@
                 idPickUp = idPickUp.replace("-", "");
 
                 // gathering and fetch pick up
-                var pic, name, reciever, phone, notes;
+                var pic, name, receiver, phone, notes;
                 if($("#"+i) == null){
                     continue;
                 } else if(idPickUp == null || idPickUp == ""){
                     pic = $("#" + defaultFormatPickupDetailsPic).val();
                     name = $("#" + defaultFormatPickupDetailsName).val();
-                    reciever = $("#" + defaultFormatPickupDetailsReciever).val();
+                    receiver = $("#" + defaultFormatPickupDetailsreceiver).val();
                     phone = $("#" + defaultFormatPickupDetailsPhone).val();
                     notes = $("#" + defaultFormatPickupDetailsNotes).val();
                 } else {
                     pic = $("#" + defaultFormatPickupDetailsPic + "-" + idPickUp).val();
                     name = $("#" + defaultFormatPickupDetailsName + "-" + idPickUp).val();
-                    reciever = $("#" + defaultFormatPickupDetailsReciever + "-" + idPickUp).val();
+                    receiver = $("#" + defaultFormatPickupDetailsreceiver + "-" + idPickUp).val();
                     phone = $("#" + defaultFormatPickupDetailsPhone + "-" + idPickUp).val();
                     notes = $("#" + defaultFormatPickupDetailsNotes + "-" + idPickUp).val();
                 }
@@ -581,7 +581,7 @@
                 payloadPickUp.push({
                     PIC: pic,
                     name: name,
-                    address: reciever,
+                    address: receiver,
                     phone_number: phone,
                     notes: notes,
                     items: payloadItem

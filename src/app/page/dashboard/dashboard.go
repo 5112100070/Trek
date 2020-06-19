@@ -7,6 +7,7 @@ import (
 
 	"github.com/5112100070/Trek/src/entity"
 
+	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/conf"
@@ -356,6 +357,64 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "update-company.tmpl", renderData)
+}
+
+func OrdersListPageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// get list param
+	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
+	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
+	orderType := c.DefaultQuery("order_type", "desc")
+
+	listOrderResp, err := global.GetServiceOrder().GetListOrders(token, order.ListOrderParam{
+		Page:      int(page),
+		Rows:      int(rows),
+		OrderType: orderType,
+	})
+	if err != nil {
+		// need internal page error handler
+	}
+
+	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/orders"
+	totalPage := listOrderResp.TotalOrder / int(rows)
+
+	// get additional page
+	// total data 22 row 10
+	// must result 3 pages
+	if listOrderResp.TotalOrder%int(rows) > 0 {
+		totalPage++
+	}
+
+	// handle pagination
+	pagination := entity.Pagination{
+		Template:  templatePage,
+		Page:      int(page),
+		NextPage:  int(page) + 1,
+		PrevPage:  int(page) - 1,
+		Rows:      int(rows),
+		TotalPage: totalPage,
+		ListPage:  global.GenerateListPage(totalPage),
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"orders":     listOrderResp.Data,
+		"pagination": pagination,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "list-orders.tmpl", renderData)
 }
 
 // getUserProfile -- get detail user based on active cookie

@@ -52,7 +52,7 @@ func SendRequestItem(c *gin.Context) {
 	}
 
 	mail := utils.NewMail()
-	mail.BuildReciever("g@trek.id", "wahyu.kukuh.herlambang@gmail.com")
+	mail.BuildReceiver("g@trek.id", "wahyu.kukuh.herlambang@gmail.com")
 	mail.BuildMessage(utils.BuildMessageForRequest(productID, productName, typeDuration, duration, total, startDate, email, projectAddress))
 	mail.SendMail()
 

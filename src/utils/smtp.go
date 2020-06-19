@@ -30,8 +30,8 @@ func NewMail() Mail {
 	return mail
 }
 
-func (mail *Mail) BuildReciever(recievers ...string) {
-	mail.toIds = recievers
+func (mail *Mail) BuildReceiver(receivers ...string) {
+	mail.toIds = receivers
 
 	//mail.toIds = []string{"ghazi.binarandi@gmail.com", "hanifnarendra@gmail.com", "russians.wahyu@gmail.com"}
 }
