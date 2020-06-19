@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+        <a class="navbar-brand d-none d-sm-block" href="index.html">CGX</a><button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
+        <ul class="navbar-nav align-items-center ml-auto">
+              <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
+                  <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+                  <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+                      <h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>Alerts Center</h6>
+                      <a class="dropdown-item dropdown-notifications-item" href="#!"
+                          ><div class="dropdown-notifications-item-icon bg-warning"><i data-feather="activity"></i></div>
+                          <div class="dropdown-notifications-item-content">
+                              <div class="dropdown-notifications-item-content-details">December 29, 2019</div>
+                              <div class="dropdown-notifications-item-content-text">This is an alert message. It's nothing serious, but it requires your attention.</div>
+                          </div></a
+                      ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                          ><div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
+                          <div class="dropdown-notifications-item-content">
+                              <div class="dropdown-notifications-item-content-details">December 22, 2019</div>
+                              <div class="dropdown-notifications-item-content-text">A new monthly report is ready. Click here to view!</div>
+                          </div></a
+                      ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                          ><div class="dropdown-notifications-item-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></div>
+                          <div class="dropdown-notifications-item-content">
+                              <div class="dropdown-notifications-item-content-details">December 8, 2019</div>
+                              <div class="dropdown-notifications-item-content-text">Critical system failure, systems shutting down.</div>
+                          </div></a
+                      ><a class="dropdown-item dropdown-notifications-item" href="#!"
+                          ><div class="dropdown-notifications-item-icon bg-success"><i data-feather="user-plus"></i></div>
+                          <div class="dropdown-notifications-item-content">
+                              <div class="dropdown-notifications-item-content-details">December 2, 2019</div>
+                              <div class="dropdown-notifications-item-content-text">New user request. Woody has requested access to the organization.</div>
+                          </div></a
+                      ><a class="dropdown-item dropdown-notifications-footer" href="#!">View All Alerts</a>
+                  </div>
+              </li>
+              <!-- Header Nav Bar -->
+              {{ template "dashboard-nav.tmpl" .}}
+        </ul>
+      </nav>
+
+      <div id="layoutSidenav">
+          <!-- Sidebar -->
+          {{ template "dashboard-sidebar.tmpl" .}}
+          <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid mt-5">
+                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                            <div class="mr-4 mb-3 mb-sm-0">
+                                <h1 class="mb-0">Buat Order Baru</h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard'"><i data-feather="chevron-left"></i>Back</button>                        
+                                <button id="reload-button" class="btn btn-success btn-sm hide" onClick="javascript:window.location.reload()" type="button">Reload untuk membuat order baru</button>
+                            </div>
+                            <div id="success-alert" class="alert alert-success hide" role="alert"></div>
+                            <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">Detail Penerima</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">Nama</label>
+                                    <input class="form-control form-control-sm" id="client-name" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Alamat Penerima</label>
+                                    <input class="form-control form-control-sm" id="client-address" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input class="form-control form-control-sm" id="client-phone" type="phone" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Catatan</label>
+                                    <textarea class="form-control form-control-sm" id="client-notes"></textarea>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <button class="btn btn-primary btn-sm" onClick="javascript:generatePickUpField()" type="button">Tambah Detail Pick Up</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Field Generated from here -->
+                        <div id="pickup-field" class="card mb-4">
+                            <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
+                                <div class="col-sm-11">
+                                    Detail Pick Up #1
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <div class="row align-items-center justify-content-between">
+                                        <div class="col position-relative">
+                                            <div class="form-group">
+                                                <label for="phone">PIC</label>
+                                                <input class="form-control form-control-sm" id="pickup-details-pic" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Nama Pengirim</label>
+                                                <input class="form-control form-control-sm" id="pickup-details-name" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Alamat Penerima</label>
+                                                <input class="form-control form-control-sm" id="pickup-details-reciever" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Phone Number</label>
+                                                <input class="form-control form-control-sm" id="pickup-details-phone" type="phone" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Catatan</label>
+                                                <textarea class="form-control form-control-sm" id="pickup-details-notes"></textarea>
+                                            </div>
+                                            <!-- All Detail Pick Ups  -->
+                                            <div class="card mb-4">
+                                                    <div class="card-header" style="cursor: pointer;">
+                                                        <div id="prefix-item-title" class="col-sm-11">
+                                                            Detail Barang
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <!-- Item Child Prefix Generated from here -->
+                                                            <div id="prefix-item" style="cursor: pointer;" onClick="javascript:generateItemField(this.id)">
+                                                                <div class="nav-link-icon">
+                                                                    Tambah
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Item Pickup Field Generated from here -->
+                                                    <div id="pickup-field-item" class="card-body">
+                                                        <div class="position-relative">
+                                                            <div class="row align-items-center justify-content-between">
+                                                                <div class="col position-relative">
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Nama barang</label>
+                                                                        <input class="form-control form-control-sm" id="item-name" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Quantity</label>
+                                                                        <input class="form-control form-control-sm" type="number" step="any" id="item-quantity" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Unit</label>
+                                                                        <input class="form-control form-control-sm" type="number" id="item-unit" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Catatan</label>
+                                                                        <textarea class="form-control form-control-sm" id="item-notes"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <!-- End Of All Detail Pick Ups  -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <button id="create-button" class="btn btn-success btn-sm" onClick="javascript:ProcessOrder()" type="button">Buat Order Baru</button>
+                        </div>
+                    </div>
+                </main>
+                <!-- Footer -->
+                {{ template "dashboard-footer.tmpl" .}}
+          </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        var totalgeneratedPickup = 1;
+        var counterDetailPickUp = 1;
+
+        var defaultFormatClientName = "client-name";
+        var defaultFormatClientAddress = "client-address";
+        var defaultFormatClientPhone = "client-phone";
+        var defaultFormatClientNotes = "client-notes";
+
+        var defaultFormatPickupFieldID = "pickup-field";
+        var defaultFormatPrefixItemFieldID = "prefix-item"; 
+        var defaultFormatPrefixItemTitleID = "prefix-item-title";
+        var defaultFormatItemField = "pickup-field-item";
+
+        var defaultFormatPickupDetailsPic = "pickup-details-pic";
+        var defaultFormatPickupDetailsName = "pickup-details-name";
+        var defaultFormatPickupDetailsReciever = "pickup-details-reciever";
+        var defaultFormatPickupDetailsPhone = "pickup-details-phone";
+        var defaultFormatPickupDetailsNotes = "pickup-details-notes";
+
+        var defaultFormatItemName = "item-name"
+        var defaultFormatItemQuantity = "item-quantity";
+        var defaultFormatItemUnit = "item-unit";
+        var defaultFormatItemNotes = "item-notes";
+
+        // This variable help us to mapping Pickups with its prefix Item 
+        var mappingPickupsToPrefixItem = {};
+        // This variable help us to mapping Prefix Items and Items
+        var mappingPrefixItemAndItems = {};
+
+        /*
+            all component will have ID's generate differently from variable totalgeneratedPickup
+
+            parent pickup format 
+            Main Parent - with one button can add field 
+                          Pickup Field complete with its 
+                          default Prefix Item And Item
+                pickup-field-*
+            Pickup detail is ID for gather all information about pickups. Number id is same with parent number
+                pickup-details-*
+            prefix item format - help one button on each field item to add new Item
+                prefix-item-*
+            prefix item title format have number same as prefix item format
+                prefix-item-title-*
+            child item format - needed to as parent for field input when read
+                pickup-field-item-*
+
+            read item value
+            This value based on id on parent item (pickup-field-item)
+                item-name-*
+                item-quantity-*
+                item-unit-*
+                item-notes-*
+        */
+
+        function init(){
+            mappingPickupsToPrefixItem[defaultFormatPickupFieldID] = defaultFormatPrefixItemFieldID;
+            mappingPrefixItemAndItems[defaultFormatPrefixItemFieldID] = [defaultFormatItemField];
+        }
+
+        function togglePickupField(comp){
+            var id = comp.parentNode.id;
+
+            if(id.includes(defaultFormatPickupFieldID)!=-1){
+                if($("#"+comp.parentNode.id+" > .card-body").css("display") == "none"){
+                    $("#"+comp.parentNode.id+" > .card-body").css("display", "block");
+                } else {
+                    $("#"+comp.parentNode.id+" > .card-body").css("display", "none");
+                }
+            }
+        }
+
+        function generatePickUpField(){
+            counterDetailPickUp++;
+
+            totalgeneratedPickup++;
+            var newPickupFieldID = defaultFormatPickupFieldID + "-" + totalgeneratedPickup;
+            
+            var newPickupDetailPic = defaultFormatPickupDetailsPic + "-" + totalgeneratedPickup;
+            var newPickupDetailName = defaultFormatPickupDetailsName + "-" + totalgeneratedPickup;
+            var newPickupDetailReciever = defaultFormatPickupDetailsReciever + "-" + totalgeneratedPickup;
+            var newPickupDetailPhone = defaultFormatPickupDetailsPhone + "-" + totalgeneratedPickup;
+            var newPickupDetailNotes = defaultFormatPickupDetailsNotes + "-" + totalgeneratedPickup;
+
+            totalgeneratedPickup++;
+            var newPrefixItemFieldID = defaultFormatPrefixItemFieldID + "-" + totalgeneratedPickup;
+            var newPrefixItemTitleID = defaultFormatPrefixItemTitleID + "-" + totalgeneratedPickup;
+
+            totalgeneratedPickup++;
+            var newItemField = defaultFormatItemField + "-" + totalgeneratedPickup;
+            var newItemNameField = defaultFormatItemName + "-" + totalgeneratedPickup;
+            var newItemQuantityField = defaultFormatItemQuantity + "-" + totalgeneratedPickup;
+            var newItemUnitField = defaultFormatItemUnit + "-" + totalgeneratedPickup;
+            var newItemNotesField = defaultFormatItemNotes + "-" + totalgeneratedPickup;
+
+            /*
+                Create New Mapping 
+            */
+            mappingPickupsToPrefixItem[newPickupFieldID] = newPrefixItemFieldID;
+            mappingPrefixItemAndItems[newPrefixItemFieldID] = [newItemField];
+
+            var pickUpField = `
+            <div id="` + newPickupFieldID + `" class="card mb-4">
+                <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
+                    <div class="col-sm-9">
+                        Detail Pick Up #`+ counterDetailPickUp +`
+                    </div>
+                    <div class="col-sm-3">
+                        <button onClick="javascript:deletePickUpField('`+ newPickupFieldID +`')">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="position-relative">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col position-relative">
+                                <div class="form-group">
+                                    <label for="phone">PIC</label>
+                                    <input class="form-control form-control-sm" id="` + newPickupDetailPic + `" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Nama Pengirim</label>
+                                    <input class="form-control form-control-sm" id="` + newPickupDetailName + `" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Alamat Penerima</label>
+                                    <input class="form-control form-control-sm" id="` + newPickupDetailReciever + `" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input class="form-control form-control-sm" id="` + newPickupDetailPhone + `" type="phone" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Catatan</label>
+                                    <textarea class="form-control form-control-sm" id="` + newPickupDetailNotes + `"></textarea>
+                                </div>
+                                <!-- All Detail Pick Ups  -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <div id="` + newPrefixItemTitleID + `" class="col-sm-11">
+                                            Detail Barang
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div id="`+ newPrefixItemFieldID +`" style="cursor: pointer;" onClick="javascript:generateItemField(this.id)">
+                                                <div class="nav-link-icon">
+                                                    Tambah
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="`+ newItemField +`" class="card-body">
+                                        <div class="position-relative">
+                                            <div class="row align-items-center justify-content-between">
+                                                <div class="col position-relative">
+                                                    <div class="form-group">
+                                                        <label>Nama barang</label>
+                                                        <input class="form-control form-control-sm" id="`+ newItemNameField +`" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Quantity</label>
+                                                        <input class="form-control form-control-sm" id="` + newItemQuantityField + `" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Unit</label>
+                                                        <input class="form-control form-control-sm" type="number" id="` + newItemUnitField + `" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Catatan</label>
+                                                        <textarea class="form-control form-control-sm" id="` + newItemNotesField + `"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Of All Detail Pick Ups  -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            
+            // convert string to DOM
+            var newPickUpField = $(pickUpField);
+
+            // create new component after last compnent
+            var biggestPickUpID = 0;
+            for (var i in mappingPickupsToPrefixItem){
+
+                if(i == newPickupFieldID){
+                    continue;
+                }
+
+                var tempKey = i.replace(defaultFormatPickupFieldID, "");
+                if(!($("#" + i).length) || tempKey == "" || tempKey == null){
+                    continue;
+                } else {
+                    var index = parseInt(tempKey.replace("-", ""));
+
+                    if(biggestPickUpID < index) {
+                        biggestPickUpID = index;
+                    }
+                }
+            }
+
+            if(biggestPickUpID <= 1){
+                $("#" + defaultFormatPickupFieldID).after(newPickUpField);
+            } else {
+                $("#" + defaultFormatPickupFieldID + "-" + biggestPickUpID).after(newPickUpField);
+            }
+        }
+
+        // when adding new item. update wording details !
+        function updateWordingItemDetails(prefixID){
+            var tempID = prefixID.replace(defaultFormatPrefixItemFieldID, "");
+            tempID = tempID.replace("-","");
+        
+            var titleID;
+            if(tempID=="" || tempID==null){
+                titleID = defaultFormatPrefixItemTitleID
+            } else {
+                titleID = defaultFormatPrefixItemTitleID + "-" + tempID;
+            }
+
+            var totalRegisteredItem = 0;
+            var listItem = mappingPrefixItemAndItems[prefixID];
+            for (var i = 0; i < listItem.length; i++){
+                if(!($("#" + listItem[i]).length)){
+                    continue;
+                } else {
+                    totalRegisteredItem++;
+                }
+            }
+
+            if(totalRegisteredItem != null && totalRegisteredItem > 1){
+                $("#"+titleID).html("Detail Barang (Total Barang " + totalRegisteredItem + ")");
+            } else {
+                $("#"+titleID).html("Detail Barang");
+            }
+        }
+
+        function generateItemField(prefixID){
+            totalgeneratedPickup = totalgeneratedPickup+1;
+            var newItemFieldID = defaultFormatItemField + "-" + totalgeneratedPickup;
+            var newItemNameField = defaultFormatItemName + "-" + totalgeneratedPickup;
+            var newItemQuantityField = defaultFormatItemQuantity + "-" + totalgeneratedPickup;
+            var newItemUnitField = defaultFormatItemUnit + "-" + totalgeneratedPickup;
+            var newItemNotesField = defaultFormatItemNotes + "-" + totalgeneratedPickup;
+
+
+            mappingPrefixItemAndItems[prefixID].push(newItemFieldID);
+
+            var itemField = `
+            <div id="`+ newItemFieldID +`" class="card-body">
+                <div class="position-relative">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col position-relative">
+                            <div class="form-group">
+                                <label>Nama barang</label>
+                                <input class="form-control form-control-sm" id="` + newItemNameField + `" />
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input class="form-control form-control-sm" id="` + newItemQuantityField + `" />
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <input class="form-control form-control-sm" type="number" id="` + newItemUnitField + `" />
+                            </div>
+                            <div class="form-group">
+                                <label>Catatan</label>
+                                <textarea class="form-control form-control-sm" id="` + newItemNotesField + `"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <button class="btn col-sm-12 btn-danger" onClick="javascript:deletePickUpField('`+ newItemFieldID +`')">
+                        Hapus Item
+                    </button>
+                </div>
+            </div>`;
+            
+            // convert string to DOM
+            var newItemField = $(itemField);
+             
+            // create new component after last compnent
+            var biggestItemID = 0;
+            var listItem = mappingPrefixItemAndItems[prefixID];
+            for (var i = 0; i < listItem.length; i++){
+                var itemID = listItem[i];
+
+                if(itemID == newItemFieldID){
+                    continue;
+                }
+
+                var tempKey = itemID.replace(defaultFormatItemField, "");
+
+                if(!($("#" + itemID).length) || tempKey=="" || tempKey==null){
+                    continue;
+                } else {
+                    var index = parseInt(tempKey.replace("-", ""));
+
+                    if(biggestItemID < index) {
+                        biggestItemID = index;
+                    }
+                }
+            }
+
+            if(biggestItemID <= 1){
+                $("#" + defaultFormatItemField).after(newItemField);
+            } else {
+                $("#" + defaultFormatItemField + "-" + biggestItemID).after(newItemField);
+            }
+
+            // update wording on spesific ids
+            updateWordingItemDetails(prefixID);
+        }
+        
+        // delete dom which targetted
+        function deletePickUpField(targetID){
+            $("#" + targetID).remove();
+
+            if(targetID.includes(defaultFormatItemField)){
+                for(var i in mappingPickupsToPrefixItem){
+                    updateWordingItemDetails(mappingPickupsToPrefixItem[i]);
+                }
+            } 
+        }
+
+        // gathering all information and send it to server
+        function ProcessOrder(){
+            let mainPayload = {
+                reciever: {
+                     name: $("#" + defaultFormatClientName).val(),
+                     address: $("#" + defaultFormatClientAddress).val(),
+                     phone_number: $("#" + defaultFormatClientPhone).val(),
+                     notes: $("#" + defaultFormatClientNotes).val()
+                },
+            };
+
+            let payloadPickUp = [];
+            for(var i in mappingPickupsToPrefixItem){
+                var idPickUp = i.replace(defaultFormatPickupFieldID, "");                
+                idPickUp = idPickUp.replace("-", "");
+
+                // gathering and fetch pick up
+                var pic, name, reciever, phone, notes;
+                if($("#"+i) == null){
+                    continue;
+                } else if(idPickUp == null || idPickUp == ""){
+                    pic = $("#" + defaultFormatPickupDetailsPic).val();
+                    name = $("#" + defaultFormatPickupDetailsName).val();
+                    reciever = $("#" + defaultFormatPickupDetailsReciever).val();
+                    phone = $("#" + defaultFormatPickupDetailsPhone).val();
+                    notes = $("#" + defaultFormatPickupDetailsNotes).val();
+                } else {
+                    pic = $("#" + defaultFormatPickupDetailsPic + "-" + idPickUp).val();
+                    name = $("#" + defaultFormatPickupDetailsName + "-" + idPickUp).val();
+                    reciever = $("#" + defaultFormatPickupDetailsReciever + "-" + idPickUp).val();
+                    phone = $("#" + defaultFormatPickupDetailsPhone + "-" + idPickUp).val();
+                    notes = $("#" + defaultFormatPickupDetailsNotes + "-" + idPickUp).val();
+                }
+
+                // gathering and fetch items
+                var payloadItem = [];
+                var prefixItem = mappingPickupsToPrefixItem[i];
+                listItem = mappingPrefixItemAndItems[prefixItem];
+                listItem.forEach(function(item, index){
+                    var prefixID = item.replace(defaultFormatItemField, "");
+                    prefixID = prefixID.replace("-", "");
+
+                    var itemName, itemQuantity, itemUnit, itemNotes;
+                    if($("#" + item) == null){
+                        return;
+                    } else if(prefixID == null || prefixID == ""){
+                        itemName = $("#" + defaultFormatItemName).val();
+                        itemQuantity = $("#" + defaultFormatItemQuantity).val();
+                        itemUnit = $("#" + defaultFormatItemUnit).val();
+                        itemNotes = $("#" + defaultFormatItemNotes).val();
+                    } else {
+                        itemName = $("#" + defaultFormatItemName + "-" + prefixID).val();
+                        itemQuantity = $("#" + defaultFormatItemQuantity + "-" + prefixID).val();
+                        itemUnit = $("#" + defaultFormatItemUnit + "-" + prefixID).val();
+                        itemNotes = $("#" + defaultFormatItemNotes + "-" + prefixID).val();
+                    }
+
+                    payloadItem.push({
+                        name: itemName,
+                        quantity: parseFloat(itemQuantity),
+                        unit: parseInt(itemUnit),
+                        notes: itemNotes
+                    });
+                });
+            
+                payloadPickUp.push({
+                    PIC: pic,
+                    name: name,
+                    address: reciever,
+                    phone_number: phone,
+                    notes: notes,
+                    items: payloadItem
+                })
+            }
+
+            mainPayload.pickups = payloadPickUp 
+            
+            var promise = createOrder(mainPayload);
+            StartLoading();
+            promise.done(function(response){
+                response = response.data;
+                if(response.response.error != null){
+                    setError(true, response.response.error);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+                    
+                    // show reload button
+                    $("#reload-button").removeClass("hide");
+
+                    // hide create button
+                    $("#create-button").addClass("hide");
+
+                    $("#success-alert").html("Sukses membuat order baru");
+                }
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+
+        function createOrder(payload){
+            var url = base_url + '/admin/create-order';
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                dataType: 'json'
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+
+        $(document).ready(function(){
+            init();
+        });
+    </script>
+
+</html>

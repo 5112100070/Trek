@@ -106,6 +106,7 @@ func main() {
 	r.GET("/dashboard/update-company", dashboard.CompanyUpdatePagehandler)
 	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
 	r.GET("/dashboard/company", dashboard.CompanyDetailPageHandler)
+	r.GET("/dashboard/admin/create-order", dashboard.CreateOrderPageHandler)
 
 	// need to be removed
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
@@ -120,6 +121,7 @@ func main() {
 	r.POST("/dashboard/company/update", dashboard.UpdateCompany)
 	r.POST("/admin/change-password", dashboard.AdminChangePassword)
 	r.POST("/admin/change-account-activation", dashboard.AdminChangeActivation)
+	r.POST("/admin/create-order", dashboard.CreateOrderForAdmin)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)

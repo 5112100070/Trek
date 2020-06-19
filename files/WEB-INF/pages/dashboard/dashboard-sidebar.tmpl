@@ -10,12 +10,28 @@
                 
                 <a class="nav-link" href="/dashboard/users">
                     <div class="nav-link-icon"><i data-feather="user"></i></div>
-                    User
+                    Pengguna
                 </a>
                 <a class="nav-link" href="/dashboard/companies">
                     <div class="nav-link-icon"><i data-feather="users"></i></div>
                     Perusahaan
                 </a>
+                <li>
+                    <a href="#order-sub-menu" 
+                        data-toggle="collapse" 
+                        aria-expanded="false" 
+                        class="dropdown-toggle nav-link">
+                        <div class="nav-link-icon"><i data-feather="send"></i></div>
+                        Orders
+                    </a>
+                    <ul class="collapse list-unstyled" id="order-sub-menu">
+                        <li>
+                            <a class="nav-link" href="/dashboard/admin/create-order">
+                                Buat Order
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <div class="sidenav-menu-heading">PENGIRIMAN</div>
                 <a class="nav-link" href="/deliveries">
                     <div class="nav-link-icon"><i data-feather="send"></i></div>

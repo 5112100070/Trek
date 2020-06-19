@@ -28,6 +28,10 @@ func GetServiceUser() UserService {
 	return Services.User
 }
 
+func GetServiceOrder() OrderService {
+	return Services.Order
+}
+
 func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 	service := GetServiceSession()
 	cookie, errGetCookie := c.Cookie(UserCookie[GetEnv()])

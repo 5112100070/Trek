@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/entity"
@@ -18,6 +19,7 @@ type RepoBundle struct {
 	Session SessionService
 	Public  PublicService
 	User    UserService
+	Order   OrderService
 }
 
 type SessionService interface {
@@ -43,4 +45,8 @@ type UserService interface {
 	UpdateCompany(sessionID string, param user.UpdateCompanyParam) (*user.Error, error)
 	ChangePassword(sessionID string, param user.ChangePasswordParam) (*user.Error, error)
 	ChangeStatusAccount(sessionID string, param user.ChangeStatusAccParam) (*user.Error, error)
+}
+
+type OrderService interface {
+	CreateOrderForAdmin(sessionID string, payload order.CreateOrderParam) (*order.CreateOrderForAdminResponse, error)
 }

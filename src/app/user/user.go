@@ -287,7 +287,7 @@ func (repo userRepo) UpdateUser(sessionID string, param UpdateAccountParam) (*Er
 
 	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
 	if err != nil {
-		log.Printf("func Update User error send request: err: %v\n", err)
+		log.Printf("func UpdateUser error send request: err: %v\n", err)
 		return result, err
 	}
 
@@ -318,7 +318,7 @@ func (repo userRepo) ChangePassword(sessionID string, param ChangePasswordParam)
 
 	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
 	if err != nil {
-		log.Printf("func Update User error send request: err: %v\n", err)
+		log.Printf("func ChangePassword error send request: err: %v\n", err)
 		return result, err
 	}
 
