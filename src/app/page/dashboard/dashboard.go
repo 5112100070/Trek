@@ -196,6 +196,7 @@ func UserDetailPageHandler(c *gin.Context) {
 
 	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
 	if err != nil {
+		global.Error.Println(err)
 		// need internal page error handler
 	}
 
@@ -359,6 +360,39 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "update-company.tmpl", renderData)
 }
 
+// OrdersDetailPageHandler is handler for show order detail for admin and company user
+func OrdersDetailPageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// get list param
+	orderID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
+
+	orderDetail, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
+	if err != nil {
+		// need internal page error handler
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"order":      orderDetail,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "detail-order.tmpl", renderData)
+}
+
+// OrdersListPageHandler is handler for show list order for admin or company user
 func OrdersListPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)

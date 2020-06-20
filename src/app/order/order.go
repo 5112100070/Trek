@@ -44,6 +44,87 @@ func (repo orderRepo) CreateOrderForAdmin(sessionID string, payload CreateOrderP
 	return &resultResp, nil
 }
 
+func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (OrderReponse, error) {
+	var result OrderReponse
+	var respOrder MainListOrderResponse
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_GET_ORDER_DETAIL
+	urlStr := u.String()
+
+	bodyPayload := struct {
+		OrderID int64 `json:"order_id"`
+	}{
+		OrderID: orderID,
+	}
+
+	payload, _ := json.Marshal(bodyPayload)
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, bytes.NewBuffer(payload))
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	// set query param
+	q := req.URL.Query()
+	q.Add("order_id", strconv.FormatInt(orderID, 10))
+
+	req.URL.RawQuery = q.Encode()
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &respOrder)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	if len(respOrder.Data) <= 0 {
+		return result, errors.New("no result")
+	}
+
+	// generate display data
+	result = respOrder.Data[0]
+	result.TotalPickUp = len(result.Pickups)
+	result.CreateTimeStr = result.CreateTime.Format("02 Jan 2006 - 15:04:05")
+	result.UpdateTimeStr = result.UpdateTime.Format("02 Jan 2006 - 15:04:05")
+
+	for i, _ := range result.Pickups {
+		result.Pickups[i].CreateTimeStr = result.Pickups[i].CreateTime.Format("02 Jan 2006 - 15:04:05")
+		result.Pickups[i].UpdateTimeStr = result.Pickups[i].UpdateTime.Format("02 Jan 2006 - 15:04:05")
+		result.Pickups[i].TotalItems = len(result.Pickups[i].Items)
+
+		for j, _ := range result.Pickups[i].Items {
+			result.Pickups[i].Items[j].CreateTimeStr = result.Pickups[i].Items[j].CreateTime.Format("02 Jan 2006 - 15:04:05")
+			result.Pickups[i].Items[j].UpdateTimeStr = result.Pickups[i].Items[j].UpdateTime.Format("02 Jan 2006 - 15:04:05")
+			result.Pickups[i].Items[j].PickupTimeStr = result.Pickups[i].Items[j].PickUpTime.Format("02 Jan 2006 - 15:04:05")
+			result.Pickups[i].Items[j].DeadlineStr = result.Pickups[i].Items[j].DeadlineTime.Format("02 Jan 2006 - 15:04:05")
+		}
+	}
+
+	return result, nil
+}
+
 func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (MainListOrderResponse, error) {
 	var result MainListOrderResponse
 

@@ -10,7 +10,7 @@ function ProcessLogin(){
     promise.done(function(response){
         FinishLoading();
         if(response.error!=null){
-            setErrorLogin(true, response.error.massage);
+            setErrorLogin(true, response.error.detail);
             $("#password").val("");
         } else {
             setErrorLogin(false, "");

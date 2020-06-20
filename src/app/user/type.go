@@ -70,8 +70,8 @@ type CompanyProfile struct {
 }
 
 type Error struct {
-	Code    int    `json:"code"`
-	Massage string `json:"massage"`
+	Code   int    `json:"code"`
+	Detail string `json:"detail"`
 }
 
 type userRepo struct {

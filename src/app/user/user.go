@@ -63,7 +63,7 @@ func (repo userRepo) GetDetailAccount(sessionID string, accountID int64) (MainDe
 
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
-		log.Println(errUnMarshal)
+		log.Printf("func GetDetailAccount error when unmarshal: %v, payload: %v \n", errUnMarshal, string(body))
 		return result, errUnMarshal
 	}
 
