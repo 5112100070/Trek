@@ -49,6 +49,33 @@ func MainPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "main-dashboard.tmpl", renderData)
 }
 
+// ConfigPageHandler is handler for all configuration on account
+func ConfigPageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, _, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	if accountResp.Data == nil {
+		global.Error.Println("func ConfigPageHandler not have result from cgx. but not have error")
+		// need internal page error handler
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "config.tmpl", renderData)
+}
+
 // UserListPageHandler is handler for show list user for admin or company user
 func UserListPageHandler(c *gin.Context) {
 	// Check user session
@@ -76,6 +103,11 @@ func UserListPageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+	}
+
+	if listUserResp.Error != nil {
+		// need error handler
+		return
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/users"
@@ -137,6 +169,12 @@ func UserCreatePagehandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+		return
+	}
+
+	if listCompResp.Error != nil {
+		// need page hanler
+		return
 	}
 
 	renderData := gin.H{
@@ -166,6 +204,12 @@ func UserUpdatePagehandler(c *gin.Context) {
 	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
 	if err != nil {
 		// need internal page error handler
+		return
+	}
+
+	if accDetail.Error != nil {
+		// need error handler
+		return
 	}
 
 	renderData := gin.H{
@@ -198,6 +242,12 @@ func UserDetailPageHandler(c *gin.Context) {
 	if err != nil {
 		global.Error.Println(err)
 		// need internal page error handler
+		return
+	}
+
+	if accDetail.Error != nil {
+		// need error handler
+		return
 	}
 
 	renderData := gin.H{
@@ -262,6 +312,11 @@ func CompaniesListPageHandler(c *gin.Context) {
 		return
 	}
 
+	if listUserResp.Error != nil {
+		// need error handler
+		return
+	}
+
 	// define status activation company
 	for i, c := range listUserResp.Data.Companies {
 		listUserResp.Data.Companies[i].StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[c.IsEnabled]
@@ -318,6 +373,12 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	companyDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
 	if err != nil {
 		// need internal page error handler
+		return
+	}
+
+	if companyDetail.Error != nil {
+		// need error page handler
+		return
 	}
 
 	companyDetail.Data.StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[companyDetail.Data.IsEnabled]
@@ -332,6 +393,7 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "detail-company.tmpl", renderData)
 }
 
+// CompanyUpdatePagehandler is handler for show companya update for admin
 func CompanyUpdatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -350,6 +412,12 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	accDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
 	if err != nil {
 		// need internal page error handler
+		return
+	}
+
+	if accDetail.Error != nil {
+		// need error handler
+		return
 	}
 
 	renderData := gin.H{
@@ -419,6 +487,12 @@ func OrdersListPageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+		return
+	}
+
+	if listOrderResp.Error != nil {
+		// need page handler to handle error
+		return
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/orders"

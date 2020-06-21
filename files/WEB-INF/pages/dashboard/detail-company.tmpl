@@ -17,7 +17,10 @@
                                     <div class="page-header-icon"><i data-feather="users"></i></div>
                                     <span>{{ .company.CompanyName }}</span>        
                                 </h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Back</button>   
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Kembali</button>   
+
+                                <div id="success-alert" class="alert alert-success hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>
+                                <div id="failed-alert" class="alert alert-danger hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>    
                             </div>
                         </div>
                     </div>
@@ -112,7 +115,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
-                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal">Konfirmasi</button>
+                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal" onclick="javascript:ProcessChangeStatus()">Konfirmasi</button>
                                         </div>
                                     </div>
                                 </div>
@@ -150,4 +153,71 @@
     </body>
 
     {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        var companyID = {{ .company.ID }};
+        var isEnabledAccount = {{ .company.IsEnabled  }};
+
+        function ProcessChangeStatus(){
+            setError(false, "");
+
+            var toggleIsEnabledAccount = !isEnabledAccount;
+
+            StartLoading();
+            var promise = UpdateStatusActivation(companyID, toggleIsEnabledAccount);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+
+                    if(toggleIsEnabledAccount == true) {
+                        $("#success-alert").html("Sukses melakukan update. Akun perusahaan sekarang telah di non aktifkan");
+                    } else {
+                        $("#success-alert").html("Sukses melakukan update akun. Akun perusahaan sekarang telah di aktifkan");
+                    }
+                }
+
+                FinishLoading();
+                setInterval(function(){
+                    window.location.reload();
+                }, 5000);
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+
+        function UpdateStatusActivation(companyID, isEnabled){
+            var url = base_url + '/admin/change-account-activation';
+            var data = {
+                company_id: companyID,
+                is_enabled: isEnabled,
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+    </script>
 </html>

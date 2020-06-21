@@ -4,6 +4,7 @@ package constants
 const URL_REQUEST_LOGIN string = "/auth/v1/login"
 const URL_REQUEST_LOGOUT string = "/auth/v1/logout"
 const URL_GET_USER_PROFILE string = "/auth/v1/get-profile"
+const URL_CHANGE_PASSWORD string = "/account/v1/change-password"
 
 // ADMIN ENDPOINT
 const URL_ADMIN_GET_DETAIL_ACCOUNT string = "/admin/v1/get-account"

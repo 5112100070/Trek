@@ -15,9 +15,9 @@
                             <div class="page-header-content">
                                 <h1 class="page-header-title">
                                     <div class="page-header-icon"><i data-feather="users"></i></div>
-                                    <span>{{ .account.Fullname }}</span>        
+                                    <span>Pengaturan Akun</span>        
                                 </h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'">
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard'">
                                     <i data-feather="chevron-left"></i>Kembali
                                 </button>   
                             </div>
@@ -35,24 +35,12 @@
                                             <div class="position-relative">
                                                 <div class="row align-items-center justify-content-between">
                                                     <div class="col position-relative">
-                                                        <p class="text-gray-700">ID User : {{ .account.ID }}</p>
-                                                        <p class="text-gray-700">Nama Lengkap: {{ .account.Fullname }}</p>
-                                                        <p class="text-gray-700">Email : {{ .account.Email }}</p>
-                                                        <p class="text-gray-700">Nomor Telepon : {{ .account.PhoneNumber }}</p>
-                                                        <p class="text-gray-700">Tanggal join : {{ .account.CreateTime }}</p>
+                                                        <p class="text-gray-700">ID User : {{ .UserDetail.ID }}</p>
+                                                        <p class="text-gray-700">Nama Lengkap: {{ .UserDetail.Fullname }}</p>
+                                                        <p class="text-gray-700">Email : {{ .UserDetail.Email }}</p>
+                                                        <p class="text-gray-700">Nomor Telepon : {{ .UserDetail.PhoneNumber }}</p>
+                                                        <p class="text-gray-700">Tanggal join : {{ .UserDetail.CreateTime }}</p>
                                                         
-                                                        {{ if not .account.Attribute.IsEnabled }}
-                                                        <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
-
-                                                        {{ if .account.Attribute.IsEnabled }}
-                                                        <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Non Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
-
                                                         <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
                                                             Ubah Password
                                                         </button>
@@ -65,37 +53,6 @@
                             </div>
 
                             <!-- List Modals -->
-                            <div class="modal fade" id="toggle-account-activation" tabindex="-1" role="dialog" aria-labelledby="toggle-account-activation-title" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="toggle-account-activation-title">
-                                                {{ if .account.Attribute.IsEnabled }}
-                                                    Konfirmasi untuk mematikan akun
-                                                {{ end }}
-                                                {{ if not .account.Attribute.IsEnabled }}
-                                                    Konfirmasi untuk mengaktifkan akun
-                                                {{ end }}
-                                            </h5>
-                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        </div>
-                                        <div class="modal-body">                               
-                                            {{ if .account.Attribute.IsEnabled }}
-                                                    Apakah anda yakin untuk mematikan akun {{ .account.Fullname }} ?
-                                            {{ end }}
-
-                                            {{ if not .account.Attribute.IsEnabled }}
-                                                    Apakah anda yakin untuk mengaktifkan akun {{ .account.Fullname }} ?
-                                            {{ end }}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
-                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal" onclick="javascript:ProcessChangeStatus()">Konfirmasi</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="modal fade" id="toggle-change-password" tabindex="-1" role="dialog" aria-labelledby="toggle-change-password-title" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -107,7 +64,7 @@
                                         </div>
                                         <div class="modal-body">                               
                                             <div class="form-group">
-                                                <label for="field-new-password">Password baru untuk {{ .account.Fullname }}</label>
+                                                <label for="field-new-password">Password baru untuk {{ .UserDetail.Fullname }}</label>
                                                 <input class="form-control form-control-sm" id="field-new-password" type="password" />
                                             </div>
 
@@ -133,8 +90,8 @@
                                             <div class="position-relative">
                                                 <div class="row align-items-center justify-content-between">
                                                     <div class="col position-relative">
-                                                        <p class="text-gray-700">ID : {{ .account.Company.ID }}</p>
-                                                        <p class="text-gray-700">Nama : {{ .account.Company.CompanyName }}</p>
+                                                        <p class="text-gray-700">ID : {{ .UserDetail.Company.ID }}</p>
+                                                        <p class="text-gray-700">Nama : {{ .UserDetail.Company.CompanyName }}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,17 +100,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-3">
-                                <div class="nav-sticky">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <ul class="nav flex-column" id="stickyNav">
-                                                <li class="nav-item"><a class="nav-link" href="/dashboard/update-user?id={{ .account.ID }}">Edit Data Anggota</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </main>
@@ -176,9 +122,6 @@
 
     {{ template "default-script-dashboard.tmpl" .}}
     <script>
-        var userID = {{ .account.ID }};
-        var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
-        
         function ProcessChangePassword(){
             setError(false, "");
 
@@ -196,7 +139,7 @@
             }
 
             StartLoading();
-            var promise = UpdatePassword(userID, password);
+            var promise = UpdatePassword(password);
             promise.done(function(response){
                 response = response.data;
 
@@ -218,62 +161,10 @@
             });
         }
     
-        function UpdatePassword(userID, password){
-            var url = base_url + '/admin/change-password';
+        function UpdatePassword(password){
+            var url = base_url + '/change-password';
             var data = {
-                user_id: userID,
-                new_password: password,
-            };
-            
-            var promise = $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-
-            return promise;
-        }
-
-        function ProcessChangeStatus(){
-            setError(false, "");
-
-            var toggleIsEnabledAccount = !isEnabledAccount;
-
-            StartLoading();
-            var promise = UpdateStatusActivation(userID, toggleIsEnabledAccount);
-            promise.done(function(response){
-                response = response.data;
-
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                } else {
-                    setError(false, "");
-                    $("#success-alert").removeClass("hide");
-
-                    if(toggleIsEnabledAccount == true) {
-                        $("#success-alert").html("Sukses melakukan update. Akun sekarang telah di non aktifkan");
-                    } else {
-                        $("#success-alert").html("Sukses melakukan update akun. Akun sekarang telah di aktifkan");
-                    }
-                    
-                }
-
-                FinishLoading();
-                window.location.reload();
-            }).fail(function(response){
-                FinishLoading();
-                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
-            });
-        }
-
-        function UpdateStatusActivation(userID, isEnabled){
-            var url = base_url + '/admin/change-account-activation';
-            var data = {
-                user_id: userID,
-                is_enabled: isEnabled,
+                new_password: password
             };
             
             var promise = $.ajax({

@@ -139,7 +139,40 @@ func AdminChangePassword(c *gin.Context) {
 		NewPassword: newPassword,
 	}
 
-	resp, err := userService.ChangePassword(token, param)
+	resp, err := userService.ChangePasswordAdmin(token, param)
+	if err != nil {
+		log.Println("cannot change password account. Err", err)
+		global.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response := map[string]interface{}{
+		"error": resp,
+	}
+
+	global.OKResponse(c, response)
+}
+
+func ChangePassword(c *gin.Context) {
+	newPassword := c.PostForm("new_password")
+
+	// Check user session
+	accountResp, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println(errGetResponse)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// define service user
+	userService := global.GetServiceUser()
+	resp, err := userService.ChangePassword(token, newPassword)
 	if err != nil {
 		log.Println("cannot change password account. Err", err)
 		global.InternalServerErrorResponse(c, err.Error())
@@ -155,11 +188,8 @@ func AdminChangePassword(c *gin.Context) {
 
 // AdminChangeActivation is endpoint to change status activation account
 func AdminChangeActivation(c *gin.Context) {
-	userID, errparse := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
-	if errparse != nil {
-		global.BadRequestResponse(c, nil)
-		return
-	}
+	userID, _ := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
+	companyID, _ := strconv.ParseInt(c.PostForm("company_id"), 10, 64)
 
 	var isEnabled bool
 	payloadStatus := c.PostForm("is_enabled")
@@ -191,6 +221,7 @@ func AdminChangeActivation(c *gin.Context) {
 	userService := global.GetServiceUser()
 	param := user.ChangeStatusAccParam{
 		UserID:    userID,
+		CompanyID: companyID,
 		IsEnabled: isEnabled,
 	}
 

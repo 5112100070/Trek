@@ -60,5 +60,6 @@ type ChangePasswordParam struct {
 // ChangeStatusAccParam This struct is used as parameter to change status user accounts
 type ChangeStatusAccParam struct {
 	UserID    int64 `json:"user_id"`
+	CompanyID int64 `json:"company_id"`
 	IsEnabled bool  `json:"is_enabled"`
 }

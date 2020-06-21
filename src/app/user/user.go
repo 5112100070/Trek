@@ -307,7 +307,42 @@ func (repo userRepo) UpdateUser(sessionID string, param UpdateAccountParam) (*Er
 	return result, nil
 }
 
-func (repo userRepo) ChangePassword(sessionID string, param ChangePasswordParam) (*Error, error) {
+func (repo userRepo) ChangePassword(sessionID string, newPassword string) (*Error, error) {
+	var result *Error
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_CHANGE_PASSWORD
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		NewPassword string `json:"new_password"`
+	}{
+		NewPassword: newPassword,
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
+	if err != nil {
+		log.Printf("func ChangePassword error send request: err: %v\n", err)
+		return result, err
+	}
+
+	var resultResp = struct {
+		Error             *Error `json:"error", omitempty`
+		ServerProcessTime string `json:"server_process_time"`
+	}{}
+
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Println(errUnMarshal)
+		return nil, errUnMarshal
+	}
+
+	result = resultResp.Error
+
+	return result, nil
+}
+
+func (repo userRepo) ChangePasswordAdmin(sessionID string, param ChangePasswordParam) (*Error, error) {
 	var result *Error
 
 	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
@@ -318,7 +353,7 @@ func (repo userRepo) ChangePassword(sessionID string, param ChangePasswordParam)
 
 	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodGet)
 	if err != nil {
-		log.Printf("func ChangePassword error send request: err: %v\n", err)
+		log.Printf("func ChangePasswordAdmin error send request: err: %v\n", err)
 		return result, err
 	}
 

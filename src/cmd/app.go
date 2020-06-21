@@ -94,10 +94,9 @@ func main() {
 	r.GET("/daftar", app.RegisterPageHandler)
 	r.GET("/reset-password", app.ResetPasswordPageHandler)
 	r.GET("/register-confirmation/:register_id", app.RegisterConfirmationPage)
-	r.POST("/login", app.ProcessMakeLogin)
-	r.POST("/logout", app.ProcessMakeLogout)
 
 	r.GET("/dashboard", dashboard.MainPageHandler)
+	r.GET("/dashboard/config", dashboard.ConfigPageHandler)
 	r.GET("/dashboard/users", dashboard.UserListPageHandler)
 	r.GET("/dashboard/user", dashboard.UserDetailPageHandler)
 	r.GET("/dashboard/create-user", dashboard.UserCreatePagehandler)
@@ -116,6 +115,10 @@ func main() {
 	r.GET("/dashboard/company-profile", app.CompanyProfilePageHandler)
 	r.GET("/dashboard/ganti-password", app.ChangePasswordPageHandler)
 	// border need to be removed
+
+	r.POST("/login", app.ProcessMakeLogin)
+	r.POST("/logout", app.ProcessMakeLogout)
+	r.POST("/change-password", dashboard.ChangePassword)
 
 	r.POST("/dashboard/user/register", dashboard.CreateNewAccount)
 	r.POST("/dashboard/user/update", dashboard.UpdateAccount)
