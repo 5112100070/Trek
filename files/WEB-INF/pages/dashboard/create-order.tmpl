@@ -11,7 +11,7 @@
           {{ template "dashboard-sidebar.tmpl" .}}
           <div id="layoutSidenav_content">
                 <main>
-                    <div class="container-fluid mt-5">
+                    <div class="container-fluid mt-4">
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
                             <div class="mr-4 mb-3 mb-sm-0">
                                 <h1 class="mb-0">Buat Order Baru</h1>
@@ -21,114 +21,277 @@
                             <div id="success-alert" class="alert alert-success hide" role="alert"></div>
                             <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
                         </div>
-
+                        
                         <div class="card mb-4">
-                            <div class="card-header">Detail Penerima</div>
+                            <div class="card-header lead text-dark">ORDER INFO</div>
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label for="name">Nama</label>
-                                    <input class="form-control form-control-sm" id="client-name" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Alamat Penerima</label>
-                                    <input class="form-control form-control-sm" id="client-address" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input class="form-control form-control-sm" id="client-phone" type="phone" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Catatan</label>
-                                    <textarea class="form-control form-control-sm" id="client-notes"></textarea>
-                                </div>
-
-                                <div class="card mb-4">
-                                    <button class="btn btn-primary btn-sm" onClick="javascript:generatePickUpField()" type="button">Tambah Detail Pick Up</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pickup Field Generated from here -->
-                        <div id="pickup-field" class="card mb-4">
-                            <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
-                                <div class="col-sm-11">
-                                    Detail Pick Up #1
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <div class="row align-items-center justify-content-between">
-                                        <div class="col position-relative">
-                                            <div class="form-group">
-                                                <label for="phone">PIC</label>
-                                                <input class="form-control form-control-sm" id="pickup-details-pic" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="phone">Nama Pengirim</label>
-                                                <input class="form-control form-control-sm" id="pickup-details-name" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Alamat Penerima</label>
-                                                <input class="form-control form-control-sm" id="pickup-details-receiver" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="phone">Phone Number</label>
-                                                <input class="form-control form-control-sm" id="pickup-details-phone" type="phone" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="phone">Catatan</label>
-                                                <textarea class="form-control form-control-sm" id="pickup-details-notes"></textarea>
-                                            </div>
-                                            <!-- All Detail Pick Ups  -->
-                                            <div class="card mb-4">
-                                                    <div class="card-header" style="cursor: pointer;">
-                                                        <div id="prefix-item-title" class="col-sm-11">
-                                                            Detail Barang
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <!-- Item Child Prefix Generated from here -->
-                                                            <div id="prefix-item" style="cursor: pointer;" onClick="javascript:generateItemField(this.id)">
-                                                                <div class="nav-link-icon">
-                                                                    Tambah
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Item Pickup Field Generated from here -->
-                                                    <div id="pickup-field-item" class="card-body">
-                                                        <div class="position-relative">
-                                                            <div class="row align-items-center justify-content-between">
-                                                                <div class="col position-relative">
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Nama barang</label>
-                                                                        <input class="form-control form-control-sm" id="item-name" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Quantity</label>
-                                                                        <input class="form-control form-control-sm" type="number" step="any" id="item-quantity" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Unit</label>
-                                                                        <input class="form-control form-control-sm" type="number" id="item-unit" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Catatan</label>
-                                                                        <textarea class="form-control form-control-sm" id="item-notes"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            <!-- End Of All Detail Pick Ups  -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Airwaybill</label>
+                                            <input class="form-control "  type="name" placeholder="Generate by system" disabled="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Klien</label>
+                                            <input class="form-control" id="exampleFormControlInput1" type="text" placeholder="Nama Perusahaan Pengirim" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect1">Layanan</label>
+                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                <option>Same day</option>
+                                                <option>Regular</option>
+                                                <option>SuperSDS</option>        
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card mb-4">
-                            <button id="create-button" class="btn btn-success btn-sm" onClick="javascript:ProcessOrder()" type="button">Buat Order Baru</button>
+                                <section id="pickup">
+                                    <div class="row mb-3 mt-3">
+                                        <div class="col-6"> <h4 class="text-dark">PICK UP</h4></div>
+                                        <div class="col-6">
+                                            <button class="btn btn-green rounded-pill  btn-sm float-right" onclick="javascript:generatePickUpField()">
+                                                + pickup point
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="pickup-field" class="mb-3">
+                                        <!-- card items -->
+                                        <div class="list-group-item  mb-4" style="background-color: #e3e7ee;">
+                                            <div class="row">
+                                                <!-- pickup point -->
+                                                <div class="col-md-6">
+                                                    <div class="form-row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-name">Nama</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-name" type="name" placeholder="Toko/Gedung" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-pic">PIC</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-pic" type="name" placeholder="Yang dapat dihubungi" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-phone">Telp</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-phone" type="name" placeholder="0811982345" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="exampleFormControlInput1">Ready to pick-up</label>
+                                                                <input class="form-control form-control-sm" id="exampleFormControlInput1" type="name" placeholder="0811982345" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address">Alamat</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address" type="name" placeholder="Alamat RT/RW" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-kec">Kecamatan</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address-kec" placeholder="Rawamangun" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-kel">Kelurahan</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address-kel" placeholder="Pulogadung" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">    
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-city">Kota</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address-city" placeholder="Jakarta Timur" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-prov">Provinsi</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address-prov" placeholder="DKI Jakarta" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-zip">ZIP</label>
+                                                                <input class="form-control form-control-sm" id="pickup-details-address-zip" type="name" placeholder="13220" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-12">                                
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-notes">Detail lokasi/Catatan</label> 
+                                                                <textarea class="form-control form-control-sm" id="pickup-details-notes" type="text" placeholder="Nama Perusahaan Pengirim" rows="3"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /pickup point -->
+
+                                                <!-- item details -->
+                                                <div class="col-md-6"> 
+                                                    <div class="row mt-3 mb-3">
+                                                        <div class="col-6"> 
+                                                            <h6>Item(s)</h6>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <button id="prefix-item" class="btn btn-green rounded-pill btn-sm float-right" onClick="javascript:generateItemField(this.id)">+ item</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- list items -->
+                                                    <ul class="list-group mb-3">
+                                                        <!-- detail item -->
+                                                        <li id="pickup-field-item" class="list-group-item d-flex justify-content-between lh-condensed">
+                                                        <div>
+                                                            <div class="form-row">
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <label for="item-name">Nama</label>
+                                                                        <input class="form-control form-control-sm" id="item-name" placeholder="Nama Produk" />
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="col-3">
+                                                                    <div class="form-group">
+                                                                        <label for="item-quantity">Unit</label>
+                                                                        <input class="form-control form-control-sm" id="item-quantity" placeholder="1" /></div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <label for="item-unit">Satuan</label>
+                                                                        <input class="form-control form-control-sm" id="item-unit" placeholder="KG" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-12">
+                                                                    <div class="form-group">
+                                                                        <label for="item-notes">Deskripsi</label>
+                                                                        <textarea class="form-control form-control-sm" id="item-notes" placeholder="Deskripsi barang, warna, jenis" rows="3" ></textarea> 
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        </li>
+                                                        <!-- ./detail item -->
+                                                    </ul>
+                                                    <!-- ./list items -->
+                                                </div>
+                                                <!-- /.item details -->
+                                            </div>
+                                        </div>
+                                        <!-- ./card items -->
+                                        
+                                    </div>
+                                    <!-- /isi -->
+                                    <div class="row mt-2  mb-2 mr-1" >
+                                        <div class="col-12">
+                                            <button class="btn btn-green rounded-pill my-1 btn-sm float-right" onclick="javascript:generatePickUpField()">+ pickup point</button>       
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- section penerima -->
+                                <section id="receiver"> 
+                                    <h4 class="mb-3 mt-3">DROP OFF</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="client-name">Nama</label>
+                                                <input class="form-control" id="client-name" placeholder="Reyhan" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="client-phone">No telp</label>
+                                                <input class="form-control" id="client-phone" placeholder="0811982344" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="client-address">Alamat</label>
+                                                <input class="form-control" id="client-address" placeholder="Alamat RT/RW" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="client-address-kec">Kecamatan</label>
+                                                <input class="form-control" id="client-address-kec" placeholder="Rawamangun" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="client-address-kel">Kelurahan</label>
+                                                <input class="form-control" id="client-address-kel" placeholder="Pulogadung" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="client-address-city">Kota</label>
+                                                <input class="form-control" id="client-address-city" placeholder="Jakarta Timur" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="client-address-prov">Provinsi</label>
+                                                <input class="form-control" id="client-address-prov" placeholder="DKI Jakarta" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="client-address-zip">Zip</label>
+                                                <input class="form-control" id="client-address-zip" placeholder="13220" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="client-notes">Detail lokasi/Catatan</label>
+                                                <textarea class="form-control" id="client-notes" type="text" placeholder="Nama Perusahaan Pengirim" rows="3"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>   
+                                </section>                         
+                            </div>
+                            
+                            <section>
+                                <div class="row" style="margin-left: 20px; margin-bottom: 20px">
+                                    <button id="create-button" class="btn btn-primary rounded-pill px-4" onClick="javascript:ProcessOrder()" type="button">Buat Order Baru</button>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </main>
@@ -149,10 +312,15 @@
         var totalgeneratedPickup = 1;
         var counterDetailPickUp = 1;
 
-        var defaultFormatClientName = "client-name";
-        var defaultFormatClientAddress = "client-address";
-        var defaultFormatClientPhone = "client-phone";
-        var defaultFormatClientNotes = "client-notes";
+        var defaultFormatClientName             = "client-name";
+        var defaultFormatClientAddress          = "client-address";
+        var defaultFormatClientAddressKec       = "client-address-kec";
+        var defaultFormatClientAddressKel       = "client-address-kel";
+        var defaultFormatClientAddressCity      = "client-address-city";
+        var defaultFormatClientAddressProv      = "client-address-prov";
+        var defaultFormatClientAddressZip       = "client-address-zip";
+        var defaultFormatClientPhone            = "client-phone";
+        var defaultFormatClientNotes            = "client-notes";
 
         var defaultFormatPickupFieldID = "pickup-field";
         var defaultFormatPrefixItemFieldID = "prefix-item"; 
@@ -164,6 +332,14 @@
         var defaultFormatPickupDetailsreceiver = "pickup-details-receiver";
         var defaultFormatPickupDetailsPhone = "pickup-details-phone";
         var defaultFormatPickupDetailsNotes = "pickup-details-notes";
+        
+        // detail address 
+        var defaultFormatPickupDetailsAddress = "pickup-details-address"
+        var defaultFormatPickupDetailsAddressKec = "pickup-details-address-kec"
+        var defaultFormatPickupDetailsAddressKel = "pickup-details-address-kel"
+        var defaultFormatPickupDetailsAddressCity = "pickup-details-address-city"
+        var defaultFormatPickupDetailsAddressProv = "pickup-details-address-prov"
+        var defaultFormatPickupDetailsAddressZip = "pickup-details-address-zip"
 
         var defaultFormatItemName = "item-name"
         var defaultFormatItemQuantity = "item-quantity";
@@ -223,11 +399,20 @@
             totalgeneratedPickup++;
             var newPickupFieldID = defaultFormatPickupFieldID + "-" + totalgeneratedPickup;
             
+            /* Data Input PIC */
             var newPickupDetailPic = defaultFormatPickupDetailsPic + "-" + totalgeneratedPickup;
             var newPickupDetailName = defaultFormatPickupDetailsName + "-" + totalgeneratedPickup;
             var newPickupDetailreceiver = defaultFormatPickupDetailsreceiver + "-" + totalgeneratedPickup;
             var newPickupDetailPhone = defaultFormatPickupDetailsPhone + "-" + totalgeneratedPickup;
             var newPickupDetailNotes = defaultFormatPickupDetailsNotes + "-" + totalgeneratedPickup;
+
+            /* Data Input PIC Destination Address*/
+            var newPickupDetailsAddress = defaultFormatPickupDetailsAddress + "-" + totalgeneratedPickup;
+            var newPickupDetailsAddressKec = defaultFormatPickupDetailsAddressKec + "-" + totalgeneratedPickup;
+            var newPickupDetailsAddressKel = defaultFormatPickupDetailsAddressKel + "-" + totalgeneratedPickup;
+            var newPickupDetailsAddressCity = defaultFormatPickupDetailsAddressCity + "-" + totalgeneratedPickup;
+            var newPickupDetailsAddressProv = defaultFormatPickupDetailsAddressProv + "-" + totalgeneratedPickup;
+            var newPickupDetailsAddressZip = defaultFormatPickupDetailsAddressZip + "-" + totalgeneratedPickup;
 
             totalgeneratedPickup++;
             var newPrefixItemFieldID = defaultFormatPrefixItemFieldID + "-" + totalgeneratedPickup;
@@ -247,85 +432,186 @@
             mappingPrefixItemAndItems[newPrefixItemFieldID] = [newItemField];
 
             var pickUpField = `
-            <div id="` + newPickupFieldID + `" class="card mb-4">
-                <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
-                    <div class="col-sm-9">
-                        Detail Pick Up #`+ counterDetailPickUp +`
-                    </div>
-                    <div class="col-sm-3">
-                        <button onClick="javascript:deletePickUpField('`+ newPickupFieldID +`')">
-                            Hapus
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="position-relative">
-                        <div class="row align-items-center justify-content-between">
-                            <div class="col position-relative">
-                                <div class="form-group">
-                                    <label for="phone">PIC</label>
-                                    <input class="form-control form-control-sm" id="` + newPickupDetailPic + `" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Nama Pengirim</label>
-                                    <input class="form-control form-control-sm" id="` + newPickupDetailName + `" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Alamat Penerima</label>
-                                    <input class="form-control form-control-sm" id="` + newPickupDetailreceiver + `" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input class="form-control form-control-sm" id="` + newPickupDetailPhone + `" type="phone" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Catatan</label>
-                                    <textarea class="form-control form-control-sm" id="` + newPickupDetailNotes + `"></textarea>
-                                </div>
-                                <!-- All Detail Pick Ups  -->
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <div id="` + newPrefixItemTitleID + `" class="col-sm-11">
-                                            Detail Barang
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div id="`+ newPrefixItemFieldID +`" style="cursor: pointer;" onClick="javascript:generateItemField(this.id)">
-                                                <div class="nav-link-icon">
-                                                    Tambah
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="`+ newItemField +`" class="card-body">
-                                        <div class="position-relative">
-                                            <div class="row align-items-center justify-content-between">
-                                                <div class="col position-relative">
-                                                    <div class="form-group">
-                                                        <label>Nama barang</label>
-                                                        <input class="form-control form-control-sm" id="`+ newItemNameField +`" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Quantity</label>
-                                                        <input class="form-control form-control-sm" id="` + newItemQuantityField + `" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Unit</label>
-                                                        <input class="form-control form-control-sm" type="number" id="` + newItemUnitField + `" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Catatan</label>
-                                                        <textarea class="form-control form-control-sm" id="` + newItemNotesField + `"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Of All Detail Pick Ups  -->
-                            </div>
+            <div id="` + newPickupFieldID + `" class="mb-3">
+                <!-- card items -->
+                <div class="list-group-item  mb-4" style="background-color: #e3e7ee;">
+                    <!-- tombol hapus -->
+                    <div class="row ">
+                        <div class="col-12">
+                            <button class="btn  btn-outline-red btn-icon btn-xs float-right" type="button" onClick="javascript:deletePickUpField('`+ newPickupFieldID +`')">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     </div>
+                    <!-- /tombol hapus -->
+                    <div class="row">
+                        <!-- pickup point -->
+                        <div class="col-md-6">
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailName + `">
+                                            Nama
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailName + `" type="name" placeholder="Toko/Gedung" />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailPic + `">
+                                            PIC
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailPic + `" type="name" placeholder="Yang dapat dihubungi" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailPhone + `">
+                                            Telp
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailPhone + `" type="name" placeholder="0811982345" />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">
+                                            Ready to pick-up -- masih belum jelas
+                                        </label>
+                                        <input class="form-control form-control-sm" id="exampleFormControlInput1" type="name" placeholder="0811982345" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="` + newPickupDetailsAddress + `">
+                                                Alamat
+                                            </label>
+                                            <input class="form-control form-control-sm" id="` + newPickupDetailsAddress + `" type="name" placeholder="Alamat RT/RW" />
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressKec + `">
+                                            Kecamatan
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressKec + `" type="name" placeholder="Rawamangun" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressKel + `">
+                                            Kelurahan
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressKel + `" type="name" placeholder="Pulogadung" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressCity + `">
+                                            Kota
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressCity + `" type="name" placeholder="Jakarta Timur" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressProv + `">
+                                            Provinsi
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressProv + `" type="name" placeholder="DKI Jakarta" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressZip + `">
+                                            ZIP
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressZip + `" type="name" placeholder="13220" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">                                
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailNotes + `">
+                                            Detail lokasi/Catatan
+                                        </label>
+                                        <textarea class="form-control form-control-sm" id="` + newPickupDetailNotes + `" type="text" placeholder="Nama Perusahaan Pengirim" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /pickup point -->
+                        <!-- item details -->
+                        <div class="col-md-6"> 
+                            <div class="row mt-3 mb-3">
+                                <div class="col-6"> <h6>Item(s)</h6></div>
+                                <div class="col-6">
+                                    <button id="` + newPrefixItemFieldID + `" class="btn btn-green rounded-pill btn-sm float-right" onClick="javascript:generateItemField(this.id)">
+                                        + item
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- list items -->
+                            <ul class="list-group mb-3">
+                                <!-- detail item -->
+                                <li id="` + newItemField + `" class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <div class="form-row">
+                                            <div class="col-5">
+                                                <div class="form-group">
+                                                    <label for="` + newItemNameField + `">
+                                                        Nama
+                                                    </label>
+                                                    <input id="` + newItemNameField + `" class="form-control form-control-sm" placeholder="Nama Produk" />
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label for="` + newItemQuantityField +  `">
+                                                        Unit
+                                                    </label>
+                                                    <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="1" />
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="` + newItemUnitField + `">
+                                                        Satuan
+                                                    </label>
+                                                    <input id="` + newItemUnitField + `" class="form-control form-control-sm" placeholder="KG" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="` + newItemNotesField + `">
+                                                        Deskripsi
+                                                    </label>
+                                                    <textarea id="` + newItemNotesField + `" class="form-control form-control-sm" placeholder="Deskripsi barang, warna, jenis" rows="3" ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- ./detail item -->
+                            </ul>
+                            <!-- ./list items -->
+                        </div>
+                        <!-- /.item details -->
+                    </div>
                 </div>
+                <!-- ./card items -->
             </div>`;
             
             // convert string to DOM
@@ -395,39 +681,56 @@
             var newItemUnitField = defaultFormatItemUnit + "-" + totalgeneratedPickup;
             var newItemNotesField = defaultFormatItemNotes + "-" + totalgeneratedPickup;
 
-
             mappingPrefixItemAndItems[prefixID].push(newItemFieldID);
 
             var itemField = `
-            <div id="`+ newItemFieldID +`" class="card-body">
-                <div class="position-relative">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col position-relative">
-                            <div class="form-group">
-                                <label>Nama barang</label>
-                                <input class="form-control form-control-sm" id="` + newItemNameField + `" />
+            <li id="` + newItemFieldID + `" class="list-group-item d-flex justify-content-between lh-condensed" style="margin-top:30px">
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-outline-red float-right btn-icon btn-xs" onClick="javascript:deletePickUpField('`+ newItemFieldID +`')" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                            <div class="form-row">
+                                <div class="col-5">
+                                    <div class="form-group">
+                                        <label for="` + newItemNameField + `">
+                                            Nama
+                                        </label>
+                                        <input id="` + newItemNameField + `" class="form-control form-control-sm" placeholder="Nama Produk" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="` + newItemQuantityField +  `">
+                                            Unit
+                                        </label>
+                                        <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="1" />
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="` + newItemUnitField + `">
+                                            Satuan
+                                        </label>
+                                        <input id="` + newItemUnitField + `" class="form-control form-control-sm" placeholder="KG" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Quantity</label>
-                                <input class="form-control form-control-sm" id="` + newItemQuantityField + `" />
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="` + newItemNotesField + `">
+                                            Deskripsi
+                                        </label>
+                                        <textarea id="` + newItemNotesField + `" class="form-control form-control-sm" placeholder="Deskripsi barang, warna, jenis" rows="3" ></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Unit</label>
-                                <input class="form-control form-control-sm" type="number" id="` + newItemUnitField + `" />
-                            </div>
-                            <div class="form-group">
-                                <label>Catatan</label>
-                                <textarea class="form-control form-control-sm" id="` + newItemNotesField + `"></textarea>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <button class="btn col-sm-12 btn-danger" onClick="javascript:deletePickUpField('`+ newItemFieldID +`')">
-                        Hapus Item
-                    </button>
-                </div>
-            </div>`;
+            </li>`;
             
             // convert string to DOM
             var newItemField = $(itemField);
@@ -478,10 +781,37 @@
 
         // gathering all information and send it to server
         function ProcessOrder(){
+            let address = $("#" + defaultFormatClientAddress).val(); 
+            
+            // append kecamatan data
+            if(!($("#" + defaultFormatClientAddressKec).val() == "" || $("#" + defaultFormatClientAddressKec).val() == null)){
+                address = address + ", kec. " +  $("#" + defaultFormatClientAddressKec).val();
+            }
+
+            // append kelurahan daata 
+            if(!($("#" + defaultFormatClientAddressKel).val() == "" || $("#" + defaultFormatClientAddressKel).val() == null)){
+                address = address + ", kel. " + $("#" + defaultFormatClientAddressKel).val();
+            }
+
+            // append city data
+            if(!($("#" + defaultFormatClientAddressCity).val() == "" || $("#" + defaultFormatClientAddressCity).val() == null)){
+                address = address + ", " + $("#" + defaultFormatClientAddressCity).val();
+            }
+
+            // append provincy data
+            if(!($("#" + defaultFormatClientAddressProv).val() == "" || $("#" + defaultFormatClientAddressProv).val() == null)){
+                address = address + ", " + $("#" + defaultFormatClientAddressProv).val();
+            }
+
+            // append zip data
+            if(!($("#" + defaultFormatClientAddressZip).val() == "" || $("#" + defaultFormatClientAddressZip).val() == null)){
+                address = address + " " + $("#" + defaultFormatClientAddressZip).val();
+            }
+
             let mainPayload = {
                 receiver: {
                      name: $("#" + defaultFormatClientName).val(),
-                     address: $("#" + defaultFormatClientAddress).val(),
+                     address: address,
                      phone_number: $("#" + defaultFormatClientPhone).val(),
                      notes: $("#" + defaultFormatClientNotes).val()
                 },
@@ -499,15 +829,69 @@
                 } else if(idPickUp == null || idPickUp == ""){
                     pic = $("#" + defaultFormatPickupDetailsPic).val();
                     name = $("#" + defaultFormatPickupDetailsName).val();
-                    receiver = $("#" + defaultFormatPickupDetailsreceiver).val();
                     phone = $("#" + defaultFormatPickupDetailsPhone).val();
                     notes = $("#" + defaultFormatPickupDetailsNotes).val();
+
+                    // collect address data
+                    receiver = $("#" + defaultFormatPickupDetailsAddress).val();
+
+                    // append kecamatan data
+                    if(!($("#" + defaultFormatPickupDetailsAddressKec).val() == "" || $("#" + defaultFormatPickupDetailsAddressKec).val() == null)){
+                        receiver = receiver + ", kec. " +  $("#" + defaultFormatPickupDetailsAddressKec).val();
+                    }
+
+                    // append kelurahan daata 
+                    if(!($("#" + defaultFormatPickupDetailsAddressKel).val() == "" || $("#" + defaultFormatPickupDetailsAddressKel).val() == null)){
+                        receiver = receiver + ", kel. " + $("#" + defaultFormatPickupDetailsAddressKel).val();
+                    }
+
+                    // append city data
+                    if(!($("#" + defaultFormatPickupDetailsAddressCity).val() == "" || $("#" + defaultFormatPickupDetailsAddressCity).val() == null)){
+                        receiver = receiver + ", " + $("#" + defaultFormatPickupDetailsAddressCity).val();
+                    }
+
+                    // append provincy data
+                    if(!($("#" + defaultFormatPickupDetailsAddressProv).val() == "" || $("#" + defaultFormatPickupDetailsAddressProv).val() == null)){
+                        receiver = receiver + ", " + $("#" + defaultFormatPickupDetailsAddressProv).val();
+                    }
+
+                    // append zip data
+                    if(!($("#" + defaultFormatPickupDetailsAddressZip).val() == "" || $("#" + defaultFormatPickupDetailsAddressZip).val() == null)){
+                        receiver = receiver + " " + $("#" + defaultFormatPickupDetailsAddressZip).val();
+                    }
                 } else {
                     pic = $("#" + defaultFormatPickupDetailsPic + "-" + idPickUp).val();
                     name = $("#" + defaultFormatPickupDetailsName + "-" + idPickUp).val();
-                    receiver = $("#" + defaultFormatPickupDetailsreceiver + "-" + idPickUp).val();
                     phone = $("#" + defaultFormatPickupDetailsPhone + "-" + idPickUp).val();
                     notes = $("#" + defaultFormatPickupDetailsNotes + "-" + idPickUp).val();
+
+                    // collect address data
+                    receiver = $("#" + defaultFormatPickupDetailsAddress + "-" + idPickUp).val();
+
+                    // append kecamatan data
+                    if(!($("#" + defaultFormatPickupDetailsAddressKec + "-" + idPickUp).val() == "" || $("#" + defaultFormatPickupDetailsAddressKec + "-" + idPickUp).val() == null)){
+                        receiver = receiver + ", kec. " +  $("#" + defaultFormatPickupDetailsAddressKec + "-" + idPickUp).val();
+                    }
+
+                    // append kelurahan daata 
+                    if(!($("#" + defaultFormatPickupDetailsAddressKel  + "-" + idPickUp).val() == "" || $("#" + defaultFormatPickupDetailsAddressKel  + "-" + idPickUp).val() == null)){
+                        receiver = receiver + ", kel. " + $("#" + defaultFormatPickupDetailsAddressKel + "-" + idPickUp).val();
+                    }
+
+                    // append city data
+                    if(!($("#" + defaultFormatPickupDetailsAddressCity  + "-" + idPickUp).val() == "" || $("#" + defaultFormatPickupDetailsAddressCity  + "-" + idPickUp).val() == null)){
+                        receiver = receiver + ", " + $("#" + defaultFormatPickupDetailsAddressCity + "-" + idPickUp).val();
+                    }
+
+                    // append provincy data
+                    if(!($("#" + defaultFormatPickupDetailsAddressProv + "-" + idPickUp).val() == "" || $("#" + defaultFormatPickupDetailsAddressProv + "-" + idPickUp).val() == null)){
+                        receiver = receiver + ", " + $("#" + defaultFormatPickupDetailsAddressProv + "-" + idPickUp).val();
+                    }
+
+                    // append zip data
+                    if(!($("#" + defaultFormatPickupDetailsAddressZip + "-" + idPickUp).val() == "" || $("#" + defaultFormatPickupDetailsAddressZip + "-" + idPickUp).val() == null)){
+                        receiver = receiver + " " + $("#" + defaultFormatPickupDetailsAddressZip + "-" + idPickUp).val();
+                    }
                 }
 
                 // gathering and fetch items
@@ -536,7 +920,7 @@
                     payloadItem.push({
                         name: itemName,
                         quantity: parseFloat(itemQuantity),
-                        unit: parseInt(itemUnit),
+                        unit: itemUnit,
                         notes: itemNotes
                     });
                 });
