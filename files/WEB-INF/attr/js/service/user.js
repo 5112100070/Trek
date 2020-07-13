@@ -1,8 +1,8 @@
-function makeLogin(username,secret){
+function makeLogin(email,password){
     var url = base_url + '/login';
     var data = {
-        username:username,
-        secret:secret
+        email:email,
+        password:password
     };
 
     var promise = $.ajax({
@@ -21,7 +21,10 @@ function makeLogout(){
         url: url,
         type: 'POST',
         withCredentials: true,
-        headers: {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"},
+        headers: {
+            "Access-Control-Allow-Origin": "*", 
+            "Access-Control-Allow-Headers": "access-control-allow-origin, access-control-allow-headers"
+        },
     });
 
     return promise;

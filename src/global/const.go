@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	EXPIRE_COOKIE = time.Duration((6 * time.Hour))
+	EXPIRE_COOKIE = time.Duration((2 * 24 * time.Hour))
 )
 
 //Error Logger
@@ -16,13 +16,13 @@ var Error *log.Logger
 var Services RepoBundle
 
 var UserCookie = map[string]string{
-	"production":  "_TREK_",
-	"staging":     "_TREK_TEST_",
-	"development": "_TREK_DEV_",
+	"production":  "_CGX_",
+	"staging":     "_CGX_TEST_",
+	"development": "_CGX_DEV_",
 }
 
 var DomainCookie = map[string]string{
-	"production":  ".trek.id",
+	"production":  ".cgx.co.id",
 	"staging":     ".",
 	"development": ".trek.ndvl",
 }

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
+
+      <div id="layoutSidenav">
+          <!-- Sidebar -->
+          {{ template "dashboard-sidebar.tmpl" .}}
+          <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid mt-5">
+                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                            <div class="mr-4 mb-3 mb-sm-0">
+                                <h1 class="mb-0">Update Akun {{ .account.Fullname }}</h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Kembali</button>                        
+                            </div>
+                            <div id="success-alert" class="alert alert-success hide" role="alert"></div>
+                            <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form action="">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="fullname">Nama Lengkap</label>
+                                            <input class="form-control form-control-sm" id="fullname" value="{{ .account.Fullname }}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone">Nomor Telepon</label>
+                                            <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .account.PhoneNumber }}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control form-control-sm" id="role">
+                                                <option value="1" {{ if eq .account.Role 1 }}selected{{ end }}>Admin</option>
+                                                <option value="2" {{ if eq .account.Role 2 }}selected{{ end }}>Operator</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">Update User</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </main> 
+                <!-- Footer -->
+                {{ template "dashboard-footer.tmpl" .}}
+          </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        function ProcessUpdate(){
+            setError(false, "");
+
+            var id = {{ .account.ID }};
+            var fullname = $("#fullname").val();
+            var phone = $("#phone").val();
+            var role = $('#role :selected').val();
+
+            StartLoading();
+            var promise = Update(id,fullname,phone,role);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.massage);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+                    $("#success-alert").html("Sukses melakukan update akun");
+                }
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+    
+        function Update(id, fullname, phone, role){
+            var url = base_url + '/dashboard/user/update';
+            var data = {
+                id: id,
+                fullname: fullname,
+                phone: phone,
+                role: role
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+    </script>
+
+</html>

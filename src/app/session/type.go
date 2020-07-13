@@ -15,14 +15,43 @@ const (
 	USER_TYPE_COMMON     = 2
 )
 
-type UserSession struct {
-	ID       int64  `json:"user_id"`
-	FullName string `json:"fullname"`
-	Type     int    `json:"type"`
+type AccountResponse struct {
+	Data              *Account `json:"data", omitempty`
+	Error             *Error   `json:"error", omitempty`
+	ServerProcessTime string   `json:"server_process_time"`
 }
 
-func (us UserSession) GetFullname() string {
-	return us.FullName
+type LoginResponse struct {
+	Data              *LoginDataResponse `json:"data", omitempty`
+	Error             *Error             `json:"error", omitempty`
+	ServerProcessTime string             `json:"server_process_time"`
+}
+
+type Account struct {
+	ID          int64          `json:"user_id"`
+	Fullname    string         `json:"fullname"`
+	PhoneNumber string         `json:"phone_number"`
+	Email       string         `json:"email"`
+	CreateTime  string         `json:"create_time"`
+	Role        int            `json:"role"`
+	Company     CompanyProfile `json:"company"`
+}
+
+type LoginDataResponse struct {
+	Message string `json:"message"`
+	Token   string `json:"token"`
+}
+
+type CompanyProfile struct {
+	ID          int64  `json:"company_id"`
+	CompanyName string `json:"company_name"`
+	IsEnabled   bool   `json:"is_enabled"`
+	Role        int    `json:"role"`
+}
+
+type Error struct {
+	Code   int    `json:"code"`
+	Detail string `json:"detail"`
 }
 
 type sessionRepo struct {

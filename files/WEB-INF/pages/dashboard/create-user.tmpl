@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
+
+      <div id="layoutSidenav">
+          <!-- Sidebar -->
+          {{ template "dashboard-sidebar.tmpl" .}}
+          <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid mt-5">
+                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                            <div class="mr-4 mb-3 mb-sm-0">
+                                <h1 class="mb-0">Tambah Akun Pengguna</h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Kembali</button>                        
+                            </div>
+                            <div id="success-alert" class="alert alert-success hide" role="alert"></div>
+                            <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form action="">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="fullname">Nama Lengkap</label>
+                                            <input class="form-control form-control-sm" id="fullname" placeholder="nama pengguna baru" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input class="form-control form-control-sm" id="email" type="email" placeholder="email pengguna" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone">Phone Number</label>
+                                            <input class="form-control form-control-sm" id="phone" type="phone" placeholder="nomor telepon" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control form-control-sm" id="role">
+                                                <option value="1">Admin</option>
+                                                <option value="2">Operator</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company-id">Akun Perusahaan</label>
+                                            <select class="form-control form-control-sm" id="company-id">
+                                                {{ range $_, $company := .companies }}
+                                                <option value="{{ $company.ID }}">{{ $company.CompanyName }}</option>
+                                                {{ end }}
+                                            </select> 
+                                        </div>
+                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessRegister()" type="button">Add User</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <!-- Footer -->
+                {{ template "dashboard-footer.tmpl" .}}
+          </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        function ProcessRegister(){
+            setError(false, "");
+
+            var fullname = $("#fullname").val();
+            var email = $("#email").val();
+            var phone = $("#phone").val();
+            var role = $('#role :selected').val();
+            var companyID = $('#company-id :selected').val();
+
+            StartLoading();
+            var promise = Register(fullname,email,phone,role,companyID);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.massage);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+                    $("#success-alert").html("Sukses membuat akun baru");
+
+                    // set default value
+                    $("#fullname").val("");
+                    $("#email").val("");
+                    $("#phone").val("");
+                    $('#role :selected').val(1);
+                    $('#company-id :selected').val(1);
+                    
+                }
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+    
+        function Register(fullname, email, phone, role, companyID){
+            var url = base_url + '/dashboard/user/register';
+            var data = {
+                fullname: fullname,
+                email: email,
+                phone: phone,
+                role: role,
+                company_id: companyID
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+    </script>
+
+</html>

@@ -3,36 +3,73 @@
 
   {{ template "dashboard-header.tmpl" .}}
 
-  <body id="page-top" data-spy="scroll" data-target=".navbar" data-offset="1">
-    {{ template "dashboard-nav.tmpl" .}}
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
 
-    <div id="wrapper">
+      <div id="layoutSidenav">
+          <!-- Sidebar -->
+          {{ template "dashboard-sidebar.tmpl" .}}
+          <div id="layoutSidenav_content">
+              <main>
+                  <div class="container-fluid mt-5">
+                      <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                        <div class="form_error hide" id="error_message" style="background: white;padding: 1rem; width: 100%;"></div>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                          <div class="mr-4 mb-3 mb-sm-0">
+                              <h1 class="mb-0">Dashboard</h1>
+                              <div id="cgx-date" class="small"></div>
+                          </div>
+                        
+                      </div>
+                      <div class="alert alert-primary border-0 mb-4 mt-5 px-md-5">
+                          <div class="position-relative">
+                              <div class="row align-items-center justify-content-between">
+                                  <div class="col position-relative">
+                                      <h2 class="text-primary">Welcome back, {{ .UserDetail.Fullname }}</h2>
+                                      <p class="text-gray-700">Your dashboard is ready to go! You can manage order, member and company using this dashboard.</p>
+                                      <button id="btn-get-started" class="btn btn-teal">Get started<i class="ml-1" data-feather="arrow-right"></i></button>
+                                  </div>
+                                  <div class="col d-none d-md-block text-right pt-3"><img class="img-fluid mt-n5" src="dashboard/assets/img/drawkit/color/drawkit-content-man-alt.svg" style="max-width: 25rem;" /></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </main>
+              <!-- Footer -->
+              {{ template "dashboard-footer.tmpl" .}}
+          </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
 
-      <!-- Sidebar -->
-      {{ template "dashboard-sidebar.tmpl" .}}
-
-      <div id="content-wrapper">
-        <div class="container-fluid">
-          
-                    <!-- Breadcrumbs-->
-                    <!-- <ol class="breadcrumb">
-                      <li class="breadcrumb-item">
-                        <a href="index.html">Dashboard</a>
-                      </li>
-                      <li class="breadcrumb-item active">Blank Page</li>
-                    </ol> -->
-          
-                    <!-- Page Content -->
-                    <h1>Dashboard</h1>
-                    <hr>
-                    <p>This is a great starting point for new custom pages.</p>
-          
-                  </div> <!-- /.container-fluid -->
-      </div> <!-- /.content-wrapper -->
-    </div> <!-- /#wrapper -->
-    
-    {{ template "dashboard-footer.tmpl" .}}
-
+    </body>
     {{ template "default-script-dashboard.tmpl" .}}
-  </body>
+    <script>
+        $(document).ready(function(){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var dayName = days[today.getDay()];
+            var monthName = monthNames[today.getMonth()];
+
+            compStr = `
+            <div>
+                <span class="font-weight-500 text-primary">
+                    ` + dayName + `
+                </span> &middot; ` + monthName + ` ` + dd + `, ` + yyyy + ` &middot;
+            </div>
+            `
+
+            var comp = $(compStr);
+
+            $("#cgx-date").append(comp);
+        });
+    </script>
 </html>

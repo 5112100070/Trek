@@ -9,6 +9,7 @@ type Config struct {
 	RedigoDefault redigo.RedisConfig
 	Database      map[string]*DatabaseConfig
 	Session       SessionConfig
+	Env           string
 }
 
 type BaseUrl struct {

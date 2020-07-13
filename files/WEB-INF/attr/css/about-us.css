@@ -1,7 +1,8 @@
 .form_error {
-	font-size: 9px;
+	font-size: 15px;
 	color: red;
 	margin: 4px 0;
+	text-align: center;
 }
 
 .hide {

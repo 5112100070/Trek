@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
+
+      <div id="layoutSidenav">
+            <!-- Sidebar -->
+            {{ template "dashboard-sidebar.tmpl" .}}
+            <div id="layoutSidenav_content">
+              <main>
+                    <div class="container-fluid mt-5">
+                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                            <div class="mr-4 mb-3 mb-sm-0">
+                                <h1 class="mb-0">Daftar Order</h1>
+                            </div>
+                            <div class="dropdown">
+                                <a class="btn btn-primary lift btn-sm" href="/dashboard/order/create-order"><i data-feather="plus"></i>Tambah Order Baru</a>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="datatable table-responsive">
+                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Order ID</th>
+                                                <th style="text-align: center;">Nama Penerima</th>
+                                                <th style="text-align: center;">Status</th>
+                                                <th style="text-align: center;">Total Pickup</th>
+                                                <th style="text-align: center;">Tanggal Update Terakhir</th>
+                                                <th style="text-align: center;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{ range $index, $order := .orders }}
+                                            <tr>
+                                                <td>{{ $order.ID }}</td>
+                                                <td>{{ $order.ReceiverName }}</td>
+                                                <td>{{ $order.Status }}</td>
+                                                <td>{{ $order.TotalPickUp }}</td>
+                                                <td>{{ $order.UpdateTimeStr }}</td>
+                                                <td>
+                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/order?id={{ $order.ID }}"><i data-feather="more-vertical"></i></a>
+                                                </td>
+                                            </tr>
+                                            {{ end }}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <nav aria-label="...">
+                                  <ul class="pagination">
+                                    {{ $pagination := .pagination }}
+                                    <li class="page-item {{ if (le $pagination.Page 1 ) }} disable {{ end }}">
+                                        <a 
+                                            class="page-link"
+                                            {{ if (gt $pagination.Page 1 ) }} 
+                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
+                                            {{ end }}>
+                                            Sebelumnnya
+                                        </a>
+                                    </li>
+                                    {{ range $_, $index := .pagination.ListPage }}
+                                    <li class="page-item  
+                                        {{ if (eq $pagination.Page $index) }} active {{ end }}">
+                                        <a class="page-link" 
+                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
+                                            {{ $index }}
+                                        </a>
+                                    </li>
+                                    {{ end }}
+                                    <li class="page-item {{ if (ge $pagination.Page $pagination.TotalPage ) }}disable{{ end }}">
+                                        <a 
+                                            class="page-link" 
+                                            {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
+                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
+                                            {{ end }}
+                                        >
+                                            Selanjutnya
+                                        </a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <!-- Footer -->
+                {{ template "dashboard-footer.tmpl" .}}
+            </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+</html>

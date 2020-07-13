@@ -1,0 +1,9 @@
+package status
+
+var COMPANY_IS_ENABLED_WORDING = map[bool]string{
+	true:  COMPANY_IS_ENABLED_STATUS_TRUE,
+	false: COMPANY_IS_ENABLED_STATUS_FALSE,
+}
+
+const COMPANY_IS_ENABLED_STATUS_TRUE = "active"
+const COMPANY_IS_ENABLED_STATUS_FALSE = "not active"

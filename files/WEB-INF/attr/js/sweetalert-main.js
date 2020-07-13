@@ -24,11 +24,7 @@ function SimpleSwal(title, text, type, confirmButton){
         text: text,
         type: type,
         confirmButtonText: confirmButton,
-        customClass: "animated tada",
         animation: false,
-        imageUrl: '/img/logo-cgx.png',
-        imageWidth: 150,
-        imageHeight: 50,
         background: 'rgb(255, 204, 0)',
         imageAlt: 'Trek Logo',
     });

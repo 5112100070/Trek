@@ -1,0 +1,21 @@
+#!/bin/bash
+
+go_version="$(go version)"
+echo $go_version
+
+if [ $go_version == "" ]; then
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*)     machine=Linux
+            echo hellow
+        ;;
+        Darwin*)    machine=Mac;;
+        CYGWIN*)    machine=Cygwin;;
+        MINGW*)     machine=MinGw;;
+        *)          
+            echo "UnSupported Machine"
+            exit 0
+    esac
+fi
+
+echo ${machine}

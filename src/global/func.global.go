@@ -5,13 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/5112100070/Trek/src/app/session"
 	"github.com/gin-gonic/gin"
 )
-
-func SetCookie(c *gin.Context, key string, value string, base_url string) {
-	c.SetCookie(key, value, (5 * 3600), "/", base_url, true, true)
-}
 
 func GetEnv() string {
 	cfgenv := os.Getenv("TREKENV")
@@ -27,6 +22,14 @@ func GetServiceSession() SessionService {
 
 func GetServicePublic() PublicService {
 	return Services.Public
+}
+
+func GetServiceUser() UserService {
+	return Services.User
+}
+
+func GetServiceOrder() OrderService {
+	return Services.Order
 }
 
 func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
@@ -61,12 +64,4 @@ func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 
 func GetDNSNameForCookie() string {
 	return DomainCookie[GetEnv()]
-}
-
-func IsUserCanAccess(user session.UserSession) bool {
-	if !(user.Type == session.USER_TYPE_ADMIN || user.Type == session.USER_TYPE_COMMON || user.Type == session.USER_TYPE_ADMIN_TREK) {
-		return true
-	} else {
-		return false
-	}
 }

@@ -1,18 +1,16 @@
 package app
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
+	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/5112100070/Trek/src/utils"
 )
 
@@ -54,7 +52,7 @@ func SendRequestItem(c *gin.Context) {
 	}
 
 	mail := utils.NewMail()
-	mail.BuildReciever("g@trek.id", "wahyu.kukuh.herlambang@gmail.com")
+	mail.BuildReceiver("g@trek.id", "wahyu.kukuh.herlambang@gmail.com")
 	mail.BuildMessage(utils.BuildMessageForRequest(productID, productName, typeDuration, duration, total, startDate, email, projectAddress))
 	mail.SendMail()
 
@@ -62,68 +60,38 @@ func SendRequestItem(c *gin.Context) {
 }
 
 func ProcessMakeLogin(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("secret")
+	// make sure not too fast when give response
+	defer func() {
+		time.Sleep(2 * time.Second)
+	}()
 
-	baseUrl := conf.GConfig.BaseUrlConfig.ProductDNS
-	path := "/make-login"
-	data := url.Values{}
-	data.Set("username", username)
-	data.Set("secret", password)
+	email := c.PostForm("email")
+	password := c.PostForm("password")
 
-	u, _ := url.ParseRequestURI(baseUrl)
-	u.Path = path
-	urlStr := u.String()
-
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", urlStr, strings.NewReader(data.Encode()))
-	if err != nil {
-		global.Error.Println(err)
-		return
-	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-
-	resp, errGetResp := client.Do(req)
-	if err != nil {
-		global.Error.Println(errGetResp)
+	service := global.GetServiceSession()
+	loginResp, errResp := service.RequestLogin(email, password)
+	if errResp != nil {
+		log.Println(errResp)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		global.Error.Println(err)
-		global.InternalServerErrorResponse(c, nil)
+	//  return error cause from service server
+	if loginResp.Error != nil {
+		global.ErrorResponse(c, loginResp.Error)
 		return
 	}
 
-	var resultResp struct {
-		ServerMessage string                 `json:"server_message"`
-		Data          map[string]interface{} `json:"data,omitempty"`
-	}
+	// return response from service server and keep to cookie
+	if loginResp.Data != nil {
+		cookie := gSession.SetSessionCookie(loginResp.Data.Token)
 
-	errUnMarshal := json.Unmarshal(body, &resultResp)
-	if errUnMarshal != nil {
-		global.Error.Println(errUnMarshal)
-		global.ForbiddenResponse(c, nil)
-		return
-	} else if !resultResp.Data["is_success"].(bool) {
-		global.InternalServerErrorResponse(c, nil)
-		return
-	} else {
-		cookie := http.Cookie{
-			Name:    global.UserCookie[global.GetEnv()],
-			Value:   resultResp.Data["nekot"].(string),
-			Domain:  global.GetDNSNameForCookie(),
-			Expires: time.Now().Add(global.EXPIRE_COOKIE),
-		}
 		http.SetCookie(c.Writer, &cookie)
-
-		http.Redirect(c.Writer, c.Request, conf.GConfig.BaseUrlConfig.BaseDNS, http.StatusSeeOther)
 		return
 	}
+
+	// return internal server error if not caught response from service server
+	global.InternalServerErrorResponse(c, nil)
 }
 
 func ProcessMakeLogout(c *gin.Context) {
@@ -135,16 +103,20 @@ func ProcessMakeLogout(c *gin.Context) {
 	}
 
 	service := global.GetServiceSession()
-	err := service.DelUser(token)
+	errResp, err := service.RequestLogout(token)
 	if err != nil {
+		// internal server error from go.cgx.co.id
 		global.Error.Println(err)
+		global.InternalServerErrorResponse(c, nil)
 	}
 
-	newCookie := http.Cookie{
-		Name:    global.UserCookie[global.GetEnv()],
-		Value:   token,
-		Expires: time.Now().Add(time.Duration(0)),
+	if errResp != nil {
+		// error response from go.cgx.co.id
+		global.ErrorResponse(c, errResp)
+		return
 	}
+
+	newCookie := gSession.SetExpireSessionCookie()
 
 	http.SetCookie(c.Writer, &newCookie)
 }

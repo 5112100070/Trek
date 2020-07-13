@@ -3,112 +3,164 @@
 {{ template "header.tmpl" .}}
   <body data-spy="scroll" data-target=".navbar" data-offset="1">
     {{ template "main-navigation.tmpl" .}}    
-      <header class="masthead text-black no-gutters" id="trek-bg">
-          <div class="container-fluid-width clearfix" id="trek-bg">
+     
+    <!-- <header class="masthead text-black no-gutters cgx-bg">
+          <div class="container-fluid-width clearfix cgx-bg">
             <div class="row no-gutters h-100 ">
               <div class="col-lg-8 offset-lg-4 header-img">
                   <div id="msgErreur" class="justify-content-center">
                       <div> <h1 class="pt-5 mt-5 ht" style="font-size: 3.4em;">
-                          Solutions in need!
+                          SOLUTIONS IN NEED
                         </h1>
                         <h4 style="font-weight: 400; letter-spacing: 2px; line-height: 1.5em;">
-                            Let us store, pick up, and ship for you, plus enjoy our analytical evaluation custom to your needs. So you can focus more on your customer and grow.
+                          CGX offers you logistic solutions for every type of business out there. Let us store, pick up, and ship for you! Plus, receive our analytical evaluation custom to your needs, so you can focus on your customer and growth.
                         </h4>
                       
                       
                       </div>
                   </div>
               </div>
-            </div> <!-- end of row -->
+            </div> 
           </div>
-        </header>
-  
+        </header> -->
+         <header class="masthead text-black no-gutters cgx-bg">
+            <div class="jumbotron jumbotron-fluid mb-0 py-0 px-lg-5" id="home">
+                <div id="parallax-hero">
+                    <div class="layer-0">
+                        <picture>
+                            <source srcset="img/image.svg" type="image/webp">
+                            <img src="/img/image.svg" alt="WildPress Hero Layer 0">
+                        </picture>
+                    </div>
+                </div>
+                <div class="container-at container py-3
+                 py-lg-5 clearfix">
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                            <h1 class="mb-2 mt-4 line-height-1 text-center text-lg-left ">
+                                <span class="display-3 header-t d-block mb-0 pt-lg-5">Solutions In Need</span>
+                            </h1>
+                            <section class="header-p mt-4" id="text-section">
+                                <h4 style="font-weight: 400; letter-spacing: 2px; line-height: 1.5em;">
+                                    CGX offers you logistic solutions for every type of business out there. Let us store, pick up, and ship for you! Plus, receive our analytical evaluation custom to your needs, so you can focus on your customer and growth.
+                                  </h4>                            
+                              </section>
+                        </div>
+                        </div>
+                    </div>
+                    <img id="hero-image" src="/img/image.svg" class="img-fluid" alt="Responsive image" style="width:100%;position:right bottom;">
+            </div>
+          </header>   
+  <!-- Getbutton.io widget -->
+<script type="text/javascript">
+  (function () {
+      var options = {
+          whatsapp: "+62 813-1186-9937", // WhatsApp number
+          call_to_action: "Hello, how may we help you? ", // Call to action
+          position: "right", // Position may be 'right' or 'left'
+      };
+      var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+      s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+      var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+  })();
+</script>
+<!-- /Getbutton.io widget -->
 
     <section class="features-icons my-lg-3 py-5">
       <div class="container">
         <div class="row" >
           <div class="col-lg-12 mb-2">
             <h2>
-             Our Solution
+             OUR SOLUTIONS:
             </h2>
           </div>
           <div class="col-lg-3">
             <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
               <div class="features-icons-icon d-flex">
-                <img src="img/store-icon.png" class="m-5" style="min-width:10rem;" alt="Store your products!">
+                <img src="img/store-icon.png" class="m-5" style="min-width:10rem;" alt="Store your product">
               </div>
-              <h5 style="padding-top:1rem;text-align:center;">Store your products!</h5>
+              <h5 style="padding-top:1rem;text-align:center;">Store your product</h5>
             </div>
           </div>
           <div class="col-lg-3">
             <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
               <div class="features-icons-icon d-flex">
-                <img src="img/web_icon.png" class="m-5" style="min-width:10rem;" alt="mudah digunakan">
+                <img src="img/web_icon.png" class="m-5" style="min-width:10rem;" alt="Manage your orders">
               </div>
-              <h5 style="padding-top:1rem;text-align:center;">Yeay! Orders!</h5>
+              <h5 style="padding-top:1rem;text-align:center;">Manage your orders</h5>
             </div>
           </div>
           <div class="col-lg-3">
             <div class="features-icons-item mx-auto mb-0 mb-lg-3">
               <div class="features-icons-icon d-flex">
-                <img src="img/pack_icon.png" class="m-5" style="min-width:10rem;" alt="order professionally!">
+                <img  src="img/pack_icon.png"class="m-5" style="min-width:10rem;" alt="Pack your orders professionally">
               </div>
-              <h5 style="padding-top:1rem;text-align:center;">We pack your<br>order professionally!</h5>
+              <h5 style="padding-top:1rem;text-align:center;">Pack your orders<br>professionally</h5>
             </div>
           </div>
           <div class="col-lg-3">
             <div class="features-icons-item mx-auto mb-0 mb-lg-3">
               <div class="features-icons-icon d-flex">
-                <img src="img/ship_icon.png" class="m-5" style="min-width:10rem;" alt="We ship them accurately!">
+                <img src="img/ship_icon.png" class="m-5" style="min-width:10rem;" alt="Ship them accurately">
               </div>
-              <h5 style="padding-top:1rem;text-align:center;">We ship them accurately!</h5>
+              <h5 style="padding-top:1rem;text-align:center;">Ship them accurately</h5>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="pt-5 bg-trek" >
+    <section class="pt-5 cgx-bg" >
       <div class="container">
         <div class="row">
           <div class="col-md-5 order-1 order-md-1" style="margin: auto;">
            
-            <h2>Save time and enjoy the benefits!</h2>
+            <h2>SAVE TIME & ENJOY OUR BENEFITS!</h2>
     
           </div>
           <div class="col-md-7 order-2 order-md-2">
             <ul class="list-inline">
               <li class="d-flex py-3"> <img src="img/benefit_scallable.png" class="features-icons-2 mr-4" alt="scalable"></span>
                 <div>
-                    <h5>Scalability Fulfilment  </h5>
+                    <h5>SCALABILITY FULFILLMENT</h5>
                     <p>
-                        We store, check for quality control profesionally packed
-                        and manage your inventory<br>
-                        No matter big or small, our space is ready for your growth
+                        We store, regular quality control check, profesionally pack, 
+                        and manage your inventory. No matter how big or small, 
+                        our space is ready for your company growth.
                     </p>
                 </div>
               </li>
               <li class="d-flex py-3"> <img src="img/benefit_analitik.png" class="features-icons-2 mr-4" alt="analysis evaluation"></span>
                 <div>
-                  <h5>Analytical Evaluation</h5>
+                  <h5>ANALYTICAL EVALUATION</h5>
                   <p>
-                      We not just packed and ship, we also giving your insight
-                     which one sells out the most, in which time of the year and more!
-                    letting you know your customer even more.
+                    We don't just pack and ship, 
+                    we will also give you an in-depth insight 
+                    (e.g: which product sells the most in which time of 
+                    the year, etc). 
+                    Giving you a more accurate knowledge of your customer 
+                    behavior. 
                   </p>
                 </div>
               </li>
               <li class="d-flex py-3"><img src="img/benefit_accurate.png" class="features-icons-2 mr-4" alt="accurate"></span>
                 <div>
-                    <h5>Accurate Logistic Service</h5>
-                    <p> We arrange accurately with the most efficient cost,
-                        whether is island, air flight, sea or multi mode. On time
-                       so your customer is happy</p>
+                    <h5>ACCURATE LOGISTIC SERVICE</h5>
+                    <p> 
+                      We arrange your shipment accurately with the most 
+                      efficient cost. Whether its by land, air, sea, 
+                      or multi mode, we deliver on time to satisfy you and 
+                      your customer needs.
+                    </p>
                 </div>
               </li>
               <li class="d-flex py-3"> <img src="img/benefit_secured.png" class="features-icons-2 mr-4" style="margin: 0 0;" alt="secure facilities"></span>
                 <div>
-                    <h5>Secured Facility</h5>
-                    <p> Our facilities are supervise 24 hours 7 days a week!</p>
+                    <h5>SECURED FACILITY</h5>
+                    <p>
+                      Our facilities have 'round the clock (24/7) supervision, 
+                      we guarantee your products safety and security.
+                    </p>
                 </div>
               </li>
             </ul>
@@ -136,14 +188,6 @@
               <div class="col-lg-3" style="margin: auto;">
                 <div class="mx-auto mb-2">
                   <div class="d-flex">
-                    <img src="img/partner/bw-akari.png" class="features-icons-2" alt="akari">
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-3" style="margin: auto;">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
                     <img src="img/partner/bw-cut-lane.png" class="features-icons-2" alt="cut lane">
                   </div>
                 </div>
@@ -157,12 +201,6 @@
                 </div>
               </div>
 
-            </div>
-          </div>
-          
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-            <div class="row">
-
               <div class="col-lg-3" style="margin: auto;">
                 <div class="mx-auto mb-2">
                   <div class="d-flex">
@@ -170,6 +208,12 @@
                   </div>
                 </div>
               </div>
+
+            </div>
+          </div>
+          
+          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
+            <div class="row">
 
               <div class="col-lg-3" style="margin: auto;">
                 <div class="mx-auto mb-2">
@@ -195,20 +239,6 @@
                 </div>
               </div>
 
-            </div>
-          </div>
-
-          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-            <div class="row py-4">
-
-              <div class="col-lg-3" style="margin: auto;">
-                <div class="mx-auto mb-2">
-                  <div class="d-flex">
-                    <img src="img/partner/bw-panggung.png" class="features-icons-2" alt="panggung">
-                  </div>
-                </div>
-              </div>
-
               <div class="col-lg-3" style="margin: auto;">
                 <div class="mx-auto mb-2">
                   <div class="d-flex">
@@ -216,6 +246,12 @@
                   </div>
                 </div>
               </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
+            <div class="row py-4">
 
               <div class="col-lg-3" style="margin: auto;">
                 <div class="mx-auto mb-2">
@@ -233,6 +269,22 @@
                 </div>
               </div>
 
+              <div class="col-lg-3" style="margin: auto;">
+                <div class="mx-auto mb-2">
+                  <div class="d-flex">
+                    <img src="img/partner/bw-wif.png" class="features-icons-2" alt="wif">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3" style="margin: auto;">
+                <div class="mx-auto mb-2">
+                  <div class="d-flex">
+                    <img src="img/partner/bw-woobiz.png" class="features-icons-2" alt="woobiz">
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -243,133 +295,95 @@
 
     <section class="py-5 my-4">
         <div class="container">
-          <h2 class="mb-5 text-center">Frequently Asked Questions</h2>
+          <h2 class="mb-5 text-center">FAQ</h2>
           <div class="accordion" id="faq-01">
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading1-01">
                 <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse1-01" aria-expanded="false" aria-controls="faq-collapse1-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
-                  How much it cost for Shipment and Warehouse in CGX ?
+                  How much does the shipment and warehouse services cost at CGX?
                   <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
                 </button>
               </h5>
               <div class="collapse" id="faq-collapse1-01" aria-labelledby="faq-heading1-01" data-parent="#faq-01" style="margin: -15px 0 0 0.7em">
                 <p>
-                  We have our standard published rate. However, we also have a price that can be customized according to your needs.
+                  Our prices and rates here at CGX are standard published rate that you can acquire by emailing us at info@cgxlogistic.co.id. However, we also offer customized prices and rates that can be adjusted based on your needs.
                 </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading2-01">
                 <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse2-01" aria-expanded="false" aria-controls="faq-collapse2-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">
-                  How is the shipment process ?
+                  How does CGX shipment process works? 
                   <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
                 </button>
               </h5>
               <div class="collapse" id="faq-collapse2-01" aria-labelledby="faq-heading2-01" data-parent="#faq-01" style="margin: -15px 0 0 0.7em">
                 <p>
-                  Our shipment will be proceed based on type of services and type of transportation that you choose. 
-                  After we receive a delivery order, our operational team will be delivery order, our operational team 
-                  will be deliver your package safely.
+                  Our shipment process will be based on the type of service and mode of transportation of your choosing. 
+                  After we receive a delivery order, our well-trained and experienced operational team will deliver your 
+                  package safely & accurately.
                 </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading3-01">
                 <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse3-01" aria-expanded="false" aria-controls="faq-collapse3-01" style="white-space:normal !important; text-decoration:none;word-wrap: break-word">
-                  What kind of service that CGX offered ?
+                  What are the types of shipment services that CGX offer?
                   <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
                 </button>
               </h5>
               <div class="collapse" id="faq-collapse3-01" aria-labelledby="faq-heading3-01" data-parent="#faq-01"  style="margin: -15px 0 0 0.7em">
-                <p> 
-                  CGX will ensure that your goods are delivered to the destination with various choices of lines and 
-                  types mode of transportation ranging from Land Transportations, Sea Transportations, Air Transportations, Multi Modes 
-                  and last but not least, Courier.  In addition, we also accept overseas shipping services.
-                </p>
-              </div>
-            </div>
-            <div class="mb-2 border-bottom">
-              <h5 id="faq-heading4-01">
-                <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse4-01" aria-expanded="false" aria-controls="faq-collapse4-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
-                    If I want to rent a space at CGX warehouse, how is the operational process at CGX ?
-                  <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
-                </button>
-              </h5>
-              <div class="collapse" id="faq-collapse4-01" aria-labelledby="faq-heading4-01" data-parent="#faq-01" style="margin: -15px 0 0 0.7em">
                 <p>
-                  The operational process that we implement is starting from
-                  handling in and out by checking the quality and quantity when the goods arrived, sorting and
-                  storing goods on our warehouse.
+                  Ensuring that your package arrives safely is our number one priority. We offer various modes of transportation 
+                  ranging from Land Transport, Sea Transport, Air Transport, as well as Multi Mode. We also offer shipment via our 
+                  Courier Service. In addition, CGX also accepts overseas and international shipping services.
                 </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading5-01">
                 <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse5-01" aria-expanded="false" aria-controls="faq-collapse5-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
-                    How is the fulfillment process ?
+                    How does the fulfillment process works?
                   <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
                 </button>
               </h5>
               <div class="collapse" id="faq-collapse5-01" aria-labelledby="faq-heading5-01" data-parent="#faq-01" style="margin: -15px 0 0 0.7em">
                 <p>
-                    CGX Logistics will assist three crucial aspects of operations, 
-                    from managing stock, shipping goods supported by expertise with an affordable location, 
-                    and 100% guarantee. Our framework that we offer starts from pick up the
-                    to stock checking price, goods strategic from factory, warehousing, managing stock, 
-                    packing and deliver it to your
+                  CGX fulfillment service manage three crucial parts in an operational system which includes; stock management, item delivery, 
+                  as well as inventory that are done by professionals. We offer this service with reasonable prices, strategic location, and any 
+                  risks that might occur in our warehouse are under our responsibility.
                 </p>
               </div>
             </div>
             <div class="mb-2 border-bottom">
               <h5 id="faq-heading6-01">
                 <button class="btn btn-link btn-block text-left d-flex text-dark" type="button" data-toggle="collapse" data-target="#faq-collapse6-01" aria-expanded="false" aria-controls="faq-collapse6-01" style="white-space:normal !important;text-decoration:none; word-wrap: break-word">
-                    Does the service offered include insurance ?
+                  Does CGX services includes insurance?
                   <img class="p-1 ml-auto my-auto" src="img/chevron-circle-down.svg" alt="">
                 </button>
               </h5>
               <div class="collapse" id="faq-collapse6-01" aria-labelledby="faq-heading6-01" data-parent="#faq-01" style="margin: -15px 0 0 0.7em">
                 <p> 
-                    All risks in warehousing are covered 100% As by for CGX Logistics. 
-                    shipping services, insurance will provided according to be your request, 
-                    which refers to the value of the item you wish to insure.
+                  CGX offers the best treatment possible for all of our services. For risks that might occur in our warehouse are 100% covered 
+                  by CGX and will be under our responsibility. However for any shipment services, insurance will be provided upon request depending 
+                  on the value of items that you wish to insure.
                 </p>
               </div>
             </div>
           </div>
         </div>
     </section>
-    <!-- <section class="features-icons text-center">
-      <div class="container">
-        <div class="row" >
-          <div class="col-lg-12">
-            <div class="row">
-              <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder">
-                <h4>
-                  Ready to grow your bussiness
-                  <br>with us ?</h4>
-              </div>
-          
-              <div class="col-lg-12 mb-2" style="text-align: center; font-weight: bolder;">
-                <a class="btn btn-lg"
-                      target="_blank"
-                      style="border:2px solid black; border-radius: 25px;"
-                      onClick="javascript:GoToIndex('home')">Get in touch!</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-      <section class="py-5 bg-trek">
+      <section class="py-5 cgx-bg">
           <div class="container">
-            <h2 class="my-3 text-center">Ready to grow business with us?</h2>
+            <h2 class="my-3 text-center">
+              Ready To Grow Your Business With Us?
+            </h2>
             <div class="row pt-md-5">
-              <div class="col-md-6 my-3 mb-md-0">
-                <h5>Let's talk about the future of the internet</h5>
-                <p class="mb-5 text-muted">We're here to answer your questions and discuss the decentralized future of the internet.</p>
+              <div class="col-6 my-3 mb-md-0">
+                <h5>Drop in your questions!</h5>
+                <p class="mb-5 text-muted"> For any inquiries feel free to contact us, we're here to help!</p>
                 <div>
-                  <div class="d-flex-custom"><img class="mb-3 mr-3" src="img/map-marker.svg" alt="">
+                  <div>
                     <p>Office :<br>
                         Jalan Raya Pondok Gede No. I 8R,
                         Jakarta Timur, Indonesia I 3810<br>
@@ -378,9 +392,12 @@
                         Jati Asih, Bekasi, Indonesia</p>
                   </div>
                   <div class="d-flex-custom"><img class="mb-3 mr-3" src="img/phone.svg" alt="">
-                    <p>Phone: 021 8243 5678<br><br>
-                      Mobile: +62 813-8595-4267
-                    
+                    <p>
+                      Phone: 021 8243 5678
+                      <br><br>
+                      <a href="https://api.whatsapp.com/send?phone=6281311869937">
+                        Mobile: +62 813-1186-9937
+                      </a>
                     </p>
                   </div>
                   <div class="d-flex-custom"><img class="mb-3 mr-3" src="img/envelope.svg" alt="">
@@ -388,7 +405,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-6">
                 <form>
                   <div class="row">
                     <div class="col-md-6 mb-3">
@@ -425,12 +442,12 @@
             </div>
           </div>
         </section>
-      <footer class="bg-trek">
+      <footer class="cgx-bg">
           <div class="container">
             <div class="d-flex justify-content-center align-items-center flex-column">
               <!-- <h5 class="mb-3"><a href="#">CGX</a></h5> -->
               <img src="/img/logo-cgx.png" width="100" height="100" alt="" >
-              <div class="d-flex mb-3"><a href="#"><img class="mr-3" src="img/twitter.svg" alt=""></a><a href="#"><img class="mr-3" src="img/facebook-f.svg" alt=""></a><a href="#"><img class="mr-3" src="img/instagram.svg" alt=""></a><a href="#"><img src="img/linkedin-in.svg" alt=""></a></div>
+              <div class="d-flex mb-3"><a href="https://www.facebook.com/cgxlogistic"><img class="mr-3" src="img/facebook-f.svg" alt=""></a><a href="https://www.instagram.com/cgx.id/"><img class="mr-3" src="img/instagram.svg" alt=""></a><a href="https://www.linkedin.com/company/pt.-citra-global-ekspresindo"><img src="img/linkedIN.svg" style=" width:20px;" alt=""></a></div>
               <div class="d-flex">
                 <p class="mb-0 small text-muted">&copy; 2020 CGX. All right reserved.</p>
               </div>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+        {{ template "dashboard-notifcenter.tmpl" .}}   
+        
+        <div id="layoutSidenav">
+            {{ template "dashboard-sidebar.tmpl" .}}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="page-header pb-10">
+                        <div class="container-fluid">
+                            <div class="page-header-content">
+                                <h1 class="page-header-title">
+                                    <div class="page-header-icon"><i data-feather="users"></i></div>
+                                    <span>Pengaturan Akun</span>        
+                                </h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard'">
+                                    <i data-feather="chevron-left"></i>Kembali
+                                </button>   
+                            </div>
+                            <div id="success-alert" class="alert alert-success hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>
+                            <div id="failed-alert" class="alert alert-danger hide" role="alert" style="margin: -2rem 0 1rem 0;"></div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-n10">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <div id="sizing">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Detail Akun Pengguna</div>
+                                        <div class="card-body">
+                                            <div class="position-relative">
+                                                <div class="row align-items-center justify-content-between">
+                                                    <div class="col position-relative">
+                                                        <p class="text-gray-700">ID User : {{ .UserDetail.ID }}</p>
+                                                        <p class="text-gray-700">Nama Lengkap: {{ .UserDetail.Fullname }}</p>
+                                                        <p class="text-gray-700">Email : {{ .UserDetail.Email }}</p>
+                                                        <p class="text-gray-700">Nomor Telepon : {{ .UserDetail.PhoneNumber }}</p>
+                                                        <p class="text-gray-700">Tanggal join : {{ .UserDetail.CreateTime }}</p>
+                                                        
+                                                        <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
+                                                            Ubah Password
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- List Modals -->
+                            <div class="modal fade" id="toggle-change-password" tabindex="-1" role="dialog" aria-labelledby="toggle-change-password-title" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="toggle-change-password-title">
+                                                Konfirmasi ubah password
+                                            </h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body">                               
+                                            <div class="form-group">
+                                                <label for="field-new-password">Password baru untuk {{ .UserDetail.Fullname }}</label>
+                                                <input class="form-control form-control-sm" id="field-new-password" type="password" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="field-new-password-confirm">Konfirmasi Password</label>
+                                                <input class="form-control form-control-sm" id="field-new-password-confirm" type="password" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
+                                            <button class="btn btn-danger btn-secondary" type="button" onclick="javascript:ProcessChangePassword()" data-dismiss="modal">Simpan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of List Modals -->
+                            
+                            <div class="col-lg-9">
+                                <div id="sizing">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Terdaftar Pada Perusahaan</div>
+                                        <div class="card-body">
+                                            <div class="position-relative">
+                                                <div class="row align-items-center justify-content-between">
+                                                    <div class="col position-relative">
+                                                        <p class="text-gray-700">ID : {{ .UserDetail.Company.ID }}</p>
+                                                        <p class="text-gray-700">Nama : {{ .UserDetail.Company.CompanyName }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </main>
+                <footer class="footer mt-auto footer-light">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 small">Copyright &copy; CGX 2020</div>
+    
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+         <!-- Modal -->
+        <div id="loading-pop-up" class="modal-loading">
+          <div class="lds-facebook"><div></div><div></div><div></div></div>
+        </div>
+    </body>
+
+    {{ template "default-script-dashboard.tmpl" .}}
+    <script>
+        function ProcessChangePassword(){
+            setError(false, "");
+
+            var password = $("#field-new-password").val();
+            var passwordConfirm =$("#field-new-password-confirm").val();
+
+            if(password != passwordConfirm){
+                setError(true, "password baru dan password  konfirmasi berbeda"); 
+                return
+            }
+
+            if(password == ""){
+                setError(true, "password baru tidak boleh kosong"); 
+                return
+            }
+
+            StartLoading();
+            var promise = UpdatePassword(password);
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+                    $("#success-alert").html("Sukses melakukan update akun");
+                }
+
+                $("#field-new-password").val("");
+                $("#field-new-password-confirm").val("");
+
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+            });
+        }
+    
+        function UpdatePassword(password){
+            var url = base_url + '/change-password';
+            var data = {
+                new_password: password
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            return promise;
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+    </script>
+</html>

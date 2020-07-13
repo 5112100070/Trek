@@ -1,4 +1,5 @@
 pages/comingsoon/
 bin/.
 bin/
-config/development.ini
+config/
+*.exe

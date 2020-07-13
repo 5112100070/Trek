@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
+
+      <div id="layoutSidenav">
+          <!-- Sidebar -->
+          {{ template "dashboard-sidebar.tmpl" .}}
+          <div id="layoutSidenav_content">
+                <main>
+                    <div class="page-header">
+                        <div class="container-fluid">
+                            <div class="page-header-content">
+                                <h1 class="page-header-title">
+                                    <span>Detail Order</span>        
+                                </h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/orders'">
+                                    <i data-feather="chevron-left"></i>Kembali
+                                </button>   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="card mb-4">
+                            <div class="card-header">Detail Penerima</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">Order ID</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.ID }}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Nama</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverName }}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Alamat Penerima</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverAddress }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverPhoneNumber }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.Status }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Dibuat</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.CreateTimeStr }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Terakhir Di Update</label>
+                                    <input class="form-control form-control-sm" disabled value="{{ .order.UpdateTimeStr }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Catatan</label>
+                                    <textarea class="form-control form-control-sm" disabled>{{ .order.ReceiverNotes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Field Generated from here -->
+                        {{ range $indexPickup, $pickup := .order.Pickups }}
+                        <div id="pickup-field" class="card mb-4">
+                            <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
+                                <div class="col-sm-11">
+                                    Detail Pick Up
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <div class="row align-items-center justify-content-between">
+                                        <div class="col position-relative">
+                                            <div class="form-group">
+                                                <label>Nama Pengirim</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Name }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Alamat Penerima</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Address }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nama Driver</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.DriverName }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>No Telepon Driver</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.DriverPhone }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Phone Number</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.PhoneNumber }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Status }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Terakhir Update</label>
+                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.UpdateTimeStr }}" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Catatan</label>
+                                                <textarea class="form-control form-control-sm" disabled>{{ $pickup.Notes }}</textarea>
+                                            </div>
+                                            <!-- All Detail Pick Ups  -->
+                                            {{ range $indexItem, $item := $pickup.Items }}
+                                            <div class="card mb-4">
+                                                    <div class="card-header" style="cursor: pointer;">
+                                                        <div id="prefix-item-title" class="col-sm-11">
+                                                            Detail Barang
+                                                        </div>
+                                                    </div>
+                                                    <!-- Item Pickup Field Generated from here -->
+                                                    <div id="pickup-field-item" class="card-body">
+                                                        <div class="position-relative">
+                                                            <div class="row align-items-center justify-content-between">
+                                                                <div class="col position-relative">
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Nama barang</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Name }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Quantity</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Quantity }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Unit</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Unit }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Terakhir Update</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.UpdateTimeStr }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Waktu Deadline</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.DeadlineStr }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Waktu Pickup</label>
+                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.PickupTimeStr }}" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phone">Catatan</label>
+                                                                        <textarea class="form-control form-control-sm" disabled>{{ $item.Notes }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            {{ end }}
+                                            <!-- End Of All Detail Pick Ups  -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+                </main>
+                <!-- Footer -->
+                {{ template "dashboard-footer.tmpl" .}}
+          </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+         function togglePickupField(comp){
+            console.log(comp);
+            $(comp).css("display", "none");
+        }
+    </script>
+
+</html>

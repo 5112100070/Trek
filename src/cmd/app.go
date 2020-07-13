@@ -10,8 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/app"
+	"github.com/5112100070/Trek/src/app/page/dashboard"
 	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
+	"github.com/5112100070/publib/constants/env"
 )
 
 func init() {
@@ -24,6 +26,7 @@ func init() {
 		log.Println("[trek] No environment set. Using 'development'.")
 		log.Println("[trek] Use 'export TKPENV=[development|alpha|staging|production]' to change.")
 		cfgenv = "development"
+		network = "development"
 	}
 
 	fileLocation := fmt.Sprintf("/etc/trek/%s.ini", cfgenv)
@@ -31,10 +34,18 @@ func init() {
 	log.Println(fmt.Sprintf("Running in network : %s", network))
 
 	var ok bool
+	// using
 	conf.GConfig, ok = conf.ReadConfig(fileLocation)
-	if !ok {
+	if !ok && cfgenv == env.Development {
+		fileLocation = fmt.Sprintf("./config/%s.ini", cfgenv)
+		conf.GConfig, ok = conf.ReadConfig(fileLocation)
+		if !ok {
+			log.Fatal("Could not find configuration file")
+		}
+	} else if !ok && cfgenv == env.Production {
 		log.Fatal("Could not find configuration file")
 	}
+	conf.GConfig.Env = cfgenv
 
 	redis := conf.InitRedis(conf.GConfig)
 	db := conf.InitDatabase(conf.GConfig.Database)
@@ -48,7 +59,7 @@ func init() {
 }
 
 func main() {
-	r := initEngine()
+	r := initEngine(conf.GConfig.Env)
 
 	config := cors.Config{
 		AllowAllOrigins:  true,
@@ -83,15 +94,39 @@ func main() {
 	r.GET("/daftar", app.RegisterPageHandler)
 	r.GET("/reset-password", app.ResetPasswordPageHandler)
 	r.GET("/register-confirmation/:register_id", app.RegisterConfirmationPage)
-	r.POST("/login", app.ProcessMakeLogin)
-	r.POST("/logout", app.ProcessMakeLogout)
 
-	r.GET("/dashboard", app.DashboardPageHandler)
+	r.GET("/dashboard", dashboard.MainPageHandler)
+	r.GET("/dashboard/config", dashboard.ConfigPageHandler)
+	r.GET("/dashboard/users", dashboard.UserListPageHandler)
+	r.GET("/dashboard/user", dashboard.UserDetailPageHandler)
+	r.GET("/dashboard/create-user", dashboard.UserCreatePagehandler)
+	r.GET("/dashboard/update-user", dashboard.UserUpdatePagehandler)
+	r.GET("/dashboard/create-company", dashboard.CompanyCreatePagehandler)
+	r.GET("/dashboard/update-company", dashboard.CompanyUpdatePagehandler)
+	r.GET("/dashboard/companies", dashboard.CompaniesListPageHandler)
+	r.GET("/dashboard/company", dashboard.CompanyDetailPageHandler)
+	r.GET("/dashboard/order", dashboard.OrdersDetailPageHandler)
+	r.GET("/dashboard/orders", dashboard.OrdersListPageHandler)
+	r.GET("/dashboard/order/create-order", dashboard.CreateOrderPageHandler)
+
+	// need to be removed
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)
 	r.GET("/dashboard/daftar-perusahaan", app.RegisterCompanyPageHandler)
-	r.GET("/dashboard/list-anggota", app.MemberPageHandler)
 	r.GET("/dashboard/company-profile", app.CompanyProfilePageHandler)
 	r.GET("/dashboard/ganti-password", app.ChangePasswordPageHandler)
+	// border need to be removed
+
+	r.POST("/login", app.ProcessMakeLogin)
+	r.POST("/logout", app.ProcessMakeLogout)
+	r.POST("/change-password", dashboard.ChangePassword)
+
+	r.POST("/dashboard/user/register", dashboard.CreateNewAccount)
+	r.POST("/dashboard/user/update", dashboard.UpdateAccount)
+	r.POST("/dashboard/company/register", dashboard.CreateNewCompany)
+	r.POST("/dashboard/company/update", dashboard.UpdateCompany)
+	r.POST("/admin/change-password", dashboard.AdminChangePassword)
+	r.POST("/admin/change-account-activation", dashboard.AdminChangeActivation)
+	r.POST("/admin/create-order", dashboard.CreateOrderForAdmin)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
@@ -107,8 +142,37 @@ func main() {
 	r.Run(":4001")
 }
 
-func initEngine() *gin.Engine {
+func initEngine(cfenv string) *gin.Engine {
+	if cfenv == env.Development {
+		return initEngineDevelopment()
+	} else {
+		return initEngineProd()
+	}
+}
+
+func initEngineDevelopment() *gin.Engine {
 	r := gin.Default()
+
+	r.LoadHTMLGlob("files/WEB-INF/pages/**/*")
+
+	r.Static("/css", "files/WEB-INF/attr/css")
+	r.Static("/scss", "files/WEB-INF/attr/scss")
+	r.Static("/vendor", "files/WEB-INF/attr/vendor")
+	r.Static("/img", "files/WEB-INF/attr/img")
+	r.Static("/file", "files/WEB-INF/attr/files")
+	r.Static("/etc", "files/WEB-INF/attr/etc")
+	r.Static("/js", "files/WEB-INF/attr/js")
+
+	r.Static("/dashboard/css", "files/WEB-INF/attr-dashboard/css")
+	r.Static("/dashboard/js", "files/WEB-INF/attr-dashboard/js")
+	r.Static("/dashboard/assets", "files/WEB-INF/attr-dashboard/assets")
+
+	return r
+}
+
+func initEngineProd() *gin.Engine {
+	r := gin.Default()
+
 	r.LoadHTMLGlob("/var/www/trek/pages/**/*")
 
 	r.Static("/css", "/var/www/trek/css")
