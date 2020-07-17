@@ -26,24 +26,29 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th style="text-align: center;">Order ID</th>
-                                                <th style="text-align: center;">Nama Penerima</th>
-                                                <th style="text-align: center;">Status</th>
-                                                <th style="text-align: center;">Total Pickup</th>
-                                                <th style="text-align: center;">Tanggal Update Terakhir</th>
-                                                <th style="text-align: center;">Actions</th>
+                                                <th style="text-align: center; width: 10%">No AWB</th>
+                                                <th style="text-align: center; width: 10%">Klien</th>
+                                                <th style="text-align: center; width: 20%">Tujuan</th>
+                                                <th style="text-align: center; width: 15%">Preview Item</th>
+                                                <th style="text-align: center; width: 15%">Waktu diterima</th>
+                                                <th style="text-align: center; width: 15%">Status</th>
+                                                <th style="text-align: center; width: 15%">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{ range $index, $order := .orders }}
                                             <tr>
-                                                <td>{{ $order.ID }}</td>
-                                                <td>{{ $order.ReceiverName }}</td>
-                                                <td>{{ $order.Status }}</td>
-                                                <td>{{ $order.TotalPickUp }}</td>
-                                                <td>{{ $order.UpdateTimeStr }}</td>
+                                                <td>{{ $order.AWB }}</td>
+                                                <td>{{ $order.CompanyName }}</td>
+                                                <td>{{ $order.ReceiverAddress }}</td>
+                                                <td>Preview Item</td>
+                                                <td>DI ENDPOINT BLM</td>
                                                 <td>
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/order?id={{ $order.ID }}"><i data-feather="more-vertical"></i></a>
+                                                    <div class="badge badge-primary badge-pill">{{ $order.StatusName }}</div>
+                                                </td>
+                                                <td>
+                                                        <button class="btn btn-sm btn-outline-primary" type="button" onclick="javascript:window.location='/dashboard/order?id={{ $order.ID }}'">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="javascript:window.location='/dashboard/order?id={{ $order.ID }}'">view</button>
                                                 </td>
                                             </tr>
                                             {{ end }}

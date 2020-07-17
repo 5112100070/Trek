@@ -20,12 +20,16 @@ type MainListOrderResponse struct {
 
 type OrderReponse struct {
 	ID                  int64            `json:"id"`
+	AWB                 string           `json:"awb"`
 	RequestorID         int64            `json:"requestor_id"`
 	ReceiverName        string           `json:"receiver_name""`
 	ReceiverAddress     string           `json:"receiver_address"`
 	ReceiverPhoneNumber string           `json:"receiver_phone_number"`
 	ReceiverNotes       string           `json:"receiver_notes"`
+	CompanyID           int64            `json:"company_id"`
+	CompanyName         int64            `json:"company_name"`
 	Status              int              `json:"status"`
+	StatusName          string           `json:"status_name"`
 	UpdateBy            int64            `json:"update_by"`
 	CreateTime          time.Time        `json:"create_time"`
 	UpdateTime          time.Time        `json:"update_time"`
