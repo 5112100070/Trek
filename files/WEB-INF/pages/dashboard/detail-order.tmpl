@@ -13,153 +13,186 @@
                 <main>
                     <div class="page-header">
                         <div class="container-fluid">
-                            <div class="page-header-content">
-                                <h1 class="page-header-title">
-                                    <span>Detail Order</span>        
-                                </h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/orders'">
-                                    <i data-feather="chevron-left"></i>Kembali
-                                </button>   
+                            <div class="page-header-content py-2">
+                                <div class="page-header-title" style="font-size:1rem;"> 
+                                    <ol class="breadcrumb mt-1 mb-0">
+                                        <li class="breadcrumb-item">
+                                            <a href="#" style="color:black;" onclick="javascript:window.location='/dashboard/orders'">Order</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">#{{ .order.ID }}</li>
+                                    </ol>
+                                </div>
+                                <div class="page-header-subtitle">
+                                    <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#delivery">Edit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="container-fluid">
-                        <div class="card mb-4">
-                            <div class="card-header">Detail Penerima</div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="name">Order ID</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.ID }}"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="name">Nama</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverName }}"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Alamat Penerima</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverAddress }}" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.ReceiverPhoneNumber }}" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.Status }}" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Dibuat</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.CreateTimeStr }}" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Terakhir Di Update</label>
-                                    <input class="form-control form-control-sm" disabled value="{{ .order.UpdateTimeStr }}" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Catatan</label>
-                                    <textarea class="form-control form-control-sm" disabled>{{ .order.ReceiverNotes }}</textarea>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Pickup Field Generated from here -->
-                        {{ range $indexPickup, $pickup := .order.Pickups }}
-                        <div id="pickup-field" class="card mb-4">
-                            <div class="card-header" style="cursor: pointer;" onclick="javascript:togglePickupField(this)">
-                                <div class="col-sm-11">
-                                    Detail Pick Up
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <div class="row align-items-center justify-content-between">
-                                        <div class="col position-relative">
-                                            <div class="form-group">
-                                                <label>Nama Pengirim</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Name }}" />
+                    <div class="container-fluid mb-4" style="height: 100%;">
+                        <ul class="progressbar">
+                            <li>Konfirmasi</li>
+                            <li>Pickup</li>
+                            <li>Delivering</li>
+                            <li>Done</li>
+                        </ul>
+                    </div>
+
+                    <div class="container-fluid mt-4" style="margin-top: 4.5rem !important;">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="sizing">
+                                        <div class="card mb-4 mt-4">
+                                            <div class="card-header text-dark">
+                                                <div class="col-6">
+                                                    Order #12 
+                                                    <span class="badge badge-primary text-wrap ml-2">
+                                                        New
+                                                    </span>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="float-right">
+                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button>
+                                                    <a class="btn btn-red btn-sm" type="button" href="/delivery-cancel">Cancel</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label>Alamat Penerima</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Address }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Nama Driver</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.DriverName }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>No Telepon Driver</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.DriverPhone }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Phone Number</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.PhoneNumber }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Status</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.Status }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Terakhir Update</label>
-                                                <input class="form-control form-control-sm" disabled value="{{ $pickup.UpdateTimeStr }}" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Catatan</label>
-                                                <textarea class="form-control form-control-sm" disabled>{{ $pickup.Notes }}</textarea>
-                                            </div>
-                                            <!-- All Detail Pick Ups  -->
-                                            {{ range $indexItem, $item := $pickup.Items }}
-                                            <div class="card mb-4">
-                                                    <div class="card-header" style="cursor: pointer;">
-                                                        <div id="prefix-item-title" class="col-sm-11">
-                                                            Detail Barang
+                                            <div class="card-body">
+                                                <div class="position-relative">
+                                                    <div class="row align-items-center justify-content-between">
+                                                        <div class="col position-relative ">
+                                                           <div class="row mb-3">
+                                                                <div class="col-4 info" >
+                                                                   <p >
+                                                                    Airway bill
+                                                                   </p >
+                                                                   <p style="color:black;" class="font-weight-bold" >
+                                                                       <h1>
+                                                                            {{ .order.AWB }}
+                                                                       </h1>
+                                                                   </p>
+                                                                </div>
+                                                                <div class="col-4 info"> 
+                                                                    <p >
+                                                                        Klien
+                                                                       </p>
+                                                                       <p style="font-weight: 500;color: black;">
+                                                                            {{ .order.CompanyName }}
+                                                                       </p>
+                                                                </div>
+                                                                <div class="col-4 info"> 
+                                                                    <p>
+                                                                        Order Created
+                                                                       </p>
+                                                                       <p style="font-weight: 500;color: black;">
+                                                                          <span class="text-grey-500">
+                                                                              {{ .order.DeliveryName }}
+                                                                          </span>
+                                                                          <br>
+                                                                            {{ .order.CreateTimeStr }}
+                                                                       </p>
+                                                                </div>
+                                                           </div>
+                                                           <div class="row mb-3">
+                                                            <div class="col-4 info">
+                                                                <p >
+                                                                    Nama Penerima
+                                                                    </p >
+                                                                    <p style="color:black;" class="font-weight-bold" >
+                                                                        {{ .order.ReceiverName }}
+                                                                    </p>
+                                                                    <p style="color:black;">
+                                                                        {{ .order.ReceiverPhoneNumber }}
+                                                                    </p>
+                                                             </div>
+                                                            <div class="col-8 info" >
+                                                                <p >
+                                                                Alamat
+                                                                </p >
+                                                                <p style="color:black;" class="font-weight-bold" >
+                                                                    {{ .order.ReceiverAddress }}
+                                                                    <p style="color:black;">
+                                                                        {{ .order.ReceiverNotes }}
+                                                                    </p>
+                                                                </p>
+                                                             </div>
+                                                           </div>
                                                         </div>
                                                     </div>
-                                                    <!-- Item Pickup Field Generated from here -->
-                                                    <div id="pickup-field-item" class="card-body">
-                                                        <div class="position-relative">
-                                                            <div class="row align-items-center justify-content-between">
-                                                                <div class="col position-relative">
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Nama barang</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Name }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Quantity</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Quantity }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Unit</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.Unit }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Terakhir Update</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.UpdateTimeStr }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Waktu Deadline</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.DeadlineStr }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Waktu Pickup</label>
-                                                                        <input class="form-control form-control-sm" disabled value="{{ $item.PickupTimeStr }}" />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="phone">Catatan</label>
-                                                                        <textarea class="form-control form-control-sm" disabled>{{ $item.Notes }}</textarea>
-                                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Pickup Field Generated from here -->
+                                            <div class="card-header" style="color:black;">Pengambilan</div>
+                                            {{ range $indexPickup, $pickup := .order.Pickups }}
+                                            <div class="card-body">
+                                               <div class= "col-lg-12 p-4 mb-4" style="background-color:#e9edf3;">
+                                                    <div class="position-relative">
+                                                        <div class="row align-items-center justify-content-between">
+                                                            <div class="col position-relative ">
+                                                            <div class="row mb-3">
+                                                                <div class="col-4 info">
+                                                                    <p >
+                                                                        Nama Penerima
+                                                                        </p >
+                                                                        <p style="color:black;" class="font-weight-bold" >
+                                                                            {{ $pickup.Name }}
+                                                                        </p>
+                                                                        <p style="color:black;">
+                                                                            {{ $pickup.PhoneNumber }}
+                                                                        </p>
                                                                 </div>
+                                                                <div class="col-8 info" >
+                                                                    <p >
+                                                                    Alamat
+                                                                    </p >
+                                                                    <p style="color:black;" class="font-weight-bold" >
+                                                                        {{ $pickup.Address }}
+                                                                        <p style="color:black;">
+                                                                            {{ $pickup.Notes }}
+                                                                        </p>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="datatable table-responsive mt-4">
+                                                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Nama produk</th>
+                                                                                <th>Deskripsi produk</th>
+                                                                                <th>Jumlah</th>
+                                                                                <th>Aksi</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {{ range $indexItem, $item := $pickup.Items }}
+                                                                            <tr>
+                                                                                <td>
+                                                                                    {{ $item.Name }}
+                                                                                </td>
+                                                                                <td> 
+                                                                                    {{ $item.Notes }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $item.UnitName }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="trash-2"></i></button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            {{ end }}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                             </div>
                                             {{ end }}
-                                            <!-- End Of All Detail Pick Ups  -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {{ end }}
                     </div>
                 </main>
                 <!-- Footer -->
@@ -181,5 +214,5 @@
             $(comp).css("display", "none");
         }
     </script>
-
+    <link href="/css/progress.css" rel="stylesheet">
 </html>

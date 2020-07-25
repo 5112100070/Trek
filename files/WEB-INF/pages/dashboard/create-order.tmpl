@@ -39,25 +39,38 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="exampleFormControlInput1">Airwaybill</label>
-                                            <input class="form-control "  type="name" placeholder="Generate by system" disabled="" />
+                                            <label for="airwaybill">Airwaybill</label>
+                                            <input id="airwaybill" class="form-control" type="name" placeholder="Generate by system" disabled="" />
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="exampleFormControlInput1">Klien</label>
-                                            <input class="form-control" id="exampleFormControlInput1" type="text" placeholder="Nama Perusahaan Pengirim" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Layanan</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>Same day</option>
-                                                <option>Regular</option>
-                                                <option>SuperSDS</option>        
+                                            <label for="company-id">Klien</label>
+                                            <select id="company-id" class="form-control" type="text" placeholder="Nama Perusahaan Pengirim">
+                                                <option> - </option>
+                                                {{ range $index, $company := .Companies }}
+                                                <option value="{{ $company.ID }}">{{ $company.CompanyName }}</option>
+                                                {{ end }} 
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="delivery-type">Layanan</label>
+                                            <select class="form-control" id="delivery-type">
+                                                <option value="1">Same day</option>
+                                                <option value="2">Regular</option>
+                                                <option value="3">SuperSDS</option>        
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="deadline">Deadline</label>
+                                            <input class="form-control" id="deadline" type="date" placeholder="Deadline" />
+                                    </div>
                                     </div>
                                 </div>
 
@@ -99,13 +112,7 @@
                                                                 <input class="form-control form-control-sm" id="pickup-details-phone" type="name" placeholder="0811982345" />
                                                             </div>
                                                         </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <label for="exampleFormControlInput1">Ready to pick-up</label>
-                                                                <input class="form-control form-control-sm" id="exampleFormControlInput1" type="name" placeholder="0811982345" />
                                                             </div>
-                                                        </div>
-                                                    </div>
 
                                                     <div class="form-row">
                                                         <div class="col-md-12">
@@ -191,12 +198,13 @@
                                                                 <div class="col-3">
                                                                     <div class="form-group">
                                                                         <label for="item-quantity">Unit</label>
-                                                                        <input class="form-control form-control-sm" id="item-quantity" placeholder="1" /></div>
+                                                                        <input id="item-quantity" class="form-control form-control-sm" placeholder="Ex: 1" type="number" />
+                                                                </div>
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <div class="form-group">
                                                                         <label for="item-unit">Satuan</label>
-                                                                        <input class="form-control form-control-sm" id="item-unit" placeholder="KG" />
+                                                                        <select class="form-control form-control-sm" id="item-unit"></select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -332,6 +340,11 @@
         var defaultFormatClientAddressZip       = "client-address-zip";
         var defaultFormatClientPhone            = "client-phone";
         var defaultFormatClientNotes            = "client-notes";
+        
+        var defaultFormatAirwaybill       = "airwaybill";
+        var defaultFormatDeliveryType     = "delivery-type";
+        var defaultFormatCompanyID        = "company-id";
+        var defaultFormatDeadline         = "deadline";
 
         var defaultFormatPickupFieldID = "pickup-field";
         var defaultFormatPrefixItemFieldID = "prefix-item"; 
@@ -387,20 +400,23 @@
                 item-notes-*
         */
 
+        var units = {}; 
+        {{ range $index, $unit := .Units }}
+        units[{{ $unit.ID }}] = {{ $unit.Code }};
+        {{ end }} 
+            
         function init(){
             mappingPickupsToPrefixItem[defaultFormatPickupFieldID] = defaultFormatPrefixItemFieldID;
             mappingPrefixItemAndItems[defaultFormatPrefixItemFieldID] = [defaultFormatItemField];
+
+            addSelect(defaultFormatItemUnit);
         }
 
-        function togglePickupField(comp){
-            var id = comp.parentNode.id;
-
-            if(id.includes(defaultFormatPickupFieldID)!=-1){
-                if($("#"+comp.parentNode.id+" > .card-body").css("display") == "none"){
-                    $("#"+comp.parentNode.id+" > .card-body").css("display", "block");
-                } else {
-                    $("#"+comp.parentNode.id+" > .card-body").css("display", "none");
-                }
+        // this function using units variable as data feeds
+        // and generate drop down on item data
+        function addSelect(id) {
+            for (var i in units){
+                $("#"+id).append(new Option(units[i], i));
             }
         }
 
@@ -483,14 +499,6 @@
                                             Telp
                                         </label>
                                         <input class="form-control form-control-sm" id="` + newPickupDetailPhone + `" type="name" placeholder="0811982345" />
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlInput1">
-                                            Ready to pick-up -- masih belum jelas
-                                        </label>
-                                        <input class="form-control form-control-sm" id="exampleFormControlInput1" type="name" placeholder="0811982345" />
                                     </div>
                                 </div>
                             </div>
@@ -591,7 +599,7 @@
                                                     <label for="` + newItemQuantityField +  `">
                                                         Unit
                                                     </label>
-                                                    <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="1" />
+                                                    <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="Ex: 1" type="number" />
                                                 </div>
                                             </div>
                                             <div class="col-4">
@@ -599,7 +607,7 @@
                                                     <label for="` + newItemUnitField + `">
                                                         Satuan
                                                     </label>
-                                                    <input id="` + newItemUnitField + `" class="form-control form-control-sm" placeholder="KG" />
+                                                    <select id="` + newItemUnitField + `" class="form-control form-control-sm"></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -653,35 +661,9 @@
             } else {
                 $("#" + defaultFormatPickupFieldID + "-" + biggestPickUpID).after(newPickUpField);
             }
-        }
 
-        // when adding new item. update wording details !
-        function updateWordingItemDetails(prefixID){
-            var tempID = prefixID.replace(defaultFormatPrefixItemFieldID, "");
-            tempID = tempID.replace("-","");
-        
-            var titleID;
-            if(tempID=="" || tempID==null){
-                titleID = defaultFormatPrefixItemTitleID
-            } else {
-                titleID = defaultFormatPrefixItemTitleID + "-" + tempID;
-            }
-
-            var totalRegisteredItem = 0;
-            var listItem = mappingPrefixItemAndItems[prefixID];
-            for (var i = 0; i < listItem.length; i++){
-                if(!($("#" + listItem[i]).length)){
-                    continue;
-                } else {
-                    totalRegisteredItem++;
-                }
-            }
-
-            if(totalRegisteredItem != null && totalRegisteredItem > 1){
-                $("#"+titleID).html("Detail Barang (Total Barang " + totalRegisteredItem + ")");
-            } else {
-                $("#"+titleID).html("Detail Barang");
-            }
+            // add generate unit on data select
+            addSelect(newItemUnitField);
         }
 
         function generateItemField(prefixID){
@@ -717,7 +699,7 @@
                                         <label for="` + newItemQuantityField +  `">
                                             Unit
                                         </label>
-                                        <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="1" />
+                                        <input id="` + newItemQuantityField + `" class="form-control form-control-sm" type="number" placeholder="Ex: 1" />
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -725,7 +707,7 @@
                                         <label for="` + newItemUnitField + `">
                                             Satuan
                                         </label>
-                                        <input id="` + newItemUnitField + `" class="form-control form-control-sm" placeholder="KG" />
+                                        <select id="` + newItemUnitField + `" class="form-control form-control-sm"></select>
                                     </div>
                                 </div>
                             </div>
@@ -775,19 +757,13 @@
                 $("#" + defaultFormatItemField + "-" + biggestItemID).after(newItemField);
             }
 
-            // update wording on spesific ids
-            updateWordingItemDetails(prefixID);
+            // generate select data on unit
+            addSelect(newItemUnitField);
         }
         
         // delete dom which targetted
         function deletePickUpField(targetID){
             $("#" + targetID).remove();
-
-            if(targetID.includes(defaultFormatItemField)){
-                for(var i in mappingPickupsToPrefixItem){
-                    updateWordingItemDetails(mappingPickupsToPrefixItem[i]);
-                }
-            } 
         }
 
         // gathering all information and send it to server
@@ -826,6 +802,10 @@
                      phone_number: $("#" + defaultFormatClientPhone).val(),
                      notes: $("#" + defaultFormatClientNotes).val()
                 },
+                airwaybill: $("#" + defaultFormatAirwaybill).val(),
+                delivery_type: parseInt($("#" + defaultFormatDeliveryType).val()),
+                company_id: parseInt($("#" + defaultFormatCompanyID).val()),
+                deadline: $("#" + defaultFormatDeadline).val()
             };
 
             let payloadPickUp = [];
@@ -837,7 +817,8 @@
                 var pic, name, receiver, phone, notes;
                 if($("#"+i) == null){
                     continue;
-                } else if(idPickUp == null || idPickUp == ""){
+                } 
+                else if(idPickUp == null || idPickUp == ""){
                     pic = $("#" + defaultFormatPickupDetailsPic).val();
                     name = $("#" + defaultFormatPickupDetailsName).val();
                     phone = $("#" + defaultFormatPickupDetailsPhone).val();
@@ -905,6 +886,10 @@
                     }
                 }
 
+                if(pic == null && name == null && receiver == null && phone == null && notes == null){
+                    return
+                }
+
                 // gathering and fetch items
                 var payloadItem = [];
                 var prefixItem = mappingPickupsToPrefixItem[i];
@@ -928,10 +913,14 @@
                         itemNotes = $("#" + defaultFormatItemNotes + "-" + prefixID).val();
                     }
 
+                    if(itemName==null && itemQuantity == null && itemUnit == null && itemNotes == null){
+                        return
+                    }
+
                     payloadItem.push({
                         name: itemName,
                         quantity: parseFloat(itemQuantity),
-                        unit: itemUnit,
+                        unit: parseInt(itemUnit),
                         notes: itemNotes
                     });
                 });

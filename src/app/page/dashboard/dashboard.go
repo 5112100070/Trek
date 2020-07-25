@@ -446,8 +446,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	// get list param
 	orderID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 
-	orderDetail, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
-	if err != nil {
+	orderDetail, errCGX, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
+	if err != nil || errCGX != nil {
 		// need internal page error handler
 		return
 	}
@@ -492,33 +492,37 @@ func OrdersListPageHandler(c *gin.Context) {
 
 	if listOrderResp.Error != nil {
 		// need page handler to handle error
+		// only need error internal server error
 		return
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/orders"
-	totalPage := listOrderResp.TotalOrder / int(rows)
-
-	// get additional page
-	// total data 22 row 10
-	// must result 3 pages
-	if listOrderResp.TotalOrder%int(rows) > 0 {
-		totalPage++
-	}
 
 	// handle pagination
 	pagination := entity.Pagination{
-		Template:  templatePage,
-		Page:      int(page),
-		NextPage:  int(page) + 1,
-		PrevPage:  int(page) - 1,
-		Rows:      int(rows),
-		TotalPage: totalPage,
-		ListPage:  global.GenerateListPage(totalPage),
+		Template: templatePage,
+		Page:     int(page),
+		NextPage: int(page) + 1,
+		PrevPage: int(page) - 1,
+		Rows:     int(rows),
+	}
+
+	// fetching item data
+	mapItems := make(map[int64][]order.ItemResponse)
+	for _, orderDetail := range listOrderResp.Data.Orders {
+		var items []order.ItemResponse
+		for _, pickupDetail := range orderDetail.Pickups {
+			for _, item := range pickupDetail.Items {
+				items = append(items, item)
+			}
+		}
+		mapItems[orderDetail.ID] = items
 	}
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
-		"orders":     listOrderResp.Data,
+		"orders":     listOrderResp.Data.Orders,
+		"mapItems":   mapItems,
 		"pagination": pagination,
 		"config":     conf.GConfig,
 	}
