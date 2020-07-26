@@ -140,7 +140,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
 	if err != nil {
-		log.Println(err)
+		log.Printf("func GetListOrders error create request. error: %v", err)
 		return result, err
 	}
 
@@ -167,14 +167,14 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Printf("func GetListOrders error when readALL response: %v. error: %v", resp.Body, err)
 		return result, err
 	}
 	defer resp.Body.Close()
 
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
-		log.Println(errUnMarshal)
+		log.Printf("func GetListOrders error when unmarshal: %v. error: %v", string(body), errUnMarshal)
 		return result, errUnMarshal
 	}
 
