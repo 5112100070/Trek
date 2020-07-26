@@ -471,6 +471,7 @@ func OrdersListPageHandler(c *gin.Context) {
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
+		global.Error.Println("func OrdersListPageHandler error session: ", accountResp.Error.Detail)
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
 	}
@@ -487,12 +488,14 @@ func OrdersListPageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+		global.Error.Println("func OrdersListPageHandler error when get list order ", err)
 		return
 	}
 
 	if listOrderResp.Error != nil {
 		// need page handler to handle error
 		// only need error internal server error
+		global.Error.Println("func OrdersListPageHandler error when get order: ", listOrderResp.Error.Detail)
 		return
 	}
 
