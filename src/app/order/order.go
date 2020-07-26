@@ -174,7 +174,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
-		log.Printf("func GetListOrders error when unmarshal: %v. error: %v", string(body), errUnMarshal)
+		log.Printf("func GetListOrders error hit:%v when unmarshal: %v. error: %v", u.String(), string(body), errUnMarshal)
 		return result, errUnMarshal
 	}
 
