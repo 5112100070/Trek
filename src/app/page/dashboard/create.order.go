@@ -77,7 +77,7 @@ func CreateOrderForAdmin(c *gin.Context) {
 	errBindJSON := c.BindJSON(&body)
 	if errBindJSON != nil {
 		global.Error.Printf("func CreateOrderForAdmin error when marshal json: %v\n", errBindJSON)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid request")
 		return
 	}
 

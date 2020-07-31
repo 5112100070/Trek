@@ -13,7 +13,7 @@ import (
 func UpdateAccount(c *gin.Context) {
 	id, errparse := strconv.ParseInt(c.PostForm("id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid account id")
 		return
 	}
 
@@ -61,7 +61,7 @@ func UpdateAccount(c *gin.Context) {
 func UpdateCompany(c *gin.Context) {
 	id, errparse := strconv.ParseInt(c.PostForm("id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "Invalid Company ID")
 		return
 	}
 
@@ -112,7 +112,7 @@ func UpdateCompany(c *gin.Context) {
 func AdminChangePassword(c *gin.Context) {
 	userID, errparse := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid account")
 		return
 	}
 
@@ -199,7 +199,7 @@ func AdminChangeActivation(c *gin.Context) {
 		isEnabled = false
 	} else {
 		log.Printf("func AdminChangeActivation error when parse status. payload: %v \n", payloadStatus)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid is_enable value")
 		return
 	}
 

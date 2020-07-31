@@ -45,11 +45,13 @@ func ForbiddenResponse(c *gin.Context, val interface{}) {
 	sendResponse(c, 403, header)
 }
 
-func BadRequestResponse(c *gin.Context, val interface{}) {
+func BadRequestResponse(c *gin.Context, val string) {
 	header := gin.H{
 		"status_code":    400,
 		"server_message": "Bad Request",
-		"data":           val,
+		"data": map[string]string{
+			"error": val,
+		},
 	}
 	sendResponse(c, 400, header)
 }

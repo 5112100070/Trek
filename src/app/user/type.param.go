@@ -36,10 +36,11 @@ type UpdateAccountParam struct {
 
 // CreateCompanyParam This struct is used as parameter to create new company
 type CreateCompanyParam struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
-	Phone   string `json:"phone_number"`
-	Role    int    `json:"role"`
+	Name      string `json:"name"`
+	Address   string `json:"address"`
+	Phone     string `json:"phone_number"`
+	Role      int    `json:"role"`
+	ImageLogo string `json:"image_logo"`
 }
 
 // UpdateCompanyParam This struct is used as parameter to update company

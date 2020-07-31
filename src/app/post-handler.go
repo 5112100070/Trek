@@ -26,28 +26,28 @@ func SendRequestItem(c *gin.Context) {
 		strings.TrimRight(startDate, "\n") == "" ||
 		strings.TrimRight(email, "\n") == "" ||
 		strings.TrimRight(projectAddress, "\n") == "" {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "Silahkan mengisi seluruh form")
 		return
 	}
 
 	productID, errParse := strconv.ParseInt(c.PostForm("product_id"), 10, 64)
 	if errParse != nil || productID <= 0 {
 		global.Error.Println(errParse)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid product id")
 		return
 	}
 
 	duration, errParse := strconv.ParseInt(c.PostForm("duration"), 10, 64)
 	if errParse != nil || duration <= 0 {
 		global.Error.Println(errParse)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid duration")
 		return
 	}
 
 	total, errParse := strconv.ParseInt(c.PostForm("total"), 10, 64)
 	if errParse != nil || total <= 0 {
 		global.Error.Println(errParse)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid total")
 		return
 	}
 
