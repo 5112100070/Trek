@@ -45,11 +45,12 @@ type CreateCompanyParam struct {
 
 // UpdateCompanyParam This struct is used as parameter to update company
 type UpdateCompanyParam struct {
-	ID      int64  `json:"id"`
-	Name    string `json:"company_name"`
-	Address string `json:"address"`
-	Phone   string `json:"phone_number"`
-	Role    int    `json:"role"`
+	ID        int64  `json:"id"`
+	Name      string `json:"company_name"`
+	Address   string `json:"address"`
+	Phone     string `json:"phone_number"`
+	Role      int    `json:"role"`
+	ImageLogo string `json:"image_logo"`
 }
 
 // ChangePasswordParam This struct is used as parameter to change password user accounts

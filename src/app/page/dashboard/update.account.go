@@ -1,10 +1,12 @@
 package dashboard
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
 	"github.com/5112100070/Trek/src/app/user"
+	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -65,10 +67,36 @@ func UpdateCompany(c *gin.Context) {
 		return
 	}
 
-	address := c.PostForm("company_address")
 	companyName := c.PostForm("company_name")
+	if companyName == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nama perusahaan")
+		return
+	}
+
+	address := c.PostForm("company_address")
+	if address == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus alamat perusahaan")
+		return
+	}
+
 	phone := c.PostForm("phone")
+	if phone == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus no telepon perusahaan")
+		return
+	}
+
 	role, _ := strconv.Atoi(c.PostForm("role"))
+	if role == 0 {
+		global.BadRequestResponse(c, "Tidak boleh menghapus role")
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		global.Error.Println("func CreateNewCompany error when get multipart form: ", err)
+		global.BadRequestResponse(c, "Silahkan Upload logo perusahaan")
+		return
+	}
 
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -84,14 +112,41 @@ func UpdateCompany(c *gin.Context) {
 		return
 	}
 
+	// create/save image on location
+	files := form.File["company_image"]
+
+	var filename string
+	// if files detected. filename will filled
+	// if no files detected. no need to update image
+	if len(files) > 0 {
+		companyImage, errOpenFile := files[0].Open()
+		if errOpenFile != nil {
+			global.Error.Println("func CreateNewCompany error when create company image ", errOpenFile)
+			global.InternalServerErrorResponse(c, errOpenFile)
+			return
+		}
+		defer companyImage.Close()
+
+		var errUpload error
+		filename, errUpload = global.UploadCompanyImage(companyImage, companyName)
+		if errUpload != nil {
+			global.Error.Println("func CreateNewCompany error when upload company image ", errUpload)
+			global.InternalServerErrorResponse(c, errUpload)
+			return
+		}
+
+		filename = fmt.Sprintf("%s/img/partner/%s", conf.GConfig.BaseUrlConfig.BaseDNS, filename)
+	}
+
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.UpdateCompanyParam{
-		ID:      id,
-		Name:    companyName,
-		Address: address,
-		Phone:   phone,
-		Role:    role,
+		ID:        id,
+		Name:      companyName,
+		Address:   address,
+		Phone:     phone,
+		Role:      role,
+		ImageLogo: filename,
 	}
 
 	resp, err := userService.UpdateCompany(token, param)

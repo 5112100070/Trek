@@ -80,7 +80,7 @@ func CreateNewCompany(c *gin.Context) {
 	}
 
 	role, _ := strconv.Atoi(c.PostForm("role"))
-	if companyName == "" {
+	if role == 0 {
 		global.BadRequestResponse(c, "Invalid role")
 		return
 	}

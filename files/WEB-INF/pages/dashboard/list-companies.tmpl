@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  {{ template "dashboard-header.tmpl" .}}
+{{ template "dashboard-header.tmpl" .}}
 
-    <body class="nav-fixed">
-      {{ template "dashboard-notifcenter.tmpl" .}}   
+<body class="nav-fixed">
+    {{ template "dashboard-notifcenter.tmpl" .}}
 
-      <div id="layoutSidenav">
-            <!-- Sidebar -->
-            {{ template "dashboard-sidebar.tmpl" .}}
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid mt-5">
-                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
-                            <div class="mr-4 mb-3 mb-sm-0">
-                                <h1 class="mb-0">Daftar Perusahaan</h1>
-                            </div>
-                            <div class="dropdown">
-                                <a class="btn btn-primary lift btn-sm" href="/dashboard/create-company">
-                                    <i data-feather="plus"></i>Tambah Perusahaan
-                                </a>
-                            </div>
-                          
+    <div id="layoutSidenav">
+        <!-- Sidebar -->
+        {{ template "dashboard-sidebar.tmpl" .}}
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid mt-5">
+                    <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                        <div class="mr-4 mb-3 mb-sm-0">
+                            <h1 class="mb-0">Daftar Perusahaan</h1>
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="datatable table-responsive">
-                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align: center;">Company Name</th>
-                                                <th style="text-align: center;">Address</th>
-                                                <th style="text-align: center;">Phone</th>
-                                                <th style="text-align: center;">Status Account</th>
-                                                <th style="text-align: center;">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{ range $index, $company := .companies }}
-                                            <tr>
-                                                <td>{{ $company.CompanyName }}</td>
-                                                <td>{{ $company.Address }}</td>
-                                                <td>{{ $company.PhoneNumber }}</td>
-                                                <td style="text-align: center;">
-                                                    <div class="badge badge-primary badge-pill">
-                                                        {{ $company.StatusActivation }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/company?id={{ $company.ID }}"><i data-feather="settings"></i></a>
-                                                </td>
-                                            </tr>
-                                            {{ end }}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <nav aria-label="...">
-                                  <ul class="pagination">
+                        <div class="dropdown">
+                            <a class="btn btn-primary lift btn-sm" href="/dashboard/create-company">
+                                <i data-feather="plus"></i>Tambah Perusahaan
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="datatable table-responsive">
+                                <table class="table table-bordered table-hover middle-table" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Company Name</th>
+                                            <th style="text-align: center;">Phone</th>
+                                            <th style="text-align: center;">Status Account</th>
+                                            <th style="text-align: center;">Logo</th>
+                                            <th style="text-align: center;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range $index, $company := .companies }}
+                                        <tr>
+                                            <td>{{ $company.CompanyName }}</td>
+                                            <td>{{ $company.PhoneNumber }}</td>
+                                            <td style="text-align: center;">
+                                                <div class="badge badge-primary badge-pill">
+                                                    {{ $company.StatusActivation }}
+                                                </div>
+                                            </td>
+                                            <td style="text-align: center">
+                                                {{ if ne $company.ImageLogo "" }}
+                                                    <img src="{{ $company.ImageLogo }}" width="200px" height="110px"/>
+                                                {{ end }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/company?id={{ $company.ID }}">
+                                                    <i data-feather="settings"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {{ end }}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="...">
+                                <ul class="pagination">
                                     {{ $pagination := .pagination }}
                                     <li class="page-item {{ if (le $pagination.Page 1 ) }} disable {{ end }}">
-                                        <a 
-                                            class="page-link"
-                                            {{ if (gt $pagination.Page 1 ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
+                                        <a class="page-link" {{ if (gt $pagination.Page 1 ) }} href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}"
                                             {{ end }}>
                                             Sebelumnnya
                                         </a>
@@ -70,39 +73,39 @@
                                     {{ range $_, $index := .pagination.ListPage }}
                                     <li class="page-item  
                                         {{ if (eq $pagination.Page $index) }} active {{ end }}">
-                                        <a class="page-link" 
-                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
+                                        <a class="page-link" href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
                                             {{ $index }}
                                         </a>
                                     </li>
                                     {{ end }}
                                     <li class="page-item {{ if (ge $pagination.Page $pagination.TotalPage ) }}disable{{ end }}">
-                                        <a 
-                                            class="page-link" 
-                                            {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
-                                            {{ end }}
-                                        >
+                                        <a class="page-link" {{ if (lt $pagination.Page $pagination.TotalPage ) }} href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
+                                            {{ end }}>
                                             Selanjutnya
                                         </a>
                                     </li>
-                                  </ul>
-                                </nav>
-                            </div>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
-                </main>
+                </div>
+            </main>
 
-                <!-- Footer -->
-                {{ template "dashboard-footer.tmpl" .}}
-            </div>
-      </div>
-      
-      <!-- Modal -->
-      <div id="loading-pop-up" class="modal-loading">
-        <div class="lds-facebook"><div></div><div></div><div></div></div>
-      </div>
+            <!-- Footer -->
+            {{ template "dashboard-footer.tmpl" .}}
+        </div>
+    </div>
 
-    </body>
-    {{ template "default-script-dashboard.tmpl" .}}
+    <!-- Modal -->
+    <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+</body>
+{{ template "default-script-dashboard.tmpl" .}}
+
 </html>

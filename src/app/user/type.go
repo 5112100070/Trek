@@ -67,6 +67,7 @@ type CompanyProfile struct {
 	IsEnabled        bool   `json:"is_enabled"`
 	StatusActivation string `json:"status_activation"`
 	Role             int    `json:"role"`
+	ImageLogo        string `json:"image_logo"`
 }
 
 type Error struct {
