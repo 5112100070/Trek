@@ -48,7 +48,7 @@ func CreateNewAccount(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		global.Error.Println("func CreateNewAccount error when get multipart form: ", err)
-		global.BadRequestResponse(c, "Silahkan Upload logo perusahaan")
+		global.BadRequestResponse(c, "Invalid request payload")
 		return
 	}
 

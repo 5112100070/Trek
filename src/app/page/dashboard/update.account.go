@@ -20,8 +20,35 @@ func UpdateAccount(c *gin.Context) {
 	}
 
 	fullname := c.PostForm("fullname")
+	if fullname == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nama profile")
+		return
+	}
+
 	phone := c.PostForm("phone")
+	if phone == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nomor telepon pengguna")
+		return
+	}
+
 	role, _ := strconv.Atoi(c.PostForm("role"))
+	if role == 0 {
+		global.BadRequestResponse(c, "invalid account role")
+		return
+	}
+
+	email := c.PostForm("email")
+	if fullname == "" {
+		global.BadRequestResponse(c, "Invalid request payload")
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		global.Error.Println("func UpdateAccount error when get multipart form: ", err)
+		global.BadRequestResponse(c, "Invalid request payload")
+		return
+	}
 
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -37,13 +64,41 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
+	// create/save image on location
+	files := form.File["profile_image"]
+
+	var filename string
+	if len(files) > 0 {
+		profileImage, errOpenFile := files[0].Open()
+		if errOpenFile != nil {
+			global.Error.Println("func UpdateAccount error when create profile image ", errOpenFile)
+			global.InternalServerErrorResponse(c, errOpenFile)
+			return
+		}
+		defer profileImage.Close()
+
+		var errUpload error
+		filename, errUpload = global.UploadProfileImage(profileImage, email)
+		if errUpload != nil {
+			global.Error.Println("func UpdateAccount error when upload profile image ", errUpload)
+			global.InternalServerErrorResponse(c, errUpload)
+			return
+		}
+
+		filename = fmt.Sprintf("%s/img/user/%s", conf.GConfig.BaseUrlConfig.BaseDNS, filename)
+	} else {
+		// if no files detected. using default image
+		filename = fmt.Sprintf("%s/img/user/default-account.png", conf.GConfig.BaseUrlConfig.BaseDNS)
+	}
+
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.UpdateAccountParam{
-		ID:       id,
-		Fullname: fullname,
-		Phone:    phone,
-		Role:     role,
+		ID:           id,
+		Fullname:     fullname,
+		Phone:        phone,
+		Role:         role,
+		ProfileImage: filename,
 	}
 	resp, err := userService.UpdateUser(token, param)
 	if err != nil {
