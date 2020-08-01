@@ -16,16 +16,46 @@ import (
 // CreateNewAccount is endpoint hadler to create new user account
 func CreateNewAccount(c *gin.Context) {
 	fullname := c.PostForm("fullname")
+	if fullname == "" {
+		global.BadRequestResponse(c, "Masukkan nama lengkap")
+		return
+	}
+
 	email := c.PostForm("email")
+	if email == "" {
+		global.BadRequestResponse(c, "Masukkan alamat email")
+		return
+	}
+
 	phone := c.PostForm("phone")
+	if phone == "" {
+		global.BadRequestResponse(c, "Masukkan nomor telepon yang dapat dihubungi")
+		return
+	}
 
 	role, _ := strconv.Atoi(c.PostForm("role"))
+	if role == 0 {
+		global.BadRequestResponse(c, "Invalid role")
+		return
+	}
+
 	companyID, _ := strconv.ParseInt(c.PostForm("company_id"), 10, 64)
+	if companyID == 0 {
+		global.BadRequestResponse(c, "Perusahaan tidak valid")
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		global.Error.Println("func CreateNewAccount error when get multipart form: ", err)
+		global.BadRequestResponse(c, "Silahkan Upload logo perusahaan")
+		return
+	}
 
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CreateNewAccount error when getUserProfile", errGetResponse)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}
@@ -36,18 +66,47 @@ func CreateNewAccount(c *gin.Context) {
 		return
 	}
 
+	// create/save image on location
+	files := form.File["profile_image"]
+
+	var filename string
+	if len(files) > 0 {
+		profileImage, errOpenFile := files[0].Open()
+		if errOpenFile != nil {
+			global.Error.Println("func CreateNewAccount error when create profile image ", errOpenFile)
+			global.InternalServerErrorResponse(c, errOpenFile)
+			return
+		}
+		defer profileImage.Close()
+
+		var errUpload error
+		filename, errUpload = global.UploadProfileImage(profileImage, email)
+		if errUpload != nil {
+			global.Error.Println("func CreateNewAccount error when upload profile image ", errUpload)
+			global.InternalServerErrorResponse(c, errUpload)
+			return
+		}
+
+		filename = fmt.Sprintf("%s/img/user/%s", conf.GConfig.BaseUrlConfig.BaseDNS, filename)
+	} else {
+		// if no files detected. using default image
+		filename = fmt.Sprintf("%s/img/user/default-account.png", conf.GConfig.BaseUrlConfig.BaseDNS)
+	}
+
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.CreateAccountParam{
-		Fullname:  fullname,
-		Phone:     phone,
-		Email:     email,
-		CompanyID: companyID,
-		Role:      role,
+		Fullname:     fullname,
+		Phone:        phone,
+		Email:        email,
+		CompanyID:    companyID,
+		Role:         role,
+		ProfileImage: filename,
 	}
+
 	resp, err := userService.CreateUser(token, param)
 	if err != nil {
-		log.Println("cannot save subscriber. Err", err)
+		log.Println("func CreateNewAccount cannot save new account. Err", err)
 		global.InternalServerErrorResponse(c, err.Error())
 		return
 	}

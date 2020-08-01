@@ -106,9 +106,11 @@
                     $("#company-image").val("");
                     $("#company-image-banner").empty();
                 }
+                gotoTop();
                 FinishLoading();
             }).fail(function(response){
                 FinishLoading();
+                var status = response.status;
                 if(status >= 500){
                     setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
                 } else {
@@ -122,8 +124,6 @@
             var url = base_url + '/dashboard/company/register';
             
             var fd = new FormData();
-            var companyImage = $("#company-image")[0].files[0];
-            
             fd.append('name', companyName);
             fd.append('address', address);
             fd.append('phone', phone);

@@ -19,11 +19,12 @@ type ListCompanyParam struct {
 
 // CreateAccountParam This struct is used as parameter to create new account
 type CreateAccountParam struct {
-	Fullname  string `json:"fullname"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone_number"`
-	Role      int    `json:"role"`
-	CompanyID int64  `json:"company_id"`
+	Fullname     string `json:"fullname"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone_number"`
+	Role         int    `json:"role"`
+	CompanyID    int64  `json:"company_id"`
+	ProfileImage string `json:"profile_image"`
 }
 
 // UpdateAccountParam This struct is used as parameter to update account

@@ -110,6 +110,7 @@
                 gotoTop();
             }).fail(function(response){
                 FinishLoading();
+                var status = response.status;
                 if(status >= 500){
                     setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
                 } else {
