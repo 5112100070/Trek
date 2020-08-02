@@ -52,9 +52,9 @@
                                                 {{ end }}
                                             </td>
                                             <td>
-                                                <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/company?id={{ $company.ID }}">
-                                                    <i data-feather="settings"></i>
-                                                </a>
+                                                <button class="btn btn-sm btn-outline-primary col-sm-12" type="button" onclick="javascript:window.location='/dashboard/company?id={{ $company.ID }}'">
+                                                    view
+                                                </button>
                                             </td>
                                         </tr>
                                         {{ end }}

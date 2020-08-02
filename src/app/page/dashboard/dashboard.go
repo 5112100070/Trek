@@ -42,6 +42,10 @@ func MainPageHandler(c *gin.Context) {
 	// 	return
 	// }
 
+	if accountResp.Data.Company.ImageLogo == "" {
+		accountResp.Data.Company.ImageLogo = "dashboard/assets/img/drawkit/color/drawkit-content-man-alt.svg"
+	}
+
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"config":     conf.GConfig,
