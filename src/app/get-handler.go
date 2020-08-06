@@ -593,7 +593,7 @@ func AdminUserNew(c *gin.Context) {
 func AdminUserEditPage(c *gin.Context) {
 	cookie, errGetCookie := c.Cookie(global.UserCookie[global.GetEnv()])
 	if errGetCookie != nil {
-		global.Error.Println(errGetCookie)
+		global.Error.Println("func AdminUserEditPage error get cookie: ", errGetCookie)
 		loginUrl := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
 		http.Redirect(c.Writer, c.Request, loginUrl, http.StatusSeeOther)
 		return
