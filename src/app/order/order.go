@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -44,7 +45,7 @@ func (repo orderRepo) CreateOrderForAdmin(sessionID string, payload CreateOrderP
 	return &resultResp, nil
 }
 
-func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (OrderReponse, error) {
+func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (OrderReponse, *ErrorOrder, error) {
 	var result OrderReponse
 	var respOrder MainListOrderResponse
 
@@ -64,7 +65,7 @@ func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (O
 	req, err := http.NewRequest(http.MethodGet, urlStr, bytes.NewBuffer(payload))
 	if err != nil {
 		log.Println(err)
-		return result, err
+		return result, nil, err
 	}
 
 	// set header
@@ -78,35 +79,39 @@ func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (O
 	resp, errGetResp := client.Do(req)
 	if err != nil {
 		log.Println(errGetResp)
-		return result, errGetResp
+		return result, nil, errGetResp
 	}
 
 	if resp == nil || resp.Body == nil {
 		log.Println("no response from cgx service")
-		return result, errors.New("no response from cgx service")
+		return result, nil, errors.New("no response from cgx service")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return result, err
+		return result, nil, err
 	}
 	defer resp.Body.Close()
 
 	errUnMarshal := json.Unmarshal(body, &respOrder)
 	if errUnMarshal != nil {
 		log.Println(errUnMarshal)
-		return result, errUnMarshal
+		return result, nil, errUnMarshal
 	}
 
-	if len(respOrder.Data) <= 0 {
-		return result, errors.New("no result")
+	if respOrder.Error != nil {
+		return result, respOrder.Error, errors.New("no result")
+	}
+
+	if len(respOrder.Data.Orders) <= 0 {
+		return result, nil, nil
 	}
 
 	// generate display data
-	result = respOrder.Data[0]
+	result = respOrder.Data.Orders[0]
 	result.TotalPickUp = len(result.Pickups)
-	result.CreateTimeStr = result.CreateTime.Format("02 Jan 2006 - 15:04:05")
+	result.CreateTimeStr = fmt.Sprintf("%s, %s", result.CreateTime.Weekday(), result.CreateTime.Format("02 Jan 2006 - 15:04:05"))
 	result.UpdateTimeStr = result.UpdateTime.Format("02 Jan 2006 - 15:04:05")
 
 	for i, _ := range result.Pickups {
@@ -122,7 +127,7 @@ func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (O
 		}
 	}
 
-	return result, nil
+	return result, nil, nil
 }
 
 func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (MainListOrderResponse, error) {
@@ -135,7 +140,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
 	if err != nil {
-		log.Println(err)
+		log.Printf("func GetListOrders error create request. error: %v", err)
 		return result, err
 	}
 
@@ -162,6 +167,55 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("func GetListOrders error when readALL response: %v. error: %v", resp.Body, err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Printf("func GetListOrders error hit:%v when unmarshal: %v. error: %v", u.String(), string(body), errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	for i, _ := range result.Data.Orders {
+		result.Data.Orders[i].UpdateTimeStr = result.Data.Orders[i].UpdateTime.Format("02 Jan 2006")
+		result.Data.Orders[i].TotalPickUp = len(result.Data.Orders[i].Pickups)
+	}
+
+	return result, nil
+}
+
+func (repo orderRepo) GetListUnitInOrder(sessionID string) (MainListUnitResponse, error) {
+	var result MainListUnitResponse
+
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_ADMIN_GET_UNIT_ORDER
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
 		log.Println(err)
 		return result, err
 	}
@@ -171,11 +225,6 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	if errUnMarshal != nil {
 		log.Println(errUnMarshal)
 		return result, errUnMarshal
-	}
-
-	for i, _ := range result.Data {
-		result.Data[i].UpdateTimeStr = result.Data[i].UpdateTime.Format("02 Jan 2006")
-		result.Data[i].TotalPickUp = len(result.Data[i].Pickups)
 	}
 
 	return result, nil

@@ -43,6 +43,19 @@
                                                 <option value="2">Client</option>
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Image Perusahaan</label>
+                                            <div class="row" style="margin-left: 50px">
+                                                <div class="col-xs-6">
+                                                    <div id="company-image-banner"></div>
+                                                    <div id="upload_button-banner" class="upload_button-first">
+                                                        <label>
+                                                            <input id="company-image" type="file" onchange="javascript:uploadImage()" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         
                                         <button class="btn btn-success btn-sm" onClick="javascript:ProcessRegister()" type="button">Tambah Perusahaan Baru</button>
                                 </form>
@@ -71,14 +84,15 @@
             var address = $("#address").val();
             var phone = $("#phone").val();
             var role = $('#role :selected').val();
+            var companyImage = $("#company-image")[0].files[0];
 
             StartLoading();
-            var promise = Register(companyName,address,phone,role);
+            var promise = Register(companyName,address,phone,role,companyImage);
             promise.done(function(response){
                 response = response.data;
 
                 if(response.error!=null){
-                    setError(true, response.error.massage);
+                    setError(true, response.error.detail);
                 } else {
                     setError(false, "");
                     $("#success-alert").removeClass("hide");
@@ -89,27 +103,40 @@
                     $("#address").val("");
                     $("#phone").val("");
                     $('#role :selected').val(1);
+                    $("#company-image").val("");
+                    $("#company-image-banner").empty();
                 }
+                gotoTop();
                 FinishLoading();
             }).fail(function(response){
                 FinishLoading();
-                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                var status = response.status;
+                if(status >= 500){
+                    setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                } else {
+                    response = response.responseJSON.data;
+                    setError(true, response.error);
+                }
             });
         }
     
-        function Register(companyName, address, phone, role){
+        function Register(companyName, address, phone, role, companyImage){
             var url = base_url + '/dashboard/company/register';
-            var data = {
-                name: companyName,
-                address: address,
-                phone: phone,
-                role: role
-            };
+            
+            var fd = new FormData();
+            fd.append('name', companyName);
+            fd.append('address', address);
+            fd.append('phone', phone);
+            fd.append('role', role);
+            fd.append('company_image', companyImage);
             
             var promise = $.ajax({
                 url: url,
                 type: 'POST',
-                data: data,
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
                 xhrFields: {
                     withCredentials: true
                 }
@@ -122,10 +149,58 @@
             if (isShow) {
                 $("#failed-alert").removeClass("hide");
                 $("#failed-alert").html(message);
+                $("#success-alert").addClass("hide");
+
+                gotoTop();
             } else {
                 $("#failed-alert").addClass("hide");
                 $("#failed-alert").html("");
             }
+        }
+    
+        function uploadImage() {
+            /* 200KB */
+            var imageSizeValidation = 200000;
+            var minWidth = 500;
+
+            var companyImage = $("#company-image")[0].files[0];
+            var $mainContainer = $("#company-image-banner");
+            
+            if(companyImage.size > imageSizeValidation){
+                $("#company-image").val("");
+                $mainContainer.empty();
+                setError(true, "Maksimal ukuran gambar adalah 200 KB");
+                return
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var image = e.target.result;
+                var imageObj = new Image();
+
+                imageObj.src = e.target.result;
+                imageObj.onload = function() {
+                    var height = this.height;
+                    var width = this.width;
+                    if(width <= minWidth && height <= minWidth) {
+                        $("#company-image").val("");
+                        $mainContainer.empty();
+                        setError(true, "Dimensi cover harus kurang dari "+minWidth);
+                        return;
+                    }
+
+                    $mainContainer.empty();
+                    var imgs = $('<img class="image-cover' + '" src=' + image + " />");
+                    $mainContainer.append(imgs);
+                };
+            };
+
+            reader.readAsDataURL(companyImage);
+        }
+
+        function gotoTop(){
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
 

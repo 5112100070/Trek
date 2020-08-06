@@ -1,10 +1,12 @@
 package dashboard
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
 	"github.com/5112100070/Trek/src/app/user"
+	"github.com/5112100070/Trek/src/conf"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -13,13 +15,40 @@ import (
 func UpdateAccount(c *gin.Context) {
 	id, errparse := strconv.ParseInt(c.PostForm("id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid account id")
 		return
 	}
 
 	fullname := c.PostForm("fullname")
+	if fullname == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nama profile")
+		return
+	}
+
 	phone := c.PostForm("phone")
+	if phone == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nomor telepon pengguna")
+		return
+	}
+
 	role, _ := strconv.Atoi(c.PostForm("role"))
+	if role == 0 {
+		global.BadRequestResponse(c, "invalid account role")
+		return
+	}
+
+	email := c.PostForm("email")
+	if fullname == "" {
+		global.BadRequestResponse(c, "Invalid request payload")
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		global.Error.Println("func UpdateAccount error when get multipart form: ", err)
+		global.BadRequestResponse(c, "Invalid request payload")
+		return
+	}
 
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -35,13 +64,41 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
+	// create/save image on location
+	files := form.File["profile_image"]
+
+	var filename string
+	if len(files) > 0 {
+		profileImage, errOpenFile := files[0].Open()
+		if errOpenFile != nil {
+			global.Error.Println("func UpdateAccount error when create profile image ", errOpenFile)
+			global.InternalServerErrorResponse(c, errOpenFile)
+			return
+		}
+		defer profileImage.Close()
+
+		var errUpload error
+		filename, errUpload = global.UploadProfileImage(profileImage, email)
+		if errUpload != nil {
+			global.Error.Println("func UpdateAccount error when upload profile image ", errUpload)
+			global.InternalServerErrorResponse(c, errUpload)
+			return
+		}
+
+		filename = fmt.Sprintf("%s/img/user/%s", conf.GConfig.BaseUrlConfig.BaseDNS, filename)
+	} else {
+		// if no files detected. using default image
+		filename = fmt.Sprintf("%s/img/user/default-account.png", conf.GConfig.BaseUrlConfig.BaseDNS)
+	}
+
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.UpdateAccountParam{
-		ID:       id,
-		Fullname: fullname,
-		Phone:    phone,
-		Role:     role,
+		ID:           id,
+		Fullname:     fullname,
+		Phone:        phone,
+		Role:         role,
+		ProfileImage: filename,
 	}
 	resp, err := userService.UpdateUser(token, param)
 	if err != nil {
@@ -61,14 +118,40 @@ func UpdateAccount(c *gin.Context) {
 func UpdateCompany(c *gin.Context) {
 	id, errparse := strconv.ParseInt(c.PostForm("id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "Invalid Company ID")
+		return
+	}
+
+	companyName := c.PostForm("company_name")
+	if companyName == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus nama perusahaan")
 		return
 	}
 
 	address := c.PostForm("company_address")
-	companyName := c.PostForm("company_name")
+	if address == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus alamat perusahaan")
+		return
+	}
+
 	phone := c.PostForm("phone")
+	if phone == "" {
+		global.BadRequestResponse(c, "Tidak boleh menghapus no telepon perusahaan")
+		return
+	}
+
 	role, _ := strconv.Atoi(c.PostForm("role"))
+	if role == 0 {
+		global.BadRequestResponse(c, "Tidak boleh menghapus role")
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		global.Error.Println("func CreateNewCompany error when get multipart form: ", err)
+		global.BadRequestResponse(c, "Silahkan Upload logo perusahaan")
+		return
+	}
 
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
@@ -84,14 +167,41 @@ func UpdateCompany(c *gin.Context) {
 		return
 	}
 
+	// create/save image on location
+	files := form.File["company_image"]
+
+	var filename string
+	// if files detected. filename will filled
+	// if no files detected. no need to update image
+	if len(files) > 0 {
+		companyImage, errOpenFile := files[0].Open()
+		if errOpenFile != nil {
+			global.Error.Println("func CreateNewCompany error when create company image ", errOpenFile)
+			global.InternalServerErrorResponse(c, errOpenFile)
+			return
+		}
+		defer companyImage.Close()
+
+		var errUpload error
+		filename, errUpload = global.UploadCompanyImage(companyImage, companyName)
+		if errUpload != nil {
+			global.Error.Println("func CreateNewCompany error when upload company image ", errUpload)
+			global.InternalServerErrorResponse(c, errUpload)
+			return
+		}
+
+		filename = fmt.Sprintf("%s/img/partner/%s", conf.GConfig.BaseUrlConfig.BaseDNS, filename)
+	}
+
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.UpdateCompanyParam{
-		ID:      id,
-		Name:    companyName,
-		Address: address,
-		Phone:   phone,
-		Role:    role,
+		ID:        id,
+		Name:      companyName,
+		Address:   address,
+		Phone:     phone,
+		Role:      role,
+		ImageLogo: filename,
 	}
 
 	resp, err := userService.UpdateCompany(token, param)
@@ -112,7 +222,7 @@ func UpdateCompany(c *gin.Context) {
 func AdminChangePassword(c *gin.Context) {
 	userID, errparse := strconv.ParseInt(c.PostForm("user_id"), 10, 64)
 	if errparse != nil {
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid account")
 		return
 	}
 
@@ -199,7 +309,7 @@ func AdminChangeActivation(c *gin.Context) {
 		isEnabled = false
 	} else {
 		log.Printf("func AdminChangeActivation error when parse status. payload: %v \n", payloadStatus)
-		global.BadRequestResponse(c, nil)
+		global.BadRequestResponse(c, "invalid is_enable value")
 		return
 	}
 

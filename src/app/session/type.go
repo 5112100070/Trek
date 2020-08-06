@@ -28,13 +28,14 @@ type LoginResponse struct {
 }
 
 type Account struct {
-	ID          int64          `json:"user_id"`
-	Fullname    string         `json:"fullname"`
-	PhoneNumber string         `json:"phone_number"`
-	Email       string         `json:"email"`
-	CreateTime  string         `json:"create_time"`
-	Role        int            `json:"role"`
-	Company     CompanyProfile `json:"company"`
+	ID           int64          `json:"user_id"`
+	Fullname     string         `json:"fullname"`
+	PhoneNumber  string         `json:"phone_number"`
+	Email        string         `json:"email"`
+	CreateTime   string         `json:"create_time"`
+	Role         int            `json:"role"`
+	ImageProfile string         `json:"image_profile"`
+	Company      CompanyProfile `json:"company"`
 }
 
 type LoginDataResponse struct {
@@ -45,6 +46,7 @@ type LoginDataResponse struct {
 type CompanyProfile struct {
 	ID          int64  `json:"company_id"`
 	CompanyName string `json:"company_name"`
+	ImageLogo   string `json:"image_logo"`
 	IsEnabled   bool   `json:"is_enabled"`
 	Role        int    `json:"role"`
 }

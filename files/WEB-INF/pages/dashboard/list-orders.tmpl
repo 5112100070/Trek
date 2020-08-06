@@ -26,24 +26,43 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th style="text-align: center;">Order ID</th>
-                                                <th style="text-align: center;">Nama Penerima</th>
-                                                <th style="text-align: center;">Status</th>
-                                                <th style="text-align: center;">Total Pickup</th>
-                                                <th style="text-align: center;">Tanggal Update Terakhir</th>
-                                                <th style="text-align: center;">Actions</th>
+                                                <th style="text-align: center; width: 10%">No AWB</th>
+                                                <th style="text-align: center; width: 10%">Klien</th>
+                                                <th style="text-align: center; width: 20%">Tujuan</th>
+                                                <th style="text-align: center; width: 15%">Preview Item</th>
+                                                <th style="text-align: center; width: 15%">Waktu diterima</th>
+                                                <th style="text-align: center; width: 15%">Status</th>
+                                                <th style="text-align: center; width: 15%">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{ range $index, $order := .orders }}
                                             <tr>
-                                                <td>{{ $order.ID }}</td>
-                                                <td>{{ $order.ReceiverName }}</td>
-                                                <td>{{ $order.Status }}</td>
-                                                <td>{{ $order.TotalPickUp }}</td>
-                                                <td>{{ $order.UpdateTimeStr }}</td>
+                                                <td>{{ $order.AWB }}</td>
+                                                <td>{{ $order.CompanyName }}</td>
+                                                <td>{{ $order.ReceiverAddress }}</td>
+                                                <td style="text-align: center">
+                                                    {{ $items := index $.mapItems $order.ID }}
+                                                    {{ $length := len $items }}
+
+                                                    {{ if eq $length 1 }}
+                                                        {{ range $indexItem, $item := $items }}
+                                                            {{ $item.Name }}
+                                                        {{ end }}
+                                                    {{ end }}
+
+                                                    {{ if gt $length 1 }}
+                                                        <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#item-backdrop-{{ $order.ID }}">
+                                                            Detail barang
+                                                        </button>
+                                                    {{ end }}
+                                                </td>
+                                                <td></td>
+                                                <td style="text-align: center">
+                                                    <div class="badge badge-primary badge-pill">{{ $order.StatusName }}</div>
+                                                </td>
                                                 <td>
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="/dashboard/order?id={{ $order.ID }}"><i data-feather="more-vertical"></i></a>
+                                                    <button class="btn btn-sm btn-outline-primary col-sm-12" type="button" onclick="javascript:window.location='/dashboard/order?id={{ $order.ID }}'">view</button>
                                                 </td>
                                             </tr>
                                             {{ end }}
@@ -62,15 +81,6 @@
                                             Sebelumnnya
                                         </a>
                                     </li>
-                                    {{ range $_, $index := .pagination.ListPage }}
-                                    <li class="page-item  
-                                        {{ if (eq $pagination.Page $index) }} active {{ end }}">
-                                        <a class="page-link" 
-                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
-                                            {{ $index }}
-                                        </a>
-                                    </li>
-                                    {{ end }}
                                     <li class="page-item {{ if (ge $pagination.Page $pagination.TotalPage ) }}disable{{ end }}">
                                         <a 
                                             class="page-link" 
@@ -96,6 +106,52 @@
       <div id="loading-pop-up" class="modal-loading">
         <div class="lds-facebook"><div></div><div></div><div></div></div>
       </div>
+
+       <!-- modal detail barang -->
+       {{ range $key, $items := .mapItems }}
+       {{ $length := len $items }}
+
+       {{ if gt $length 1 }}
+       <div class="modal fade" id="item-backdrop-{{ $key }}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="item-backdrop-{{ $key }}-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body"><div class="datatable table-responsive mt-4">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nama produk</th>
+                                    <th>Deskripsi produk</th>
+                                    <th>Jumlah</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $key, $item := $items }}
+                                <tr>
+                                    <td>
+                                        {{ $item.Name }}
+                                    </td>
+                                    <td> 
+                                        {{ $item.Notes }}
+                                    </td>
+                                    <td>
+                                        {{ $item.UnitName }}
+                                    </td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div></div>
+                    <div class="modal-footer"><button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button></div>
+                </div>
+            </div>
+        </div>
+        {{ end }}
+
+        {{ end }}
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}

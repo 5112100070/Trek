@@ -15,6 +15,10 @@ type CreateOrderParam struct {
 			Notes    string  `json:"notes"`
 		} `json:"items"`
 	} `json:"pickups"`
+	Airwaybill   string `json:"airwaybill"`
+	DeliveryType int    `json:"delivery_type"`
+	CompanyID    int    `json:"company_id"`
+	Deadline     string `json:"deadline"`
 }
 
 // OrderDefaultData This struct is standart detail pick up data

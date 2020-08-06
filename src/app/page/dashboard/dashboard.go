@@ -42,6 +42,10 @@ func MainPageHandler(c *gin.Context) {
 	// 	return
 	// }
 
+	if accountResp.Data.Company.ImageLogo == "" {
+		accountResp.Data.Company.ImageLogo = "dashboard/assets/img/drawkit/color/drawkit-content-man-alt.svg"
+	}
+
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"config":     conf.GConfig,
@@ -446,8 +450,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	// get list param
 	orderID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 
-	orderDetail, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
-	if err != nil {
+	orderDetail, errCGX, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
+	if err != nil || errCGX != nil {
 		// need internal page error handler
 		return
 	}
@@ -471,6 +475,7 @@ func OrdersListPageHandler(c *gin.Context) {
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
+		global.Error.Println("func OrdersListPageHandler error session: ", accountResp.Error.Detail)
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
 	}
@@ -487,38 +492,44 @@ func OrdersListPageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		// need internal page error handler
+		global.Error.Println("func OrdersListPageHandler error when get list order ", err)
 		return
 	}
 
 	if listOrderResp.Error != nil {
 		// need page handler to handle error
+		// only need error internal server error
+		global.Error.Println("func OrdersListPageHandler error when get order: ", listOrderResp.Error.Detail)
 		return
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/orders"
-	totalPage := listOrderResp.TotalOrder / int(rows)
-
-	// get additional page
-	// total data 22 row 10
-	// must result 3 pages
-	if listOrderResp.TotalOrder%int(rows) > 0 {
-		totalPage++
-	}
 
 	// handle pagination
 	pagination := entity.Pagination{
-		Template:  templatePage,
-		Page:      int(page),
-		NextPage:  int(page) + 1,
-		PrevPage:  int(page) - 1,
-		Rows:      int(rows),
-		TotalPage: totalPage,
-		ListPage:  global.GenerateListPage(totalPage),
+		Template: templatePage,
+		Page:     int(page),
+		NextPage: int(page) + 1,
+		PrevPage: int(page) - 1,
+		Rows:     int(rows),
+	}
+
+	// fetching item data
+	mapItems := make(map[int64][]order.ItemResponse)
+	for _, orderDetail := range listOrderResp.Data.Orders {
+		var items []order.ItemResponse
+		for _, pickupDetail := range orderDetail.Pickups {
+			for _, item := range pickupDetail.Items {
+				items = append(items, item)
+			}
+		}
+		mapItems[orderDetail.ID] = items
 	}
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
-		"orders":     listOrderResp.Data,
+		"orders":     listOrderResp.Data.Orders,
+		"mapItems":   mapItems,
 		"pagination": pagination,
 		"config":     conf.GConfig,
 	}

@@ -19,36 +19,40 @@ type ListCompanyParam struct {
 
 // CreateAccountParam This struct is used as parameter to create new account
 type CreateAccountParam struct {
-	Fullname  string `json:"fullname"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone_number"`
-	Role      int    `json:"role"`
-	CompanyID int64  `json:"company_id"`
+	Fullname     string `json:"fullname"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone_number"`
+	Role         int    `json:"role"`
+	CompanyID    int64  `json:"company_id"`
+	ProfileImage string `json:"profile_image"`
 }
 
 // UpdateAccountParam This struct is used as parameter to update account
 type UpdateAccountParam struct {
-	ID       int64  `json:"id"`
-	Fullname string `json:"fullname"`
-	Phone    string `json:"phone_number"`
-	Role     int    `json:"role"`
+	ID           int64  `json:"id"`
+	Fullname     string `json:"fullname"`
+	Phone        string `json:"phone_number"`
+	Role         int    `json:"role"`
+	ProfileImage string `json:"profile_image"`
 }
 
 // CreateCompanyParam This struct is used as parameter to create new company
 type CreateCompanyParam struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
-	Phone   string `json:"phone_number"`
-	Role    int    `json:"role"`
+	Name      string `json:"name"`
+	Address   string `json:"address"`
+	Phone     string `json:"phone_number"`
+	Role      int    `json:"role"`
+	ImageLogo string `json:"image_logo"`
 }
 
 // UpdateCompanyParam This struct is used as parameter to update company
 type UpdateCompanyParam struct {
-	ID      int64  `json:"id"`
-	Name    string `json:"company_name"`
-	Address string `json:"address"`
-	Phone   string `json:"phone_number"`
-	Role    int    `json:"role"`
+	ID        int64  `json:"id"`
+	Name      string `json:"company_name"`
+	Address   string `json:"address"`
+	Phone     string `json:"phone_number"`
+	Role      int    `json:"role"`
+	ImageLogo string `json:"image_logo"`
 }
 
 // ChangePasswordParam This struct is used as parameter to change password user accounts

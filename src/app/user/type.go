@@ -19,17 +19,18 @@ type ListAccountsResponse struct {
 }
 
 type User struct {
-	ID          int64         `json:"user_id"`
-	Fullname    string        `json:"fullname"`
-	CompanyID   int64         `json:"company_id"`
-	Company     UserCompany   `json:"company"`
-	PhoneNumber string        `json:"phone_number"`
-	Email       string        `json:"email"`
-	CreateTime  string        `json:"create_time"`
-	Role        int           `json:"role"`
-	RoleWording string        `json:"role_wording"`
-	RoleColor   string        `json:"role_color"`
-	Attribute   UserAttribute `json:"attribute"`
+	ID           int64         `json:"user_id"`
+	Fullname     string        `json:"fullname"`
+	CompanyID    int64         `json:"company_id"`
+	Company      UserCompany   `json:"company"`
+	PhoneNumber  string        `json:"phone_number"`
+	Email        string        `json:"email"`
+	CreateTime   string        `json:"create_time"`
+	Role         int           `json:"role"`
+	RoleWording  string        `json:"role_wording"`
+	RoleColor    string        `json:"role_color"`
+	Attribute    UserAttribute `json:"attribute"`
+	ProfileImage string        `json:"profile_image"`
 }
 
 type UserCompany struct {
@@ -67,6 +68,7 @@ type CompanyProfile struct {
 	IsEnabled        bool   `json:"is_enabled"`
 	StatusActivation string `json:"status_activation"`
 	Role             int    `json:"role"`
+	ImageLogo        string `json:"image_logo"`
 }
 
 type Error struct {

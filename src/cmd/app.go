@@ -33,6 +33,12 @@ func init() {
 	log.Println(fmt.Sprintf("Using configuration : %s", fileLocation))
 	log.Println(fmt.Sprintf("Running in network : %s", network))
 
+	// init regex
+	errInitRegexImage := global.InitRegexCompileImageName()
+	if errInitRegexImage != nil {
+		log.Fatalln("[FATAL] Failed when try to compile regex: ", errInitRegexImage)
+	}
+
 	var ok bool
 	// using
 	conf.GConfig, ok = conf.ReadConfig(fileLocation)
