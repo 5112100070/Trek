@@ -20,4 +20,4 @@ const URL_ADMIN_CHANGE_CHANGE_STATUS_ACTIVATION string = "/admin/v1/change-statu
 const URL_ADMIN_CREATE_ORDER_FOR_ADMIN string = "/order/v1/add"
 const URL_ADMIN_GET_ORDER_DETAIL string = "/order/internal/v1/get"
 const URL_ADMIN_GET_ORDER string = "/order/internal/v1/get"
-const URL_ADMIN_GET_UNIT_ORDER string = "/order/internal/v1/get/order-unit"
+const URL_ADMIN_GET_UNIT_ORDER string = "order/v1/get/unit"

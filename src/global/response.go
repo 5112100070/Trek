@@ -68,3 +68,15 @@ func InternalServerErrorResponse(c *gin.Context, val interface{}) {
 func sendResponse(c *gin.Context, statusCode int, val gin.H) {
 	c.JSON(statusCode, val)
 }
+
+func RenderUnAuthorizePage(c *gin.Context) {
+	c.HTML(http.StatusOK, "401.tmpl", nil)
+}
+
+func RenderNotFoundPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "404.tmpl", nil)
+}
+
+func RenderInternalServerErrorPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "500.tmpl", nil)
+}

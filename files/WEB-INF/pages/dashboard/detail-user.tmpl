@@ -35,12 +35,36 @@
                                             <div class="position-relative">
                                                 <div class="row align-items-center justify-content-between">
                                                     <div class="col position-relative">
-                                                        <p class="text-gray-700">ID User : {{ .account.ID }}</p>
-                                                        <p class="text-gray-700">Nama Lengkap: {{ .account.Fullname }}</p>
-                                                        <p class="text-gray-700">Email : {{ .account.Email }}</p>
-                                                        <p class="text-gray-700">Nomor Telepon : {{ .account.PhoneNumber }}</p>
-                                                        <p class="text-gray-700">Tanggal join : {{ .account.CreateTime }}</p>
-                                                        
+                                                        <div class="row mb-3">
+                                                             <div class="col-6 info" >
+                                                                <p>Email</p >
+                                                                <p style="color:black; font-weight: 500;">
+                                                                    {{ .account.Email }}
+                                                                </p>
+                                                             </div>
+                                                             <div class="col-6 info"> 
+                                                                 <p>Nama Lengkap</p>
+                                                                    <p style="font-weight: 500;color: black;">
+                                                                            {{ .account.Fullname }}
+                                                                    </p>
+                                                             </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                             <div class="col-6 info" >
+                                                                <p>Nomor Telepon</p >
+                                                                <p style="color:black; font-weight: 500">
+                                                                    {{ .account.PhoneNumber }}
+                                                                </p>
+                                                             </div>
+                                                             <div class="col-6 info"> 
+                                                                 <p>Tanggal Bergabung</p>
+                                                                    <p style="font-weight: 500;color: black;">
+                                                                            {{ .account.CreateTime }}
+                                                                    </p>
+                                                             </div>
+                                                        </div>
+
                                                         {{ if not .account.Attribute.IsEnabled }}
                                                         <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
                                                             Aktifkan Akun

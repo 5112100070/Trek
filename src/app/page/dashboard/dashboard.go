@@ -24,7 +24,8 @@ func MainPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, _, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func MainPageHandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -58,7 +59,8 @@ func ConfigPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, _, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func ConfigPageHandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -70,7 +72,8 @@ func ConfigPageHandler(c *gin.Context) {
 
 	if accountResp.Data == nil {
 		global.Error.Println("func ConfigPageHandler not have result from cgx. but not have error")
-		// need internal page error handler
+		global.RenderInternalServerErrorPage(c)
+		return
 	}
 
 	renderData := gin.H{
@@ -85,7 +88,8 @@ func UserListPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func UserListPageHandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -106,11 +110,8 @@ func UserListPageHandler(c *gin.Context) {
 		OrderType: orderType,
 	})
 	if err != nil {
-		// need internal page error handler
-	}
-
-	if listUserResp.Error != nil {
-		// need error handler
+		global.Error.Println("func UserListPageHandler error get list user: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -155,7 +156,8 @@ func UserCreatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func UserCreatePagehandler error get list user: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -172,12 +174,8 @@ func UserCreatePagehandler(c *gin.Context) {
 		FilterByIsEnable: "1",
 	})
 	if err != nil {
-		// need internal page error handler
-		return
-	}
-
-	if listCompResp.Error != nil {
-		// need page hanler
+		global.Error.Println("func UserCreatePagehandler error get list company: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -194,7 +192,8 @@ func UserUpdatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func UserUpdatePagehandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -207,12 +206,8 @@ func UserUpdatePagehandler(c *gin.Context) {
 	accountID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
 	if err != nil {
-		// need internal page error handler
-		return
-	}
-
-	if accDetail.Error != nil {
-		// need error handler
+		global.Error.Println("func UserUpdatePagehandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -229,7 +224,8 @@ func UserDetailPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func UserDetailPageHandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -244,13 +240,8 @@ func UserDetailPageHandler(c *gin.Context) {
 
 	accDetail, err := global.GetServiceUser().GetDetailAccount(token, accountID)
 	if err != nil {
-		global.Error.Println(err)
-		// need internal page error handler
-		return
-	}
-
-	if accDetail.Error != nil {
-		// need error handler
+		global.Error.Println("func UserDetailPageHandler error get detail account: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -267,7 +258,8 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, _, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CompanyCreatePagehandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -289,7 +281,8 @@ func CompaniesListPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CompaniesListPageHandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -312,12 +305,8 @@ func CompaniesListPageHandler(c *gin.Context) {
 		FilterByIsEnable: isEnabled,
 	})
 	if err != nil {
-		// need internal page error handler
-		return
-	}
-
-	if listUserResp.Error != nil {
-		// need error handler
+		global.Error.Println("func CompaniesListPageHandler error get list company: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -361,7 +350,8 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CompanyDetailPageHandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -376,12 +366,8 @@ func CompanyDetailPageHandler(c *gin.Context) {
 
 	companyDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
 	if err != nil {
-		// need internal page error handler
-		return
-	}
-
-	if companyDetail.Error != nil {
-		// need error page handler
+		global.Error.Println("func CompanyDetailPageHandler error get detail company: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -402,7 +388,8 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CompanyUpdatePagehandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -415,12 +402,8 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 	accDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
 	if err != nil {
-		// need internal page error handler
-		return
-	}
-
-	if accDetail.Error != nil {
-		// need error handler
+		global.Error.Println("func CompanyUpdatePagehandler error get detail company: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -437,7 +420,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func OrdersDetailPageHandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -452,7 +436,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 
 	orderDetail, errCGX, err := global.GetServiceOrder().GetOrderDetailForAdmin(token, orderID)
 	if err != nil || errCGX != nil {
-		// need internal page error handler
+		global.Error.Println("func OrdersDetailPageHandler error get order detail for admin: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -469,7 +454,8 @@ func OrdersListPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func OrdersListPageHandler error get detail account: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -491,15 +477,8 @@ func OrdersListPageHandler(c *gin.Context) {
 		OrderType: orderType,
 	})
 	if err != nil {
-		// need internal page error handler
-		global.Error.Println("func OrdersListPageHandler error when get list order ", err)
-		return
-	}
-
-	if listOrderResp.Error != nil {
-		// need page handler to handle error
-		// only need error internal server error
-		global.Error.Println("func OrdersListPageHandler error when get order: ", listOrderResp.Error.Detail)
+		global.Error.Println("func OrdersListPageHandler error get list order: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -582,34 +561,12 @@ func handleSessionErrorPage(c *gin.Context, sessionErr session.Error, needRedire
 
 		return
 	} else if sessionErr.Code == errorConst.ERROR_CODE_USER_NOT_REGISTER_ON_COMPANY {
-		// TODO: redirect to user not register on any company
-		if !needRedirect {
-			// ====================== REMOVE / NEED CHANGES ======================
-			renderData := gin.H{
-				"config": conf.GConfig,
-			}
-			c.HTML(http.StatusOK, "login.tmpl", renderData)
-			// ====================================================================
-		} else {
-			loginURL := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
-			http.Redirect(c.Writer, c.Request, loginURL, http.StatusSeeOther)
-		}
-
+		// redirect to user not register on any company
+		global.RenderUnAuthorizePage(c)
 		return
 	} else {
-		// TODO: Error Internal server - redirect to problem page
-		if !needRedirect {
-			// ====================== REMOVE / NEED CHANGES ======================
-			renderData := gin.H{
-				"config": conf.GConfig,
-			}
-			c.HTML(http.StatusOK, "login.tmpl", renderData)
-			// ====================================================================
-		} else {
-			loginURL := conf.GConfig.BaseUrlConfig.BaseDNS + "/login"
-			http.Redirect(c.Writer, c.Request, loginURL, http.StatusSeeOther)
-		}
-
+		// Error Internal server - redirect to problem page
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 }
