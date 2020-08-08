@@ -196,7 +196,7 @@ func (repo orderRepo) GetListUnitInOrder(sessionID string) (MainListUnitResponse
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
 	if err != nil {
-		log.Println(err)
+		log.Println("func GetListUnitInOrder error when create request: ", err)
 		return result, err
 	}
 
@@ -205,25 +205,25 @@ func (repo orderRepo) GetListUnitInOrder(sessionID string) (MainListUnitResponse
 
 	resp, errGetResp := client.Do(req)
 	if err != nil {
-		log.Println(errGetResp)
+		log.Printf("func GetListUnitInOrder when request: %v, error: %v", urlStr, errGetResp)
 		return result, errGetResp
 	}
 
 	if resp == nil || resp.Body == nil {
-		log.Println("no response from cgx service")
+		log.Println("func GetListUnitInOrder no response from cgx service")
 		return result, errors.New("no response from cgx service")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Println("func GetListUnitInOrder when read request", err)
 		return result, err
 	}
 	defer resp.Body.Close()
 
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
-		log.Println(errUnMarshal)
+		log.Println("func GetListUnitInOrder when failed unmarshal: ", errUnMarshal)
 		return result, errUnMarshal
 	}
 

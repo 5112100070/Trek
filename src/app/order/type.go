@@ -11,9 +11,9 @@ type ErrorOrder struct {
 }
 
 type CreateOrderForAdminResponse struct {
-	Error             *string `json:"error", omitempty`
-	Status            string  `json:"status"`
-	ServerProcessTime string  `json:"server_process_time"`
+	Error             *ErrorOrder `json:"error", omitempty`
+	Status            string      `json:"status"`
+	ServerProcessTime string      `json:"server_process_time"`
 }
 
 type MainListOrderResponse struct {
@@ -26,11 +26,9 @@ type MainListOrderResponse struct {
 }
 
 type MainListUnitResponse struct {
-	Data struct {
-		Units []Unit `json:"units", omitempty`
-	} `json:"data", omitempty`
-	Error             *ErrorOrder `json:"error", omitempty`
-	ServerProcessTime string      `json:"server_process_time"`
+	Data              map[int]string `json:"data", omitempty`
+	Error             *ErrorOrder    `json:"error", omitempty`
+	ServerProcessTime string         `json:"server_process_time"`
 }
 
 type OrderReponse struct {
@@ -42,7 +40,7 @@ type OrderReponse struct {
 	ReceiverPhoneNumber string           `json:"receiver_phone_number"`
 	ReceiverNotes       string           `json:"receiver_notes"`
 	CompanyID           int64            `json:"company_id"`
-	CompanyName         int64            `json:"company_name"`
+	CompanyName         string           `json:"company_name"`
 	Status              int              `json:"status"`
 	StatusName          string           `json:"status_name"`
 	UpdateBy            int64            `json:"update_by"`
@@ -97,7 +95,6 @@ type ItemResponse struct {
 
 // Handling standart unit data
 type Unit struct {
-	ID       int    `json:"id"`
-	Code     string `json:"code"`
-	FullName string `json:"fullname"`
+	ID   int    `json:"id"`
+	Code string `json:"code"`
 }

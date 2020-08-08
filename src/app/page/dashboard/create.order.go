@@ -16,7 +16,7 @@ func CreateOrderPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, sessionID, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
-		global.Error.Println(errGetResponse)
+		global.Error.Println("func CreateOrderPageHandler error when get profile: ", errGetResponse)
 		return
 	}
 
@@ -55,7 +55,7 @@ func CreateOrderPageHandler(c *gin.Context) {
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
-		"Units":      unitsResp.Data.Units,
+		"Units":      unitsResp.Data,
 		"Companies":  companiesResp.Data.Companies,
 		"config":     conf.GConfig,
 	}
