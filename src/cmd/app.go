@@ -172,6 +172,8 @@ func initEngineDevelopment() *gin.Engine {
 
 	r.Static("/dashboard/css", "files/WEB-INF/attr-dashboard/css")
 	r.Static("/dashboard/js", "files/WEB-INF/attr-dashboard/js")
+	r.Static("/dashboard/scss", "/var/www/trek/dashboard/scss")
+	r.Static("/dashboard/vendor", "/var/www/trek/dashboard/vendor")
 	r.Static("/dashboard/assets", "files/WEB-INF/attr-dashboard/assets")
 
 	return r
@@ -194,6 +196,7 @@ func initEngineProd() *gin.Engine {
 	r.Static("/dashboard/js", "/var/www/trek/dashboard/js")
 	r.Static("/dashboard/scss", "/var/www/trek/dashboard/scss")
 	r.Static("/dashboard/vendor", "/var/www/trek/dashboard/vendor")
+	r.Static("/dashboard/assets", "files/WEB-INF/attr-dashboard/assets")
 
 	return r
 }
