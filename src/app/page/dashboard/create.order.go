@@ -3,6 +3,7 @@ package dashboard
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/5112100070/Trek/src/app/user"
 
@@ -84,6 +85,41 @@ func CreateOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().CreateOrderForAdmin(token, body)
 	if err != nil {
 		global.Error.Println("func CreateOrderForAdmin error when create order for admin: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
+// ApproveOrderForAdmin method to create order only for admin
+func ApproveOrderForAdmin(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func ApproveOrderForAdmin error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, nil)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func ApproveOrderForAdmin error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid request")
+		return
+	}
+
+	awb := c.PostForm("awb")
+
+	resp, err := global.GetServiceOrder().ApproveOrderForAdmin(token, orderID, awb)
+	if err != nil {
+		global.Error.Println("func ApproveOrderForAdmin error when create order for admin: ", err)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}

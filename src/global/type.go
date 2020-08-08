@@ -50,6 +50,7 @@ type UserService interface {
 
 type OrderService interface {
 	CreateOrderForAdmin(sessionID string, payload order.CreateOrderParam) (*order.CreateOrderForAdminResponse, error)
+	ApproveOrderForAdmin(sessionID string, orderID int64, awb string) (*order.CreateOrderForAdminResponse, error)
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)

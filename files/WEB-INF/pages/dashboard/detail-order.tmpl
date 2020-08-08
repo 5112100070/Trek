@@ -14,6 +14,8 @@
                     <div class="page-header">
                         <div class="container-fluid">
                             <div class="page-header-content py-2">
+                                <div id="success-alert" class="alert alert-success hide" role="alert"></div>
+                                <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
                                 <div class="page-header-title" style="font-size:1rem;"> 
                                     <ol class="breadcrumb mt-1 mb-0">
                                         <li class="breadcrumb-item">
@@ -220,12 +222,12 @@
                         </h6>
                         <div class="form-group">
                             <label for="exampleFormControlInput1">Airwaybill</label>
-                            <input class="form-control" type="name" />
+                            <input id="airwaybill" class="form-control" type="name" />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Close</button>
-                        <a class="btn btn-success btn-sm" type="button" href="/delivery-confirmed">Submit</a>
+                        <button class="btn btn-success btn-sm" type="button" onclick="javascript:handleApproveOrder()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -236,8 +238,70 @@
 
     <script>
          function togglePickupField(comp){
-            console.log(comp);
             $(comp).css("display", "none");
+        }
+
+        function handleApproveOrder(){
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            var awb = $("#airwaybill").val();
+
+            StartLoading();
+
+            var fd = new FormData();
+            fd.append('order_id', orderID);
+            fd.append('awb', awb);
+            
+            var promise = $.ajax({
+                url: base_url + '/admin/approve-order',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+            
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                } else {
+                    $('#konfirmasi').modal("toggle");   
+                }
+                gotoTop();
+                FinishLoading();
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                if(status >= 500){
+                    setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                } else {
+                    response = response.responseJSON.data;
+                    setError(true, response.error);
+                }
+            });
+        }
+
+        function setError(isShow, message = "") {
+            if (isShow) {
+                $("#failed-alert").removeClass("hide");
+                $("#failed-alert").html(message);
+                $("#success-alert").addClass("hide");
+
+                gotoTop();
+            } else {
+                $("#failed-alert").addClass("hide");
+                $("#failed-alert").html("");
+            }
+        }
+
+        function gotoTop(){
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
     <link href="/css/progress.css" rel="stylesheet">

@@ -133,6 +133,7 @@ func main() {
 	r.POST("/admin/change-password", dashboard.AdminChangePassword)
 	r.POST("/admin/change-account-activation", dashboard.AdminChangeActivation)
 	r.POST("/admin/create-order", dashboard.CreateOrderForAdmin)
+	r.POST("/admin/approve-order", dashboard.ApproveOrderForAdmin)
 
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)

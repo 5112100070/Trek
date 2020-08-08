@@ -16,6 +16,12 @@ type CreateOrderForAdminResponse struct {
 	ServerProcessTime string      `json:"server_process_time"`
 }
 
+type ApproveOrderForAdminResponse struct {
+	Error             *ErrorOrder `json:"error", omitempty`
+	Success           bool        `json:"success"`
+	ServerProcessTime string      `json:"server_process_time"`
+}
+
 type MainListOrderResponse struct {
 	Data struct {
 		Orders []OrderReponse `json:"order"`
