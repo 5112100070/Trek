@@ -72,6 +72,27 @@ func (repo orderRepo) ApproveOrderForAdmin(sessionID string, orderID int64, awb 
 	return &resultResp, nil
 }
 
+func (repo orderRepo) RejectOrderForAdmin(sessionID string, orderID int64) (*CreateOrderForAdminResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_REJECT_ORDER, orderID)
+	urlStr := u.String()
+
+	resp, err := repo.doRequest(nil, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func RejectOrderForAdmin error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp CreateOrderForAdminResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func RejectOrderForAdmin error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
 func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (OrderReponse, *ErrorOrder, error) {
 	var result OrderReponse
 	var respOrder MainListOrderResponse
@@ -260,7 +281,7 @@ func (repo orderRepo) GetListUnitInOrder(sessionID string) (MainListUnitResponse
 func (repo orderRepo) doRequest(param []byte, sessionID, url, method string) ([]byte, error) {
 	client := &http.Client{}
 	if param == nil {
-		param = []byte{}
+		param = []byte("{}")
 	}
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(param))

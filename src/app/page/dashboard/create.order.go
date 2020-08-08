@@ -17,6 +17,7 @@ func CreateOrderPageHandler(c *gin.Context) {
 	// Check user session
 	accountResp, sessionID, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
+		global.RenderInternalServerErrorPage(c)
 		global.Error.Println("func CreateOrderPageHandler error when get profile: ", errGetResponse)
 		return
 	}
@@ -31,11 +32,13 @@ func CreateOrderPageHandler(c *gin.Context) {
 	if errGetUnitData != nil {
 		// add internal server error page response
 		log.Println("func CreateOrderPageHandler error when call get list unit from CGX: ", errGetUnitData)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
 	if unitsResp.Error != nil {
 		log.Println("func CreateOrderPageHandler error expected when call get list unit from CGX: ", unitsResp.Error.Detail)
+		global.RenderInternalServerErrorPage(c)
 	}
 
 	companiesResp, errGetCompany := global.GetServiceUser().GetListCompany(sessionID, user.ListCompanyParam{
@@ -47,6 +50,7 @@ func CreateOrderPageHandler(c *gin.Context) {
 	if errGetCompany != nil {
 		// add internal server error page response
 		log.Println("func CreateOrderPageHandler error when call get list unit to CGX: ", errGetCompany)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
@@ -120,6 +124,39 @@ func ApproveOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().ApproveOrderForAdmin(token, orderID, awb)
 	if err != nil {
 		global.Error.Println("func ApproveOrderForAdmin error when create order for admin: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
+// RejectOrderForAdmin method to create order only for admin
+func RejectOrderForAdmin(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func RejectOrderForAdmin error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, nil)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func RejectOrderForAdmin error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid request")
+		return
+	}
+
+	resp, err := global.GetServiceOrder().RejectOrderForAdmin(token, orderID)
+	if err != nil {
+		global.Error.Println("func RejectOrderForAdmin error when create order for admin: ", err)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}
