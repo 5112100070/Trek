@@ -38,7 +38,15 @@
                                         <tbody>
                                             {{ range $index, $order := .orders }}
                                             <tr>
-                                                <td>{{ $order.AWB }}</td>
+                                                <td style="text-align: center">
+                                                    {{ if eq $order.Status 1 }}
+                                                    REJECTED
+                                                    {{ end }}
+
+                                                    {{ if ne $order.Status 1 }}
+                                                    {{ $order.AWB }}
+                                                    {{ end }}
+                                                </td>
                                                 <td>{{ $order.CompanyName }}</td>
                                                 <td>{{ $order.ReceiverAddress }}</td>
                                                 <td style="text-align: center">
@@ -59,7 +67,13 @@
                                                 </td>
                                                 <td></td>
                                                 <td style="text-align: center">
-                                                    <div class="badge badge-primary badge-pill">{{ $order.StatusName }}</div>
+                                                    {{ if eq $order.Status 2 }}
+                                                    <div class="badge badge-primary badge-pill">{{ $order.StatusName }} </div>
+                                                    {{ end }}
+                                                
+                                                    {{ if eq $order.Status 1 }}
+                                                    <div class="badge badge-danger badge-pill">{{ $order.StatusName }} </div>
+                                                    {{ end }}
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary col-sm-12" type="button" onclick="javascript:window.location='/dashboard/order?id={{ $order.ID }}'">view</button>
