@@ -162,6 +162,7 @@
             /* 200KB */
             var imageSizeValidation = 200000;
             var minWidth = 500;
+            var minHeight = 150;
 
             var companyImage = $("#company-image")[0].files[0];
             var $mainContainer = $("#company-image-banner");
@@ -182,10 +183,10 @@
                 imageObj.onload = function() {
                     var height = this.height;
                     var width = this.width;
-                    if(width <= minWidth && height <= minWidth) {
+                    if(width <= minWidth && height <= minHeight) {
                         $("#company-image").val("");
                         $mainContainer.empty();
-                        setError(true, "Dimensi cover harus kurang dari "+minWidth);
+                        setError(true, "Dimensi cover harus kurang dari width: "+minWidth+". height: "+minHeight);
                         return;
                     }
 
