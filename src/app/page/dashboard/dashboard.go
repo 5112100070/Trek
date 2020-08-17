@@ -11,6 +11,7 @@ import (
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/conf"
+	constErr "github.com/5112100070/Trek/src/constants/error"
 	errorConst "github.com/5112100070/Trek/src/constants/error"
 	roleConst "github.com/5112100070/Trek/src/constants/role"
 	statusConst "github.com/5112100070/Trek/src/constants/status"
@@ -307,6 +308,25 @@ func CompaniesListPageHandler(c *gin.Context) {
 	if err != nil {
 		global.Error.Println("func CompaniesListPageHandler error get list company: ", errGetResponse)
 		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if listUserResp.Error != nil {
+		// possibility error
+		if listUserResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+			// ERROR_CODE_SESSION_EXPIRE
+			handleSessionErrorPage(c, *accountResp.Error, true)
+		} else if listUserResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listUserResp.Error.Code == constErr.ERROR_CODE_COMPANY_NOT_HAVE_ACCESS {
+			// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
+			global.RenderUnAuthorizePage(c)
+		} else if listUserResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
+			// ERROR_CODE_INVALID_PARAMETER
+			global.RenderNotFoundPage(c)
+		} else {
+			// ERROR_CODE_INTERNAL_SERVER
+			global.RenderInternalServerErrorPage(c)
+		}
+
 		return
 	}
 

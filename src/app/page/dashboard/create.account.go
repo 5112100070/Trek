@@ -173,9 +173,10 @@ func CreateNewCompany(c *gin.Context) {
 		companyImage, errOpenFile := files[0].Open()
 		if errOpenFile != nil {
 			global.Error.Println("func CreateNewCompany error when create company image ", errOpenFile)
-			global.InternalServerErrorResponse(c, errOpenFile)
+			global.BadRequestResponse(c, errOpenFile)
 			return
 		}
+
 		defer companyImage.Close()
 
 		var errUpload error
