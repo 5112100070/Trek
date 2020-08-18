@@ -123,8 +123,7 @@
                 if(status >= 500){
                     setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
                 } else {
-                    response = response.responseJSON.data;
-                    setError(true, response.error);
+                    setError(true, response.responseJSON.data);
                 }
             });
         }

@@ -8,14 +8,20 @@
                     Dashboard</a>
                 <div class="sidenav-menu-heading">PENGATURAN</div>
                 
+                {{ if eq .UserDetail.Role 1 }}
                 <a class="nav-link" href="/dashboard/users">
                     <div class="nav-link-icon"><i data-feather="user"></i></div>
                     Pengguna
                 </a>
+                {{ end }}
+                
+                {{ if eq .UserDetail.Company.Role 1 -999 }}
                 <a class="nav-link" href="/dashboard/companies">
                     <div class="nav-link-icon"><i data-feather="users"></i></div>
                     Perusahaan
                 </a>
+                {{ end }}
+
                 <div class="sidenav-menu-heading">ORDER</div>
                 <li>
                     <a href="#order-sub-menu" 

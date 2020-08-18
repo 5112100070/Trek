@@ -9,6 +9,8 @@ import (
 
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/conf"
+	constErr "github.com/5112100070/Trek/src/constants/error"
+	constRole "github.com/5112100070/Trek/src/constants/role"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -41,27 +43,71 @@ func CreateOrderPageHandler(c *gin.Context) {
 		global.RenderInternalServerErrorPage(c)
 	}
 
-	companiesResp, errGetCompany := global.GetServiceUser().GetListCompany(sessionID, user.ListCompanyParam{
-		Page:             1,
-		Rows:             50,
-		OrderType:        "desc",
-		FilterByIsEnable: "1",
-	})
-	if errGetCompany != nil {
-		// add internal server error page response
-		log.Println("func CreateOrderPageHandler error when call get list unit to CGX: ", errGetCompany)
-		global.RenderInternalServerErrorPage(c)
-		return
-	}
+	var listCompany []user.CompanyProfile
+	if accountResp.Data.Company.Role != constRole.ROLE_COMPANY_CLIENT {
+		companiesResp, errGetCompany := global.GetServiceUser().GetListCompany(sessionID, user.ListCompanyParam{
+			Page:             1,
+			Rows:             50,
+			OrderType:        "desc",
+			FilterByIsEnable: "1",
+		})
+		if errGetCompany != nil {
+			// add internal server error page response
+			log.Println("func CreateOrderPageHandler error when call get list unit to CGX: ", errGetCompany)
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 
-	if companiesResp.Error != nil {
-		log.Println("func CreateOrderPageHandler error expected when call get list unit to CGX: ", companiesResp.Error.Detail)
+		if companiesResp.Error != nil {
+			// possibility error
+			if companiesResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+				// ERROR_CODE_SESSION_EXPIRE
+				handleSessionErrorPage(c, *accountResp.Error, true)
+			} else if companiesResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || companiesResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_RESULT {
+				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
+				global.RenderUnAuthorizePage(c)
+			} else if companiesResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
+				// ERROR_CODE_INVALID_PARAMETER
+				global.RenderNotFoundPage(c)
+			} else {
+				// ERROR_CODE_INTERNAL_SERVER
+				global.RenderInternalServerErrorPage(c)
+			}
+
+			return
+		}
+
+		listCompany = companiesResp.Data.Companies
+	} else {
+		detailResp, err := global.GetServiceUser().GetDetailCompany(sessionID, accountResp.Data.Company.ID)
+		if err != nil {
+			global.Error.Println("func UserCreatePagehandler error get detail company: ", err)
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
+
+		if detailResp.Error != nil {
+			// possibility error
+			if detailResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+				// ERROR_CODE_SESSION_EXPIRE
+				handleSessionErrorPage(c, *accountResp.Error, true)
+			} else if detailResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS {
+				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
+				global.RenderUnAuthorizePage(c)
+			} else {
+				// ERROR_CODE_INTERNAL_SERVER
+				global.RenderInternalServerErrorPage(c)
+			}
+			return
+		}
+
+		listCompany = append(listCompany, detailResp.Data)
 	}
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"Units":      unitsResp.Data,
-		"Companies":  companiesResp.Data.Companies,
+		"Companies":  listCompany,
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "create-order.tmpl", renderData)
