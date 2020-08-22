@@ -11,6 +11,7 @@ import (
 	"github.com/5112100070/Trek/src/conf"
 	constErr "github.com/5112100070/Trek/src/constants/error"
 	constRole "github.com/5112100070/Trek/src/constants/role"
+	constStatus "github.com/5112100070/Trek/src/constants/status"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -203,6 +204,124 @@ func RejectOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().RejectOrderForAdmin(token, orderID)
 	if err != nil {
 		global.Error.Println("func RejectOrderForAdmin error when create order for admin: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
+// DispatchOrder method to dispatch order
+func DispatchOrder(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func DispatchOrderForAdmin error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, nil)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func DispatchOrderForAdmin error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid request")
+		return
+	}
+
+	// Check is action is allowed dispatch status
+	action := c.PostForm("action")
+	if !constStatus.ALLOWED_STATUS_DISPATCH[action] {
+		global.Error.Printf("func DispatchOrderForAdmin error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid request")
+		return
+	}
+
+	var resp *order.SuccessCRUDResponse
+	var err error
+	if action == constStatus.STATUS_ORDER_DISPATCH_TO_FULFILMENT_CENTER {
+		resp, err = global.GetServiceOrder().DispatchOrderToFulfilmentCenter(token, orderID)
+		if err != nil {
+			global.Error.Println("func DispatchOrderForAdmin error when dispatch order to fulfilment center: ", err)
+			global.InternalServerErrorResponse(c, nil)
+			return
+		}
+	} else if action == constStatus.STATUS_ORDER_DISPATCH_TO_DRIVER {
+		resp, err = global.GetServiceOrder().DispatchOrderToDriver(token, orderID)
+		if err != nil {
+			global.Error.Println("func DispatchOrderForAdmin error when dispatch order to fulfilment center: ", err)
+			global.InternalServerErrorResponse(c, nil)
+			return
+		}
+	} else {
+		global.Error.Println("func DispatchOrderForAdmin undefined action")
+		global.BadRequestResponse(c, nil)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func DispatchOrderForAdmin error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
+// PickUpItem method to pick up item in order. specific for 1 order 1 pickup id
+func PickUpItem(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func PickUpItem error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, nil)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func PickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid order id")
+		return
+	}
+
+	pickupID, errParse := strconv.ParseInt(c.PostForm("pickup_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func PickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid pickup ID")
+		return
+	}
+
+	param := order.PickUpParam{
+		PickUpIDs: []int64{
+			pickupID,
+		},
+		DriverName:  c.PostForm("driver_name"),
+		DriverPhone: c.PostForm("driver_phone"),
+	}
+
+	resp, err := global.GetServiceOrder().PickUpOrderToDriver(token, orderID, param)
+	if err != nil {
+		global.Error.Println("func PickUpItem error when dispatch order to fulfilment center: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func PickUpItem error not have response from cgx: ", err)
 		global.InternalServerErrorResponse(c, nil)
 		return
 	}

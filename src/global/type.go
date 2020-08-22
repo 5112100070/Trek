@@ -20,6 +20,11 @@ type RepoBundle struct {
 	Public  PublicService
 	User    UserService
 	Order   OrderService
+
+	// map order status
+	// get from response CGX server.
+	// must initiable. if fails must return FATAL
+	MapOrderStatus map[string]string
 }
 
 type SessionService interface {
@@ -49,9 +54,13 @@ type UserService interface {
 }
 
 type OrderService interface {
+	GetListActiveStatusCGX() (map[string]string, error)
 	CreateOrderForAdmin(sessionID string, payload order.CreateOrderParam) (*order.CreateOrderForAdminResponse, error)
 	ApproveOrderForAdmin(sessionID string, orderID int64, awb string) (*order.CreateOrderForAdminResponse, error)
 	RejectOrderForAdmin(sessionID string, orderID int64) (*order.CreateOrderForAdminResponse, error)
+	DispatchOrderToFulfilmentCenter(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
+	DispatchOrderToDriver(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
+	PickUpOrderToDriver(sessionID string, orderID int64, param order.PickUpParam) (*order.SuccessCRUDResponse, error)
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)
