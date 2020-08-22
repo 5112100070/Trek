@@ -23,3 +23,9 @@ const URL_ADMIN_GET_ORDER string = "/order/internal/v1/get"
 const URL_ADMIN_GET_UNIT_ORDER string = "order/internal/v1/get/unit"
 const URL_ADMIN_APPROVE_ORDER string = "/order/internal/v1/update/%d/approved"
 const URL_ADMIN_REJECT_ORDER string = "/order/internal/v1/update/%d/reject"
+const URL_ADMIN_DISPATCH_ORDER_FULFILMENT_CENTER string = "/order/internal/v1/update/%d/dispatch_order"
+const URL_ADMIN_DISPATCH_ORDER_PICK_UP string = "/order/internal/v1/update/%d/pick_up"
+const URL_ADMIN_PICKUP_DRIVER string = "/order/internal/v1/update/%d/pick_up"
+
+// Utility Endpoint (1 hit and re-use)
+const URL_DESC_GET_LIST_ORDER_STATUS string = "/order/v1/get/order-status"

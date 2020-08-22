@@ -40,3 +40,9 @@ type ListOrderParam struct {
 	Rows      int
 	OrderType string
 }
+
+type PickUpParam struct {
+	PickUpIDs   []int64 `json:"pickup_ids"`
+	DriverName  string  `json:"driver_name"`
+	DriverPhone string  `json:"driver_phone"`
+}

@@ -15,10 +15,19 @@ func InitLogError(errorHandle io.Writer) {
 }
 
 func InitRepoBundle(dbBundle DBBundle) {
+	// init order status
+	orderService := order.InitOrderRepo()
+	mapOrderStatus, errInitOrderStatus := orderService.GetListActiveStatusCGX()
+	if errInitOrderStatus != nil {
+		Error.Fatalln("func InitRepoBundle failed when init list order status. Error: ", errInitOrderStatus)
+		return
+	}
+
 	Services = RepoBundle{
-		Session: session.InitSessionRepo(dbBundle.RedisSession),
-		Public:  public.InitPublicRepo(dbBundle.DB),
-		User:    user.InitUserRepo(),
-		Order:   order.InitOrderRepo(),
+		Session:        session.InitSessionRepo(dbBundle.RedisSession),
+		Public:         public.InitPublicRepo(dbBundle.DB),
+		User:           user.InitUserRepo(),
+		Order:          orderService,
+		MapOrderStatus: mapOrderStatus,
 	}
 }

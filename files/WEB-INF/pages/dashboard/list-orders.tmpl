@@ -67,13 +67,7 @@
                                                 </td>
                                                 <td></td>
                                                 <td style="text-align: center">
-                                                    {{ if eq $order.Status 2 }}
-                                                    <div class="badge badge-primary badge-pill">{{ $order.StatusName }} </div>
-                                                    {{ end }}
-                                                
-                                                    {{ if eq $order.Status 1 }}
-                                                    <div class="badge badge-danger badge-pill">{{ $order.StatusName }} </div>
-                                                    {{ end }}
+                                                    <div class="badge badge-pill {{ $order.StatusBadge }}">{{ $order.StatusName }}</div>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary col-sm-12" type="button" onclick="javascript:window.location='/dashboard/order?id={{ $order.ID }}'">view</button>

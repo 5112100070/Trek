@@ -22,6 +22,12 @@ type ApproveOrderForAdminResponse struct {
 	ServerProcessTime string      `json:"server_process_time"`
 }
 
+type SuccessCRUDResponse struct {
+	Error             *ErrorOrder `json:"error", omitempty`
+	Success           bool        `json:"success"`
+	ServerProcessTime string      `json:"server_process_time"`
+}
+
 type MainListOrderResponse struct {
 	Data struct {
 		Orders []OrderReponse `json:"order"`
@@ -60,9 +66,11 @@ type OrderReponse struct {
 	TotalPickUp   int
 	CreateTimeStr string
 	UpdateTimeStr string
+	StatusBadge   string
 }
 
 type PickUpResponse struct {
+	ID          int64          `json:"id"`
 	Name        string         `json:"name"`
 	Address     string         `json:"address"`
 	PhoneNumber string         `json:"phone_number"`

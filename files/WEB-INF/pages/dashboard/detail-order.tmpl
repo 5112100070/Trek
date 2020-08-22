@@ -75,16 +75,9 @@
                                                     <div class="float-right">
                                                         {{ if eq .order.Status 0 }}
                                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button> 
-                                                        <button class="btn btn-red btn-sm" type="button" data-toggle="modal" data-target="#reject-order">Cancel</button>
                                                         {{ end }}
 
-                                                        {{ if eq .order.Status 1 }}
-                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button>
-                                                        {{ end }}
-                                                        
-                                                        {{ if eq .order.Status 2 }} 
                                                         <button class="btn btn-red btn-sm" type="button" data-toggle="modal" data-target="#reject-order">Cancel</button>
-                                                        {{ end }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -153,11 +146,49 @@
                                                 </div>
                                             </div>
                                             <!-- Pickup Field Generated from here -->
-                                            <div class="card-header" style="color:black;">Pengambilan</div>
+                                            <div class="card-header" style="color:black;">
+                                                <div class="col-6">Pengambilan</div>
+                                                {{ if eq .order.Status 2 }} 
+                                                <div class="col-6 ">
+                                                    <div class="dropdown float-right">
+                                                        <button class="btn btn-green btn-sm dropdown-toggle" id="dispatch-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Dispatch
+                                                        </button>
+                                                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dispatch-menu">
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#dispatch-fulfilment-center" style="cursor: pointer;">Fullfilment Center</a>
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#dispatch-pickup" style="cursor: pointer;">Driver</a>
+                                                        </div>
+                                                    </div>      
+                                                </div>
+                                                {{ end }}
+                                            </div>
+                                            {{ $orderDetail := .order }}
                                             {{ range $indexPickup, $pickup := .order.Pickups }}
                                             <div class="card-body">
                                                <div class= "col-lg-12 p-4 mb-4" style="background-color:#e9edf3;">
                                                     <div class="position-relative">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="badge badge-primary text-wrap ml-2">
+                                                                    Picking up
+                                                                </span>
+                                                            </div>
+
+                                                            {{ if eq $orderDetail.Status 3 }} 
+                                                            <div class="col-6 ">
+                                                                <div class="dropdown float-right">
+                                                                    <button class="btn btn-green btn-sm dropdown-toggle" id="pickup-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        Assign to driver
+                                                                    </button>
+                                                                    <div class="dropdown-menu animated--fade-in" aria-labelledby="pickup-menu">
+                                                                        <a class="dropdown-item" style="cursor: pointer;" onclick="javascript:showModalPickUp({{ $orderDetail.ID }}, {{ $pickup.ID }})">Input Driver's Data</a>
+                                                                        <a class="dropdown-item" href="javascript:void(0);" style="cursor: pointer;">Reject</a>
+                                                                    </div>
+                                                                </div>      
+                                                            </div>
+                                                            {{ end }}
+                                                        </div>
+
                                                         <div class="row align-items-center justify-content-between">
                                                             <div class="col position-relative ">
                                                             <div class="row mb-3">
@@ -272,17 +303,84 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Konfimasi penolakan order. Apakah anda yakin ?</label>
-                    </div>
+                    Apakah anda yakin untuk melakukan pembatalan order ?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
-                    <button class="btn btn-success btn-sm" type="button" onclick="javascript:handleRejectOrder()">Ya, yakin</button>
+                    <button class="btn btn-success btn-sm" type="button" onclick="javascript:handleRejectOrder()">Ya, Batalkan Order !</button>
                 </div>
             </div>
         </div>
       </div>
+
+      <!-- modal konfirmasi dispatch by pickup driver -->
+      <div class="modal fade" id="dispatch-pickup" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="dispatch-pickup-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dispatch-pickup-label">Confirmation Dispatch To Driver</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin untuk melakukan dispatch order ke <span style="font-weight: bold;">Driver</span> ?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
+                    <a class="btn btn-success btn-sm" onclick="javascript:handleDispatchOrder('DISPATCH_TO_FULFILMENT_DRIVER')" type="button" style="text-decoration: none; color: black;">Dispatch To Driver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal konfirmasi dispatch by to fulfilment center -->
+    <div class="modal fade" id="dispatch-fulfilment-center" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="dispatch-fulfilment-center" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation Dispatch To Fulfilment Center</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin untuk melakukan dispatch order ke <span style="font-weight: bold;">Fulfilment Center</span> ?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleDispatchOrder('DISPATCH_TO_FULFILMENT_CENTER')" style="text-decoration: none; color: black;">
+                        Dispatch To Fulfilment Center
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal konfirmasi Pickup By Driver -->
+    <div class="modal fade" id="modal-pickup-driver" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-pickup-driver-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-pickup-driver-label">Assign Driver</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="pickup-driver-name">Driver name</label>
+                        <input class="form-control" id="pickup-driver-name" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup-driver-phone">Driver phone</label>
+                        <input class="form-control" id="pickup-driver-phone" type="text" />
+                    </div>
+                    <input class="hide" id="pickup-pickup-id" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Close</button>
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handlePickUpOrder()" style="text-decoration: none; color: black;">
+                        Assign To Driver!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
@@ -380,6 +478,112 @@
                     setError(true, response.responseJSON.data);
                 }
             });
+        }
+
+        function handleDispatchOrder(action){
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+
+            StartLoading();
+
+            var fd = new FormData();
+            fd.append('order_id', orderID);
+            fd.append('action', action);
+
+            var promise = $.ajax({
+                url: base_url + '/admin/dispatch-order',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+            
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                } else {
+                    if(action == "DISPATCH_TO_FULFILMENT_CENTER"){
+                        $('#dispatch-fulfilment-center').modal("toggle");
+                    } else if(action == "DISPATCH_TO_FULFILMENT_DRIVER"){
+                        $('#dispatch-pickup').modal("toggle");
+                    }
+                }
+                gotoTop();
+                FinishLoading();
+
+                window.location.reload();
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                if(status >= 500){
+                    setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                } else {
+                    setError(true, response.responseJSON.data);
+                }
+            });
+        }
+
+        function handlePickUpOrder(){
+            $('#modal-pickup-driver').modal("toggle");
+
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            var pickupID = $("#pickup-pickup-id").val();
+            var driverName = $("#pickup-driver-name").val();
+            var driverPhone = $("#pickup-driver-phone").val();             
+
+            StartLoading();
+
+            var fd = new FormData();
+            fd.append('order_id', orderID);
+            fd.append('pickup_id', pickupID);
+            fd.append('driver_name', driverName);
+            fd.append('driver_phone', driverPhone);
+
+            var promise = $.ajax({
+                url: base_url + '/admin/pickup-item-order',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+            
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                }
+                
+                FinishLoading();
+                gotoTop();
+                window.location.reload();
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                if(status >= 500){
+                    setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                } else {
+                    setError(true, response.responseJSON.data);
+                }
+            });
+        }
+
+        function showModalPickUp(orderID, pickupID){
+            $('#modal-pickup-driver').modal("show");
+
+            // add pickup id on input for request data
+            $('#pickup-pickup-id').val(pickupID);
         }
 
         function setError(isShow, message = "") {

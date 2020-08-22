@@ -14,12 +14,67 @@ import (
 
 	"github.com/5112100070/Trek/src/conf"
 	headerConst "github.com/5112100070/Trek/src/constants/header"
+	statusConst "github.com/5112100070/Trek/src/constants/status"
 	urlConst "github.com/5112100070/Trek/src/constants/url"
 )
 
 // InitOrderRepo - initialization for orderRepo
 func InitOrderRepo() *orderRepo {
 	return &orderRepo{}
+}
+
+func (repo orderRepo) GetListActiveStatusCGX() (map[string]string, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_DESC_GET_LIST_ORDER_STATUS
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		log.Println("func GetListActiveStatusCGX error when create new request. Error: ", err)
+		return nil, err
+	}
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println("func GetListActiveStatusCGX error error when do resp. Error: ", errGetResp)
+		return nil, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("func GetListActiveStatusCGX no response from cgx service")
+		return nil, errors.New("func GetListActiveStatusCGX no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("func GetListActiveStatusCGX error read response. Error: ", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var resultResp struct {
+		Data  map[string]string `json:"data", omitempty`
+		Error *ErrorOrder       `json:"error", omitempty`
+	}
+	errUnMarshal := json.Unmarshal(body, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func GetListActiveStatusCGX error when unmarshal response: err: %v. Payload: %+v\n", errUnMarshal, string(body))
+		return nil, errUnMarshal
+	}
+
+	if resultResp.Error != nil {
+		log.Printf("func GetListActiveStatusCGX error from CGX. Code: %d, error: %v", resultResp.Error.Code, resultResp.Error.Detail)
+		return nil, errors.New(resultResp.Error.Detail)
+	}
+
+	// if not have result from cgx. must return error
+	if resultResp.Data == nil {
+		log.Printf("func GetListActiveStatusCGX not have response from CGX")
+		return nil, errors.New("GetListActiveStatusCGX not have response from CGX")
+	}
+
+	return resultResp.Data, nil
 }
 
 func (repo orderRepo) CreateOrderForAdmin(sessionID string, payload CreateOrderParam) (*CreateOrderForAdminResponse, error) {
@@ -229,6 +284,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	for i, _ := range result.Data.Orders {
 		result.Data.Orders[i].UpdateTimeStr = result.Data.Orders[i].UpdateTime.Format("02 Jan 2006")
 		result.Data.Orders[i].TotalPickUp = len(result.Data.Orders[i].Pickups)
+		result.Data.Orders[i].StatusBadge = statusConst.MAP_BADGE_BY_STATUS_ORDER[result.Data.Orders[i].Status]
 	}
 
 	return result, nil
@@ -278,6 +334,79 @@ func (repo orderRepo) GetListUnitInOrder(sessionID string) (MainListUnitResponse
 	return result, nil
 }
 
+func (repo orderRepo) DispatchOrderToFulfilmentCenter(sessionID string, orderID int64) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_DISPATCH_ORDER_FULFILMENT_CENTER, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct{}{})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func DispatchOrderToFulfilmentCenter error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func DispatchOrderToFulfilmentCenter error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
+func (repo orderRepo) DispatchOrderToDriver(sessionID string, orderID int64) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_DISPATCH_ORDER_PICK_UP, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct{}{})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func DispatchOrderToDriver error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func DispatchOrderToDriver error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
+func (repo orderRepo) PickUpOrderToDriver(sessionID string, orderID int64, param PickUpParam) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_PICKUP_DRIVER, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		DriverPickUP PickUpParam `json:"driver_pickup"`
+	}{
+		DriverPickUP: param,
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func PickUpOrderToDriver error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func PickUpOrderToDriver error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
 func (repo orderRepo) doRequest(param []byte, sessionID, url, method string) ([]byte, error) {
 	client := &http.Client{}
 	if param == nil {
@@ -291,7 +420,9 @@ func (repo orderRepo) doRequest(param []byte, sessionID, url, method string) ([]
 	}
 
 	// set header
-	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	if sessionID != "" {
+		req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	}
 	req.Header.Add(headerConst.CONTENT_TYPE, "application/json")
 
 	resp, errGetResp := client.Do(req)
