@@ -10,6 +10,7 @@ import (
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/conf"
 	errorConst "github.com/5112100070/Trek/src/constants/error"
+	statusConst "github.com/5112100070/Trek/src/constants/status"
 	"github.com/5112100070/Trek/src/global"
 	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/gin-gonic/gin"
@@ -100,6 +101,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"order":      orderDetail,
+		"BadgeOrder": statusConst.MAP_BADGE_BY_STATUS_ORDER,
+		"BadgePickup": statusConst.MAP_BADGE_BY_STATUS_PICKUP,
 		"config":     conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-order.tmpl", renderData)

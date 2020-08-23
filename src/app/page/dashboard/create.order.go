@@ -335,7 +335,7 @@ func PickUpItem(c *gin.Context) {
 	return
 }
 
-// RejectPickUpItem method to reject pick up based on pick up id
+// RejectPickUpItem method to reject pick up based on pick up id 
 func RejectPickUpItem(c *gin.Context) {
 	// Check user session
 	_, token, errGetResponse := getUserProfile(c)
@@ -380,4 +380,54 @@ func RejectPickUpItem(c *gin.Context) {
 	global.OKResponse(c, response)
 
 	return
+}
+
+// FinishPickUpItem method to finish pick up 
+func FinishPickUpItem(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func FinishPickUpItem error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
+		return
+	}
+
+	var requestParam struct{
+		OrderID int64 `json:"order_id"`
+		PickUpIDs   []int64 `json:"pickup_ids"`
+		Items []order.ItemPickUpParam `json:"items"`
+	}
+	 
+	errBindRequest := c.BindJSON(&requestParam)
+	if errBindRequest!=nil {
+		global.Error.Printf("func FinishPickUpItem error when parsing : %v\n", errBindRequest)
+		global.BadRequestResponse(c, "invalid parameter request")
+		return
+	}
+
+	var param order.FinishPickupParam
+	param.PickUpIDs = requestParam.PickUpIDs
+	param.Items = requestParam.Items
+
+	resp, err := global.GetServiceOrder().FinishPickUpOrder(token, requestParam.OrderID, param)
+	if err != nil {
+		global.Error.Println("func FinishPickUpItem error when dispatch order to fulfilment center: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+ 
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func FinishPickUpItem error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return	
 }

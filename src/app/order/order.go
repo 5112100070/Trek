@@ -23,7 +23,7 @@ func InitOrderRepo() *orderRepo {
 	return &orderRepo{}
 }
 
-func (repo orderRepo) GetListActiveStatusCGX() (map[string]string, error) {
+func (repo orderRepo) GetListOrderStatusCGX() (map[string]string, error) {
 	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
 	u.Path = urlConst.URL_DESC_GET_LIST_ORDER_STATUS
 	urlStr := u.String()
@@ -31,24 +31,24 @@ func (repo orderRepo) GetListActiveStatusCGX() (map[string]string, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
-		log.Println("func GetListActiveStatusCGX error when create new request. Error: ", err)
+		log.Println("func GetListOrderStatusCGX error when create new request. Error: ", err)
 		return nil, err
 	}
 
 	resp, errGetResp := client.Do(req)
 	if err != nil {
-		log.Println("func GetListActiveStatusCGX error error when do resp. Error: ", errGetResp)
+		log.Println("func GetListOrderStatusCGX error error when do resp. Error: ", errGetResp)
 		return nil, errGetResp
 	}
 
 	if resp == nil || resp.Body == nil {
-		log.Println("func GetListActiveStatusCGX no response from cgx service")
-		return nil, errors.New("func GetListActiveStatusCGX no response from cgx service")
+		log.Println("func GetListOrderStatusCGX no response from cgx service")
+		return nil, errors.New("func GetListOrderStatusCGX no response from cgx service")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("func GetListActiveStatusCGX error read response. Error: ", err)
+		log.Println("func GetListOrderStatusCGX error read response. Error: ", err)
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -59,19 +59,73 @@ func (repo orderRepo) GetListActiveStatusCGX() (map[string]string, error) {
 	}
 	errUnMarshal := json.Unmarshal(body, &resultResp)
 	if errUnMarshal != nil {
-		log.Printf("func GetListActiveStatusCGX error when unmarshal response: err: %v. Payload: %+v\n", errUnMarshal, string(body))
+		log.Printf("func GetListOrderStatusCGX error when unmarshal response: err: %v. Payload: %+v\n", errUnMarshal, string(body))
 		return nil, errUnMarshal
 	}
 
 	if resultResp.Error != nil {
-		log.Printf("func GetListActiveStatusCGX error from CGX. Code: %d, error: %v", resultResp.Error.Code, resultResp.Error.Detail)
+		log.Printf("func GetListOrderStatusCGX error from CGX. Code: %d, error: %v", resultResp.Error.Code, resultResp.Error.Detail)
 		return nil, errors.New(resultResp.Error.Detail)
 	}
 
 	// if not have result from cgx. must return error
 	if resultResp.Data == nil {
-		log.Printf("func GetListActiveStatusCGX not have response from CGX")
-		return nil, errors.New("GetListActiveStatusCGX not have response from CGX")
+		log.Printf("func GetListOrderStatusCGX not have response from CGX")
+		return nil, errors.New("GetListOrderStatusCGX not have response from CGX")
+	}
+
+	return resultResp.Data, nil
+}
+
+func (repo orderRepo) GetListPickupStatusCGX() (map[string]string, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_DESC_GET_LIST_PICKUP_STATUS
+	urlStr := u.String()
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		log.Println("func GetListPickupStatusCGX error when create new request. Error: ", err)
+		return nil, err
+	}
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println("func GetListPickupStatusCGX error error when do resp. Error: ", errGetResp)
+		return nil, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("func GetListPickupStatusCGX no response from cgx service")
+		return nil, errors.New("func GetListPickupStatusCGX no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("func GetListPickupStatusCGX error read response. Error: ", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var resultResp struct {
+		Data  map[string]string `json:"data", omitempty`
+		Error *ErrorOrder       `json:"error", omitempty`
+	}
+	errUnMarshal := json.Unmarshal(body, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func GetListPickupStatusCGX error when unmarshal response: err: %v. Payload: %+v\n", errUnMarshal, string(body))
+		return nil, errUnMarshal
+	}
+
+	if resultResp.Error != nil {
+		log.Printf("func GetListPickupStatusCGX error from CGX. Code: %d, error: %v", resultResp.Error.Code, resultResp.Error.Detail)
+		return nil, errors.New(resultResp.Error.Detail)
+	}
+
+	// if not have result from cgx. must return error
+	if resultResp.Data == nil {
+		log.Printf("func GetListPickupStatusCGX not have response from CGX")
+		return nil, errors.New("GetListPickupStatusCGX not have response from CGX")
 	}
 
 	return resultResp.Data, nil
@@ -409,7 +463,7 @@ func (repo orderRepo) PickUpOrderToDriver(sessionID string, orderID int64, param
 
 func (repo orderRepo) RejectPickUpOrder(sessionID string, orderID int64, pickupID ...int64) (*SuccessCRUDResponse, error) {
 	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
-	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_REJECT_PICKUP, orderID)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_PICKUP_REJECT, orderID)
 	urlStr := u.String()
 
 	bodyReq, _ := json.Marshal(struct {
@@ -431,6 +485,33 @@ func (repo orderRepo) RejectPickUpOrder(sessionID string, orderID int64, pickupI
 	}
 
 	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
+func (repo orderRepo) FinishPickUpOrder(sessionID string, orderID int64, param FinishPickupParam) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_PICKUP_FINISH, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		DriverPickup FinishPickupParam `json:"driver_pickup"`
+	}{
+		DriverPickup: param, 
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func RejectPickUpOrder error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse 
 	errUnMarshal := json.Unmarshal(resp, &resultResp)
 	if errUnMarshal != nil {
 		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
