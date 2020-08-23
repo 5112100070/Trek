@@ -31,3 +31,4 @@ const URL_ADMIN_PICKUP_FINISH string = "/order/internal/v1/update/%d/pick_up_fin
 
 // Utility Endpoint (1 hit and re-use)
 const URL_DESC_GET_LIST_ORDER_STATUS string = "/order/v1/get/order-status"
+const URL_DESC_GET_LIST_PICKUP_STATUS string = "/order/v1/get/pickup-status"

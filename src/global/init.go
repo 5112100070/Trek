@@ -1,6 +1,7 @@
 package global
 
 import (
+	"strconv"
 	"io"
 	"log"
 
@@ -17,11 +18,29 @@ func InitLogError(errorHandle io.Writer) {
 func InitRepoBundle(dbBundle DBBundle) {
 	// init order status
 	orderService := order.InitOrderRepo()
-	mapOrderStatus, errInitOrderStatus := orderService.GetListActiveStatusCGX()
+	orderStatus, errInitOrderStatus := orderService.GetListOrderStatusCGX()
 	if errInitOrderStatus != nil {
 		Error.Fatalln("func InitRepoBundle failed when init list order status. Error: ", errInitOrderStatus)
 		return
 	}
+
+	var mapOrderStatus = make(map[int]string)
+	for k,v := range orderStatus {
+		key,_ := strconv.Atoi(k) 
+		mapOrderStatus[key] = v
+	}
+
+	pickupStatus, errInitPickupStatus := orderService.GetListPickupStatusCGX()
+	if errInitPickupStatus != nil {
+		Error.Fatalln("func InitRepoBundle failed when init list pickup status. Error: ", errInitPickupStatus)
+		return
+	}
+
+	var mapPickupStatus = make(map[int]string)
+	for k,v := range pickupStatus {
+		key,_ := strconv.Atoi(k) 
+		mapPickupStatus[key] = v
+	}	
 
 	Services = RepoBundle{
 		Session:        session.InitSessionRepo(dbBundle.RedisSession),
@@ -29,5 +48,6 @@ func InitRepoBundle(dbBundle DBBundle) {
 		User:           user.InitUserRepo(),
 		Order:          orderService,
 		MapOrderStatus: mapOrderStatus,
+		MapPickupStatus:mapPickupStatus,
 	}
 }
