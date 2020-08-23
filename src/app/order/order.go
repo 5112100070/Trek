@@ -409,7 +409,7 @@ func (repo orderRepo) PickUpOrderToDriver(sessionID string, orderID int64, param
 
 func (repo orderRepo) RejectPickUpOrder(sessionID string, orderID int64, pickupID ...int64) (*SuccessCRUDResponse, error) {
 	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
-	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_REJECT_PICKUP, orderID)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_PICKUP_REJECT, orderID)
 	urlStr := u.String()
 
 	bodyReq, _ := json.Marshal(struct {
@@ -431,6 +431,33 @@ func (repo orderRepo) RejectPickUpOrder(sessionID string, orderID int64, pickupI
 	}
 
 	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
+func (repo orderRepo) FinishPickUpOrder(sessionID string, orderID int64, param FinishPickupParam) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_PICKUP_FINISH, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		DriverPickup FinishPickupParam `json:"driver_pickup"`
+	}{
+		DriverPickup: param, 
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func RejectPickUpOrder error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse 
 	errUnMarshal := json.Unmarshal(resp, &resultResp)
 	if errUnMarshal != nil {
 		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))

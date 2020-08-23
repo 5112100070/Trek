@@ -174,7 +174,8 @@
                                                                 </span>
                                                             </div>
 
-                                                            {{ if eq $orderDetail.Status 3 }} 
+                                                            {{ if eq $orderDetail.Status 3 }}
+                                                            {{ if ne $pickup.Status 3 }}
                                                             <div class="col-6 ">
                                                                 <div class="dropdown float-right">
                                                                     <button class="btn btn-green btn-sm dropdown-toggle" id="pickup-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -198,11 +199,12 @@
                                                                         <a class="dropdown-item" style="cursor: pointer;" onclick="javascript:showModalRejectPickUp({{ $pickup.ID }}, {{ $pickup.Name }}, {{ $pickup.Address }})">Reject</a>
                                                                         {{ end }}
                                                                         {{ if eq $pickup.Status 1 }}
-                                                                        <a class="dropdown-item" href="javascript:void(0);" style="cursor: pointer;">Finish</a>
+                                                                        <a class="dropdown-item" style="cursor: pointer;" onclick="javascript:showModalFinishPickUp({{ $pickup.ID }})">Finish</a>
                                                                         {{ end }}
                                                                     </div>
                                                                 </div>      
                                                             </div>
+                                                            {{ end }}
                                                             {{ end }}
                                                         </div>
 
@@ -266,7 +268,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> 
                                             {{ end }}
                                         </div>
                                     </div>
@@ -410,10 +412,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body" id="reject-pick-up-body">
-                    Apakah anda yakin untuk melakukan pembatalan pick up atas nama: , dengan alamat: ?
-                </div>
-
+                <div class="modal-body" id="reject-pick-up-body"></div>
                 <input class="hide" id="reject-pick-up-id" />
                 
                 <div class="modal-footer">
@@ -422,7 +421,41 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- modal konfirmasi finish pick up -->
+    <div class="modal fade" id="finish-pick-up" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="finish-pick-up-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="finish-pick-up-label">Konfirmasi Penerimaan Barang</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="datatable table-responsive mt-4">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama produk</th>
+                                <th>Deskripsi produk</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finish-pick-up-body"></tbody>
+                    </table>
+                </div>
+              </div>
+              <input class="hide" id="finish-pickup-id" />
+              
+              <div class="modal-footer">
+                  <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
+                  <button class="btn btn-success btn-sm" type="button" onclick="javascript:handleFinishPickUp()">Pick Up telah Selesai !</button>
+              </div>
+          </div>
       </div>
+    </div>
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
@@ -647,6 +680,61 @@
             });
         }
 
+        function handleFinishPickUp(){
+            StartLoading();
+
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            var pickupID = $("#finish-pickup-id").val();
+
+            // generate payload to hit
+            var itemsPayload = [];
+            for(var i=0; i < activePickupItems.length; i++){
+                let quantity = $("#"+activePickupItems[i]).val();
+                if(quantity == null){
+                    quantity = 0;
+                }
+
+                let id = activePickupItems[i].replace("item-", "");
+                itemsPayload.push({
+                    id: parseInt(id),
+                    quantity: parseInt(quantity),
+                });
+            }
+
+            let payload = {
+                order_id: parseInt(orderID),
+                pickup_ids: [parseInt(pickupID)],
+                items: itemsPayload
+            };
+
+            var promise = $.ajax({
+                url: base_url + '/admin/finish-pickup',
+                type: 'POST',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                dataType: "json"
+            });
+            
+            $('#finish-pick-up').modal("toggle");
+
+            promise.done(function(response){
+                response = response.data;
+
+                FinishLoading();
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    window.location.reload();   
+                }
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                setError(true, response.responseJSON.data);
+            });
+        }
+
         function showModalRejectPickUp(pickupID, recieverName, recieverAddress){
             $("#reject-pick-up").modal("show");
 
@@ -672,6 +760,33 @@
             $('#pickup-pickup-id').val(pickupID);
         }
 
+        function showModalFinishPickUp(pickupID){
+            $("#finish-pick-up").modal("show");
+
+            // add pickup id on input for request data
+            $('#finish-pickup-id').val(pickupID);
+
+            var items = PickupItems[pickupID];
+            var component = "";
+
+            // reset active list active pickup item
+            activePickupItems = [];
+            for(let i = 0; i < items.length; i++){
+                let name = "<td>"+ items[i].name +"</td>";
+                let description = "<td>"+ items[i].notes +"</td>";
+                
+                let inputID = "item-" + items[i].id;
+                let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="0"></td>`;
+                activePickupItems.push(inputID);
+
+                let newComponent = `<tr>`+ name + description + input +`</tr>`
+                component = component + newComponent;
+            }
+
+            // generate component
+            $('#finish-pick-up-body').html(component);
+        }
+
         function setError(isShow, message = "") {
             if (isShow) {
                 $("#failed-alert").removeClass("hide");
@@ -689,6 +804,13 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+        var activePickupItems = [];
+
+        var PickupItems = {};
+        {{ range $indexPickup, $pickup := .order.Pickups }}
+        PickupItems[{{ $pickup.ID }}] = {{ $pickup.Items }};
+        {{ end }} 
     </script>
     <link href="/css/progress.css" rel="stylesheet">
 </html>

@@ -46,3 +46,13 @@ type PickUpParam struct {
 	DriverName  string  `json:"driver_name"`
 	DriverPhone string  `json:"driver_phone"`
 }
+
+type FinishPickupParam struct { 
+	PickUpIDs   []int64 `json:"pickup_ids"`
+	Items []ItemPickUpParam `json:"items"`
+}  
+  
+type ItemPickUpParam struct {
+	ID int64 `json:"id"`
+	Quantity int64 `json:"quantity"`   
+}

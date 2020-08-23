@@ -89,7 +89,8 @@ type PickUpResponse struct {
 	UpdateTimeStr string
 }
 
-type ItemResponse struct {
+type ItemResponse struct { 
+	ID 	int64 `json:"id"`
 	Name         string    `json:"name"`
 	Quantity     int64     `json:"quantity"`
 	Unit         int64     `json:"unit"`
@@ -106,7 +107,7 @@ type ItemResponse struct {
 	DeadlineStr   string
 	PickupTimeStr string
 }
-
+ 
 // Handling standart unit data
 type Unit struct {
 	ID   int    `json:"id"`
