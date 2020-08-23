@@ -200,7 +200,7 @@ func RegisterConfirmationPage(c *gin.Context) {
 	resp, errGetResp := client.Do(req)
 	if err != nil {
 		global.Error.Println(errGetResp)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, errorConst.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -208,7 +208,7 @@ func RegisterConfirmationPage(c *gin.Context) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		global.Error.Println(err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, errorConst.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 

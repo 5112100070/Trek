@@ -122,7 +122,7 @@ func CreateOrderForAdmin(c *gin.Context) {
 	_, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func CreateOrderForAdmin error get user profile: ", errGetResponse)
-		global.ForbiddenResponse(c, nil)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
 		return
 	}
 
@@ -136,7 +136,7 @@ func CreateOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().CreateOrderForAdmin(token, body)
 	if err != nil {
 		global.Error.Println("func CreateOrderForAdmin error when create order for admin: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -155,7 +155,7 @@ func ApproveOrderForAdmin(c *gin.Context) {
 	_, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func ApproveOrderForAdmin error get user profile: ", errGetResponse)
-		global.ForbiddenResponse(c, nil)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
 		return
 	}
 
@@ -171,7 +171,7 @@ func ApproveOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().ApproveOrderForAdmin(token, orderID, awb)
 	if err != nil {
 		global.Error.Println("func ApproveOrderForAdmin error when create order for admin: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -190,7 +190,7 @@ func RejectOrderForAdmin(c *gin.Context) {
 	_, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func RejectOrderForAdmin error get user profile: ", errGetResponse)
-		global.ForbiddenResponse(c, nil)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
 		return
 	}
 
@@ -204,7 +204,7 @@ func RejectOrderForAdmin(c *gin.Context) {
 	resp, err := global.GetServiceOrder().RejectOrderForAdmin(token, orderID)
 	if err != nil {
 		global.Error.Println("func RejectOrderForAdmin error when create order for admin: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -223,7 +223,7 @@ func DispatchOrder(c *gin.Context) {
 	_, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func DispatchOrderForAdmin error get user profile: ", errGetResponse)
-		global.ForbiddenResponse(c, nil)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
 		return
 	}
 
@@ -248,14 +248,14 @@ func DispatchOrder(c *gin.Context) {
 		resp, err = global.GetServiceOrder().DispatchOrderToFulfilmentCenter(token, orderID)
 		if err != nil {
 			global.Error.Println("func DispatchOrderForAdmin error when dispatch order to fulfilment center: ", err)
-			global.InternalServerErrorResponse(c, nil)
+			global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 			return
 		}
 	} else if action == constStatus.STATUS_ORDER_DISPATCH_TO_DRIVER {
 		resp, err = global.GetServiceOrder().DispatchOrderToDriver(token, orderID)
 		if err != nil {
 			global.Error.Println("func DispatchOrderForAdmin error when dispatch order to fulfilment center: ", err)
-			global.InternalServerErrorResponse(c, nil)
+			global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 			return
 		}
 	} else {
@@ -267,7 +267,7 @@ func DispatchOrder(c *gin.Context) {
 	// prevent any panic on frontend process rendering
 	if resp == nil {
 		global.Error.Println("func DispatchOrderForAdmin error not have response from cgx: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -286,7 +286,7 @@ func PickUpItem(c *gin.Context) {
 	_, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func PickUpItem error get user profile: ", errGetResponse)
-		global.ForbiddenResponse(c, nil)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
 		return
 	}
 
@@ -315,14 +315,61 @@ func PickUpItem(c *gin.Context) {
 	resp, err := global.GetServiceOrder().PickUpOrderToDriver(token, orderID, param)
 	if err != nil {
 		global.Error.Println("func PickUpItem error when dispatch order to fulfilment center: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// prevent any panic on frontend process rendering
 	if resp == nil {
 		global.Error.Println("func PickUpItem error not have response from cgx: ", err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
+// RejectPickUpItem method to reject pick up based on pick up id
+func RejectPickUpItem(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func RejectPickUpItem error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func RejectPickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid order id")
+		return
+	}
+
+	pickupID, errParse := strconv.ParseInt(c.PostForm("pickup_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func RejectPickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid pickup ID")
+		return
+	}
+
+	resp, err := global.GetServiceOrder().RejectPickUpOrder(token, orderID, pickupID)
+	if err != nil {
+		global.Error.Println("func RejectPickUpItem error when dispatch order to fulfilment center: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func RejectPickUpItem error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 

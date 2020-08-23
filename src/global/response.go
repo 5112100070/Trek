@@ -40,6 +40,7 @@ func UnAuthorizeResponse(c *gin.Context, val interface{}) {
 
 func ForbiddenResponse(c *gin.Context, val interface{}) {
 	header := gin.H{
+		"status_code":    403,
 		"server_message": "Forbidden",
 		"data":           val,
 	}

@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/5112100070/Trek/src/app/user"
+	constErr "github.com/5112100070/Trek/src/constants/error"
 	"github.com/5112100070/Trek/src/global"
 )
 
@@ -56,13 +57,13 @@ func CreateNewAccount(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func CreateNewAccount error when getUserProfile", errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
