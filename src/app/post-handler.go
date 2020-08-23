@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	constErr "github.com/5112100070/Trek/src/constants/error"
 	"github.com/5112100070/Trek/src/global"
 	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/5112100070/Trek/src/utils"
@@ -72,7 +73,7 @@ func ProcessMakeLogin(c *gin.Context) {
 	loginResp, errResp := service.RequestLogin(email, password)
 	if errResp != nil {
 		log.Println(errResp)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -91,7 +92,7 @@ func ProcessMakeLogin(c *gin.Context) {
 	}
 
 	// return internal server error if not caught response from service server
-	global.InternalServerErrorResponse(c, nil)
+	global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 }
 
 func ProcessMakeLogout(c *gin.Context) {
@@ -107,7 +108,7 @@ func ProcessMakeLogout(c *gin.Context) {
 	if err != nil {
 		// internal server error from go.cgx.co.id
 		global.Error.Println(err)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 	}
 
 	if errResp != nil {

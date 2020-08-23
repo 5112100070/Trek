@@ -7,6 +7,7 @@ import (
 
 	"github.com/5112100070/Trek/src/app/user"
 	"github.com/5112100070/Trek/src/conf"
+	constErr "github.com/5112100070/Trek/src/constants/error"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -54,13 +55,13 @@ func UpdateAccount(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println(errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -157,13 +158,13 @@ func UpdateCompany(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println(errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -232,13 +233,13 @@ func AdminChangePassword(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println(errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -270,13 +271,13 @@ func ChangePassword(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println(errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
@@ -317,13 +318,13 @@ func AdminChangeActivation(c *gin.Context) {
 	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println(errGetResponse)
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
-		global.InternalServerErrorResponse(c, nil)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
 

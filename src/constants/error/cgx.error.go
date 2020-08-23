@@ -9,3 +9,6 @@ const ERROR_CODE_INVALID_PARAMETER = 4008
 const ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS = 4009
 
 var ERROR_CODE_INTERNAL_SERVER = 5000
+
+var WORDING_ERROR_FORBIDDEN = "Session habis, silahkan untuk refresh halaman atau login ulang"
+var WORDING_ERROR_INTERNAL_SERVER = "Ada kendala pada server, silahkan mencoba sekali lagi"
