@@ -381,3 +381,50 @@ func RejectPickUpItem(c *gin.Context) {
 
 	return
 }
+
+// RejectPickUpItem method to reject pick up based on pick up id
+func RejectPickUpItem(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func RejectPickUpItem error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, nil)
+		return
+	}
+
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func RejectPickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid order id")
+		return
+	}
+
+	pickupID, errParse := strconv.ParseInt(c.PostForm("pickup_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func RejectPickUpItem error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid pickup ID")
+		return
+	}
+
+	resp, err := global.GetServiceOrder().RejectPickUpOrder(token, orderID, pickupID)
+	if err != nil {
+		global.Error.Println("func RejectPickUpItem error when dispatch order to fulfilment center: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func RejectPickUpItem error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, nil)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
