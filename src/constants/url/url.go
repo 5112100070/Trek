@@ -26,6 +26,7 @@ const URL_ADMIN_REJECT_ORDER string = "/order/internal/v1/update/%d/reject"
 const URL_ADMIN_DISPATCH_ORDER_FULFILMENT_CENTER string = "/order/internal/v1/update/%d/dispatch_order"
 const URL_ADMIN_DISPATCH_ORDER_PICK_UP string = "/order/internal/v1/update/%d/pick_up"
 const URL_ADMIN_PICKUP_DRIVER string = "/order/internal/v1/update/%d/pick_up"
+const URL_ADMIN_REJECT_PICKUP string = "/order/internal/v1/update/%d/pick_up_reject"
 
 // Utility Endpoint (1 hit and re-use)
 const URL_DESC_GET_LIST_ORDER_STATUS string = "/order/v1/get/order-status"

@@ -407,6 +407,39 @@ func (repo orderRepo) PickUpOrderToDriver(sessionID string, orderID int64, param
 	return &resultResp, nil
 }
 
+func (repo orderRepo) RejectPickUpOrder(sessionID string, orderID int64, pickupID ...int64) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_REJECT_PICKUP, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		DriverPickUP struct {
+			PickupIDs []int64 `json:"pickup_ids"`
+		} `json:"driver_pickup"`
+	}{
+		DriverPickUP: struct {
+			PickupIDs []int64 `json:"pickup_ids"`
+		}{
+			PickupIDs: pickupID,
+		},
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func RejectPickUpOrder error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
 func (repo orderRepo) doRequest(param []byte, sessionID, url, method string) ([]byte, error) {
 	client := &http.Client{}
 	if param == nil {
