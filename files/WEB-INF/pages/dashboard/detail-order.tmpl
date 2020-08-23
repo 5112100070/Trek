@@ -24,23 +24,8 @@
                                         <li class="breadcrumb-item active">#{{ .order.ID }}</li>
                                     </ol>
                                 </div>
-                                <div class="page-header-subtitle">
-                                    <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#delivery">Edit</button>
-                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="container-fluid mb-4" style="height: 100%;">
-                        <ul class="progressbar">
-                            <li
-                            {{ if eq .order.Status 1 }} class="stop" {{ end }}
-                            {{ if gt .order.Status 1 }} class="active" {{ end }}
-                            >Konfirmasi</li>
-                            <li>Pickup</li>
-                            <li>Delivering</li>
-                            <li>Done</li>
-                        </ul>
                     </div>
 
                     <div class="container-fluid mt-4" style="margin-top: 4.5rem !important;">
@@ -51,33 +36,19 @@
                                             <div class="card-header text-dark">
                                                 <div class="col-6">
                                                     Order #{{ .order.ID }}
-                                                    
-                                                    {{ if eq .order.Status 0 }}
-                                                    <span class="badge badge-primary text-wrap ml-2">
-                                                        New
+                                                    <span class="badge {{ index .BadgeOrder .order.Status }} text-wrap ml-2">
+                                                        {{ .order.StatusName }}
                                                     </span>
-                                                    {{ end }}
-
-                                                    {{ if eq .order.Status 1 }}
-                                                    <span class="badge badge-danger text-wrap ml-2">
-                                                        Rejected
-                                                    </span>
-                                                    {{ end }}
-                                                    
-                                                    {{ if eq .order.Status 2 }}
-                                                    <span class="badge badge-primary text-wrap ml-2">
-                                                        Approved
-                                                    </span>
-                                                    {{ end }}
-
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="float-right">
-                                                        {{ if eq .order.Status 0 }}
+                                                        {{ if eq .order.Status 0 1 }}
                                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button> 
                                                         {{ end }}
 
+                                                        {{ if ne .order.Status 1 }}
                                                         <button class="btn btn-red btn-sm" type="button" data-toggle="modal" data-target="#reject-order">Cancel</button>
+                                                        {{ end }}
                                                     </div>
                                                 </div>
                                             </div>

@@ -101,6 +101,7 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"order":      orderDetail,
+		"BadgeOrder": statusConst.MAP_BADGE_BY_STATUS_ORDER,
 		"BadgePickup": statusConst.MAP_BADGE_BY_STATUS_PICKUP,
 		"config":     conf.GConfig,
 	}

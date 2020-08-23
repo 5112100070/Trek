@@ -1,7 +1,7 @@
 package status
 
 var MAP_BADGE_BY_STATUS_ORDER = map[int]string{
-	0:  "",
+	0:  "badge-primary",
 	1:  "badge-danger",
 	2:  "badge-primary",
 	3:  "badge-primary",
