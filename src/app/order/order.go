@@ -502,7 +502,7 @@ func (repo orderRepo) FinishPickUpOrder(sessionID string, orderID int64, param F
 	bodyReq, _ := json.Marshal(struct {
 		DriverPickup FinishPickupParam `json:"driver_pickup"`
 	}{
-		DriverPickup: param, 
+		DriverPickup: param,
 	})
 
 	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
@@ -511,10 +511,37 @@ func (repo orderRepo) FinishPickUpOrder(sessionID string, orderID int64, param F
 		return nil, err
 	}
 
-	var resultResp SuccessCRUDResponse 
+	var resultResp SuccessCRUDResponse
 	errUnMarshal := json.Unmarshal(resp, &resultResp)
 	if errUnMarshal != nil {
 		log.Printf("func RejectPickUpOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
+func (repo orderRepo) DeliveryOrder(sessionID string, orderID int64, param DeliveryParam) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_DELIVER_ORDER, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		Payload DeliveryParam `json:"driver_delivery"`
+	}{
+		Payload: param,
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func DeliveryOrder error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func DeliveryOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
 		return nil, errUnMarshal
 	}
 

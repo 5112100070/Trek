@@ -68,6 +68,7 @@ type OrderService interface {
 	PickUpOrderToDriver(sessionID string, orderID int64, param order.PickUpParam) (*order.SuccessCRUDResponse, error)
 	RejectPickUpOrder(sessionID string, orderID int64, pickupID ...int64) (*order.SuccessCRUDResponse, error)
 	FinishPickUpOrder(sessionID string, orderID int64, param order.FinishPickupParam) (*order.SuccessCRUDResponse, error)
+	DeliveryOrder(sessionID string, orderID int64, param order.DeliveryParam) (*order.SuccessCRUDResponse, error)
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)

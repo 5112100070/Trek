@@ -46,6 +46,11 @@
                                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button> 
                                                         {{ end }}
 
+                                                        {{ if eq .order.Status 4 }}
+                                                        <button class="btn btn-success btn-sm" type="button" onclick="javascript:showModalDeliverOrder()">Deliver</button>
+                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Transit</button>
+                                                        {{ end }}
+
                                                         {{ if ne .order.Status 1 }}
                                                         <button class="btn btn-red btn-sm" type="button" data-toggle="modal" data-target="#reject-order">Cancel</button>
                                                         {{ end }}
@@ -429,6 +434,48 @@
       </div>
     </div>
 
+    <!-- modal konfirmasi delivery order -->
+    <div class="modal fade" id="delivery-order" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="delivery-order-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="delivery-order-label">Konfirmasi Penerimaan Barang</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <label for="delivery-driver-name">Driver name</label>
+                    <input class="form-control" id="delivery-driver-name" type="text" />
+                </div>
+                <div class="form-group">
+                    <label for="delivery-driver-phone">Driver phone</label>
+                    <input class="form-control" id="delivery-driver-phone" type="text" />
+                </div>
+                <div class="datatable table-responsive mt-4">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama produk</th>
+                                <th>Deskripsi produk</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="delivery-order-body"></tbody>
+                    </table>
+                </div>
+              </div>
+              <input class="hide" id="finish-pickup-id" />
+              
+              <div class="modal-footer">
+                  <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
+                  <button class="btn btn-success btn-sm" type="button" onclick="javascript:handleDeliverOrder()">Deliver The Item !</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
 
@@ -707,6 +754,61 @@
             });
         }
 
+        function handleDeliverOrder(){
+            StartLoading();
+
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+
+            // generate payload to hit
+            var itemsPayload = [];
+            for(var i=0; i < activePickupItems.length; i++){
+                let quantity = $("#"+activePickupItems[i]).val();
+                if(quantity == null){
+                    quantity = 0;
+                }
+
+                let id = activePickupItems[i].replace("item-delivery-", "");
+                itemsPayload.push({
+                    id: parseInt(id),
+                    quantity: parseInt(quantity),
+                });
+            }
+
+            let payload = {
+                order_id: parseInt(orderID),
+                driver_name: $("#delivery-driver-name").val(),
+                driver_phone: $("#delivery-driver-phone").val(),
+                items: itemsPayload
+            };
+
+            var promise = $.ajax({
+                url: base_url + '/admin/delivery-order',
+                type: 'POST',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                dataType: "json"
+            });
+
+            $('#delivery-order').modal("toggle");
+
+            promise.done(function(response){
+                response = response.data;
+
+                FinishLoading();
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    window.location.reload();   
+                }
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                setError(true, response.responseJSON.data);
+            });
+        }
+
         function showModalRejectPickUp(pickupID, recieverName, recieverAddress){
             $("#reject-pick-up").modal("show");
 
@@ -758,6 +860,31 @@
             // generate component
             $('#finish-pick-up-body').html(component);
         }
+
+        function showModalDeliverOrder(){
+            $("#delivery-order").modal("show");
+
+            var component = "";
+            activePickupItems = [];
+            for (var key in PickupItems) {
+                let items = PickupItems[key];
+                for(let i = 0; i < items.length; i++){
+                    let name = "<td>"+ items[i].name +"</td>";
+                    let description = "<td>"+ items[i].notes +"</td>";
+                    
+                    let inputID = "item-delivery-" + items[i].id;
+                    let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="0"></td>`;
+
+                    activePickupItems.push(inputID);
+
+                    let newComponent = `<tr>`+ name + description + input +`</tr>`
+                    component = component + newComponent;
+                }
+            }
+
+            // generate component
+            $('#delivery-order-body').html(component);
+        };
 
         function setError(isShow, message = "") {
             if (isShow) {

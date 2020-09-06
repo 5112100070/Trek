@@ -335,7 +335,7 @@ func PickUpItem(c *gin.Context) {
 	return
 }
 
-// RejectPickUpItem method to reject pick up based on pick up id 
+// RejectPickUpItem method to reject pick up based on pick up id
 func RejectPickUpItem(c *gin.Context) {
 	// Check user session
 	_, token, errGetResponse := getUserProfile(c)
@@ -382,7 +382,7 @@ func RejectPickUpItem(c *gin.Context) {
 	return
 }
 
-// FinishPickUpItem method to finish pick up 
+// FinishPickUpItem method to finish pick up
 func FinishPickUpItem(c *gin.Context) {
 	// Check user session
 	_, token, errGetResponse := getUserProfile(c)
@@ -392,14 +392,14 @@ func FinishPickUpItem(c *gin.Context) {
 		return
 	}
 
-	var requestParam struct{
-		OrderID int64 `json:"order_id"`
-		PickUpIDs   []int64 `json:"pickup_ids"`
-		Items []order.ItemPickUpParam `json:"items"`
+	var requestParam struct {
+		OrderID   int64                   `json:"order_id"`
+		PickUpIDs []int64                 `json:"pickup_ids"`
+		Items     []order.ItemPickUpParam `json:"items"`
 	}
-	 
+
 	errBindRequest := c.BindJSON(&requestParam)
-	if errBindRequest!=nil {
+	if errBindRequest != nil {
 		global.Error.Printf("func FinishPickUpItem error when parsing : %v\n", errBindRequest)
 		global.BadRequestResponse(c, "invalid parameter request")
 		return
@@ -415,7 +415,7 @@ func FinishPickUpItem(c *gin.Context) {
 		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
 		return
 	}
- 
+
 	// prevent any panic on frontend process rendering
 	if resp == nil {
 		global.Error.Println("func FinishPickUpItem error not have response from cgx: ", err)
@@ -429,5 +429,57 @@ func FinishPickUpItem(c *gin.Context) {
 
 	global.OKResponse(c, response)
 
-	return	
+	return
+}
+
+// DeliveryOrder method to handle delivery process order
+func DeliveryOrder(c *gin.Context) {
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func DeliveryOrder error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
+		return
+	}
+
+	var requestParam struct {
+		OrderID     int64                   `json:"order_id"`
+		DriverName  string                  `json:"driver_name"`
+		DriverPhone string                  `json:"driver_phone"`
+		Items       []order.ItemPickUpParam `json:"items"`
+	}
+
+	errBindRequest := c.BindJSON(&requestParam)
+	if errBindRequest != nil {
+		global.Error.Printf("func DeliveryOrder error when parsing : %v\n", errBindRequest)
+		global.BadRequestResponse(c, "invalid parameter request")
+		return
+	}
+
+	var param order.DeliveryParam
+	param.DriverName = requestParam.DriverName
+	param.DriverPhone = requestParam.DriverPhone
+	param.Items = requestParam.Items
+
+	resp, err := global.GetServiceOrder().DeliveryOrder(token, requestParam.OrderID, param)
+	if err != nil {
+		global.Error.Println("func DeliveryOrder error when set process order to deliver step: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func DeliveryOrder error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
 }

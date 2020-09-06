@@ -141,8 +141,9 @@ func main() {
 	r.POST("/admin/pickup-item-order", dashboard.PickUpItem)
 	r.POST("/admin/reject-pickup", dashboard.RejectPickUpItem)
 	r.POST("/admin/finish-pickup", dashboard.FinishPickUpItem)
+	r.POST("/admin/delivery-order", dashboard.DeliveryOrder)
 
-	r.GET("/admin", app.AdminDashboardPage) 
+	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
 	r.GET("/admin/product/new", app.AdminProductNew)
 	r.GET("/admin/product/edit", app.AdminProductEditPage)
