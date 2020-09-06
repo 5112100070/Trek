@@ -29,6 +29,7 @@ const URL_ADMIN_PICKUP_DRIVER string = "/order/internal/v1/update/%d/pick_up"
 const URL_ADMIN_PICKUP_REJECT string = "/order/internal/v1/update/%d/pick_up_reject"
 const URL_ADMIN_PICKUP_FINISH string = "/order/internal/v1/update/%d/pick_up_finish"
 const URL_ADMIN_DELIVER_ORDER string = "/order/internal/v1/update/%d/delivery"
+const URL_ADMIN_ON_CGX_ORDER string = "/order/internal/v1/update/%d/on_cgx"
 
 // Utility Endpoint (1 hit and re-use)
 const URL_DESC_GET_LIST_ORDER_STATUS string = "/order/v1/get/order-status"

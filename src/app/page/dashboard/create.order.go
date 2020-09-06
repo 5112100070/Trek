@@ -432,6 +432,46 @@ func FinishPickUpItem(c *gin.Context) {
 	return
 }
 
+// TransitOrder method to handle Transit process Order
+func TransitOrder(c *gin.Context) {
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func TransitOrder error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid order id")
+		return
+	}
+
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func TransitOrder error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
+		return
+	}
+
+	resp, err := global.GetServiceOrder().TransitOnCGXOrder(token, orderID)
+	if err != nil {
+		global.Error.Println("func TransitOrder error when set process order to deliver step: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func TransitOrder error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
 // DeliveryOrder method to handle delivery process order
 func DeliveryOrder(c *gin.Context) {
 	// Check user session

@@ -48,7 +48,11 @@
 
                                                         {{ if eq .order.Status 4 }}
                                                         <button class="btn btn-success btn-sm" type="button" onclick="javascript:showModalDeliverOrder()">Deliver</button>
-                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Transit</button>
+                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#transit-on-cgx">Transit</button>
+                                                        {{ end }}
+
+                                                        {{ if eq .order.Status 5 }}
+                                                        <button class="btn btn-success btn-sm" type="button" onclick="javascript:showModalDeliverOrder()">Deliver</button>
                                                         {{ end }}
 
                                                         {{ if ne .order.Status 1 }}
@@ -476,6 +480,25 @@
       </div>
     </div>
 
+    <!-- modal konfirmasi dispatch by pickup driver -->
+    <div class="modal fade" id="transit-on-cgx" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="transit-on-cgx-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transit-on-cgx-label">Confirmation Transit Process Order To CGX</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    Tempatkan order ini ke <span style="font-weight: bold;">Transit</span> ?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tidak</button>
+                    <a class="btn btn-success btn-sm" onclick="javascript:handleTransitOrder()" type="button" style="text-decoration: none; color: black;">Ya, Transitkan ke CGX</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
 
@@ -737,6 +760,45 @@
             
             $('#finish-pick-up').modal("toggle");
 
+            promise.done(function(response){
+                response = response.data;
+
+                FinishLoading();
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    window.location.reload();   
+                }
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                setError(true, response.responseJSON.data);
+            });
+        }
+
+        function handleTransitOrder(){
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            StartLoading();
+
+            var fd = new FormData();
+            fd.append('order_id', orderID);
+
+            $('#transit-on-cgx').modal("toggle");
+
+            var promise = $.ajax({
+                url: base_url + '/admin/transit-order',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+ 
             promise.done(function(response){
                 response = response.data;
 
