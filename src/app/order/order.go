@@ -571,6 +571,33 @@ func (repo orderRepo) TransitOnCGXOrder(sessionID string, orderID int64) (*Succe
 	return &resultResp, nil
 }
 
+func (repo orderRepo) FinishCGXOrder(sessionID string, orderID int64, param FinishParam) (*SuccessCRUDResponse, error) {
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = fmt.Sprintf(urlConst.URL_ADMIN_FINISH_CGX_ORDER, orderID)
+	urlStr := u.String()
+
+	bodyReq, _ := json.Marshal(struct {
+		Delivery FinishParam `json:"delivery"`
+	}{
+		Delivery: param,
+	})
+
+	resp, err := repo.doRequest(bodyReq, sessionID, urlStr, http.MethodPost)
+	if err != nil {
+		log.Printf("func FinishCGXOrder error send request: err: %v\n", err)
+		return nil, err
+	}
+
+	var resultResp SuccessCRUDResponse
+	errUnMarshal := json.Unmarshal(resp, &resultResp)
+	if errUnMarshal != nil {
+		log.Printf("func FinishCGXOrder error when unmarshal response: err: %v. Payload: %+v\n", err, string(resp))
+		return nil, errUnMarshal
+	}
+
+	return &resultResp, nil
+}
+
 func (repo orderRepo) doRequest(param []byte, sessionID, url, method string) ([]byte, error) {
 	client := &http.Client{}
 	if param == nil {

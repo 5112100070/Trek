@@ -472,6 +472,51 @@ func TransitOrder(c *gin.Context) {
 	return
 }
 
+// FinishOrder method to mark Order To Finish
+func FinishOrder(c *gin.Context) {
+	orderID, errParse := strconv.ParseInt(c.PostForm("order_id"), 10, 64)
+	if errParse != nil {
+		global.Error.Printf("func FinishOrder error when parsing : %v\n", errParse)
+		global.BadRequestResponse(c, "invalid order id")
+		return
+	}
+
+	receiverName := c.PostForm("receiver_name")
+
+	// Check user session
+	_, token, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func FinishOrder error get user profile: ", errGetResponse)
+		global.ForbiddenResponse(c, constErr.WORDING_ERROR_FORBIDDEN)
+		return
+	}
+
+	var param order.FinishParam
+	param.ReceiverName = receiverName
+
+	resp, err := global.GetServiceOrder().FinishCGXOrder(token, orderID, param)
+	if err != nil {
+		global.Error.Println("func FinishOrder error when set process order to deliver step: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	// prevent any panic on frontend process rendering
+	if resp == nil {
+		global.Error.Println("func FinishOrder error not have response from cgx: ", err)
+		global.InternalServerErrorResponse(c, constErr.WORDING_ERROR_INTERNAL_SERVER)
+		return
+	}
+
+	response := map[string]interface{}{
+		"response": resp,
+	}
+
+	global.OKResponse(c, response)
+
+	return
+}
+
 // DeliveryOrder method to handle delivery process order
 func DeliveryOrder(c *gin.Context) {
 	// Check user session

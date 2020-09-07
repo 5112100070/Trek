@@ -42,7 +42,7 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="float-right">
-                                                        {{ if eq .order.Status 0 1 }}
+                                                        {{ if eq .order.Status 0 }}
                                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#konfirmasi">Approved</button> 
                                                         {{ end }}
 
@@ -55,7 +55,11 @@
                                                         <button class="btn btn-success btn-sm" type="button" onclick="javascript:showModalDeliverOrder()">Deliver</button>
                                                         {{ end }}
 
-                                                        {{ if ne .order.Status 1 }}
+                                                        {{ if eq .order.Status 6 }}
+                                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#modal-finish-order">Finish</button>
+                                                        {{ end }}
+
+                                                        {{ if eq .order.Status 0 2 3 4 5 6 8 9 10 }}
                                                         <button class="btn btn-red btn-sm" type="button" data-toggle="modal" data-target="#reject-order">Cancel</button>
                                                         {{ end }}
                                                     </div>
@@ -499,6 +503,30 @@
         </div>
     </div>
 
+    <!-- modal konfirmasi Pickup By Driver -->
+    <div class="modal fade" id="modal-finish-order" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-finish-order-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="receiver-name-label">Konfirmasi Order Selesai</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="receiver-name">Nama Penerima</label>
+                        <input class="form-control" id="receiver-name" type="text" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Close</button>
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleFinishOrder()" style="text-decoration: none; color: black;">
+                        Selesaikan Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
 
@@ -853,6 +881,45 @@
             });
 
             $('#delivery-order').modal("toggle");
+
+            promise.done(function(response){
+                response = response.data;
+
+                FinishLoading();
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    window.location.reload();   
+                }
+            }).fail(function(response){
+                FinishLoading();
+                var status = response.status;
+                setError(true, response.responseJSON.data);
+            });
+        }
+
+        function handleFinishOrder(){
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+
+            StartLoading();
+
+            var fd = new FormData();
+            fd.append('order_id', orderID);
+            fd.append('receiver_name', $("#receiver-name").val());
+
+            var promise = $.ajax({
+                url: base_url + '/admin/finish-order',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
 
             promise.done(function(response){
                 response = response.data;

@@ -58,6 +58,10 @@ type DeliveryParam struct {
 	Items       []ItemPickUpParam `json:"items"`
 }
 
+type FinishParam struct {
+	ReceiverName string `json:"receiver"`
+}
+
 type ItemPickUpParam struct {
 	ID       int64 `json:"id"`
 	Quantity int64 `json:"quantity"`

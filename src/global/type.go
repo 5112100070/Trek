@@ -70,6 +70,7 @@ type OrderService interface {
 	FinishPickUpOrder(sessionID string, orderID int64, param order.FinishPickupParam) (*order.SuccessCRUDResponse, error)
 	DeliveryOrder(sessionID string, orderID int64, param order.DeliveryParam) (*order.SuccessCRUDResponse, error)
 	TransitOnCGXOrder(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
+	FinishCGXOrder(sessionID string, orderID int64, param order.FinishParam) (*order.SuccessCRUDResponse, error)
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)
