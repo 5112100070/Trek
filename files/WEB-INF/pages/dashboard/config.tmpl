@@ -35,11 +35,42 @@
                                             <div class="position-relative">
                                                 <div class="row align-items-center justify-content-between">
                                                     <div class="col position-relative">
-                                                        <p class="text-gray-700">ID User : {{ .UserDetail.ID }}</p>
-                                                        <p class="text-gray-700">Nama Lengkap: {{ .UserDetail.Fullname }}</p>
-                                                        <p class="text-gray-700">Email : {{ .UserDetail.Email }}</p>
-                                                        <p class="text-gray-700">Nomor Telepon : {{ .UserDetail.PhoneNumber }}</p>
-                                                        <p class="text-gray-700">Tanggal join : {{ .UserDetail.CreateTime }}</p>
+                                                        <div class="row mb-3">
+                                                            <div class="col-6 info" >
+                                                               <p>Email</p >
+                                                               <p style="color:black; font-weight: 500;">
+                                                                    {{ .UserDetail.Email }}
+                                                               </p>
+                                                            </div>
+                                                            <div class="col-6 info"> 
+                                                                <p>Nama Lengkap</p>
+                                                                   <p style="font-weight: 500;color: black;">
+                                                                        {{ .UserDetail.Fullname }}
+                                                                   </p>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row mb-3">
+                                                            <div class="col-6 info" >
+                                                                <p>Nomor Telepon</p >
+                                                                <p style="color:black; font-weight: 500">
+                                                                    {{ .UserDetail.PhoneNumber }}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-6 info"> 
+                                                                <p>Tanggal Bergabung</p>
+                                                                <p style="font-weight: 500;color: black;">
+                                                                    {{ .UserDetail.CreateTime }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-12 info center" style="text-align: center;">
+                                                                <p>Terdaftar di Perusahaan</p >
+                                                                <p style="color:black; font-weight: 500">
+                                                                    {{ .UserDetail.Company.CompanyName }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                         
                                                         <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
                                                             Ubah Password
@@ -49,6 +80,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="row">
+                                    {{ if ne .UserDetail.ImageProfile "" }}
+                                    <div class="col-lg-12">
+                                        <div class="nav-sticky">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <img src="{{ .UserDetail.ImageProfile }}" width="100%" height="300px" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{ end }}
                                 </div>
                             </div>
 
@@ -82,24 +129,6 @@
                             </div>
                             <!-- End of List Modals -->
                             
-                            <div class="col-lg-9">
-                                <div id="sizing">
-                                    <div class="card mb-4">
-                                        <div class="card-header">Terdaftar Pada Perusahaan</div>
-                                        <div class="card-body">
-                                            <div class="position-relative">
-                                                <div class="row align-items-center justify-content-between">
-                                                    <div class="col position-relative">
-                                                        <p class="text-gray-700">ID : {{ .UserDetail.Company.ID }}</p>
-                                                        <p class="text-gray-700">Nama : {{ .UserDetail.Company.CompanyName }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </main>

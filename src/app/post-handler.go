@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -61,11 +60,6 @@ func SendRequestItem(c *gin.Context) {
 }
 
 func ProcessMakeLogin(c *gin.Context) {
-	// make sure not too fast when give response
-	defer func() {
-		time.Sleep(2 * time.Second)
-	}()
-
 	email := c.PostForm("email")
 	password := c.PostForm("password")
 
