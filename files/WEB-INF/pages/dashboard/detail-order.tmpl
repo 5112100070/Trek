@@ -118,7 +118,7 @@
                                                                 Alamat
                                                                 </p >
                                                                 <p style="color:black;" class="font-weight-bold" >
-                                                                    {{ .order.ReceiverAddress }}
+                                                                    {{ .order.ReceiverAddrDisplay }}
                                                                     <p style="color:black;">
                                                                         {{ .order.ReceiverNotes }}
                                                                     </p>
@@ -198,7 +198,7 @@
                                                             <div class="row mb-3">
                                                                 <div class="col-4 info">
                                                                     <p >
-                                                                        Nama Penerima
+                                                                        PIC Pengambilan
                                                                         </p >
                                                                         <p style="color:black;" class="font-weight-bold" >
                                                                             {{ $pickup.Name }}
@@ -212,7 +212,7 @@
                                                                     Alamat
                                                                     </p >
                                                                     <p style="color:black;" class="font-weight-bold" >
-                                                                        {{ $pickup.Address }}
+                                                                        {{ $pickup.FullAddress }}
                                                                         <p style="color:black;">
                                                                             {{ $pickup.Notes }}
                                                                         </p>
@@ -225,7 +225,7 @@
                                                                                 <th>Nama produk</th>
                                                                                 <th>Deskripsi produk</th>
                                                                                 <th>Jumlah</th>
-                                                                                <th>Aksi</th>
+                                                                                <!-- <th>Aksi</th> -->
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -240,9 +240,9 @@
                                                                                 <td>
                                                                                     {{ $item.Quantity }} {{ $item.UnitName }}
                                                                                 </td>
-                                                                                <td>
+                                                                                <!-- <td>
                                                                                     <button class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="trash-2"></i></button>
-                                                                                </td>
+                                                                                </td> -->
                                                                             </tr>
                                                                             {{ end }}
                                                                         </tbody>
@@ -282,12 +282,8 @@
                     </div>
                     <div class="modal-body">
                         <h6>
-                            Masukan Airwaybill
+                            Konfirmasi Approving Order
                         </h6>
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">Airwaybill</label>
-                            <input id="airwaybill" class="form-control" type="name" />
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Close</button>
@@ -538,13 +534,11 @@
         function handleApproveOrder(){
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
-            var awb = $("#airwaybill").val();
 
             StartLoading();
 
             var fd = new FormData();
             fd.append('order_id', orderID);
-            fd.append('awb', awb);
             
             var promise = $.ajax({
                 url: base_url + '/admin/approve-order',

@@ -141,7 +141,8 @@ func CreateOrderForAdmin(c *gin.Context) {
 	}
 
 	response := map[string]interface{}{
-		"response": resp,
+		"error": resp.Error,
+		"data":  resp.Data,
 	}
 
 	global.OKResponse(c, response)

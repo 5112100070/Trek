@@ -11,9 +11,12 @@ type ErrorOrder struct {
 }
 
 type CreateOrderForAdminResponse struct {
-	Error             *ErrorOrder `json:"error", omitempty`
-	Status            string      `json:"status"`
-	ServerProcessTime string      `json:"server_process_time"`
+	Error *ErrorOrder `json:"error, omitempty"`
+	Data  *struct {
+		Success bool  `json:"success"`
+		OrderID int64 `json:"order_id"`
+	} `json:"data, omitempty"`
+	ServerProcessTime string `json:"server_process_time"`
 }
 
 type ApproveOrderForAdminResponse struct {
@@ -49,6 +52,13 @@ type OrderReponse struct {
 	RequestorID         int64            `json:"requestor_id"`
 	ReceiverName        string           `json:"receiver_name""`
 	ReceiverAddress     string           `json:"receiver_address"`
+	ReceiverKecamatan   string           `json:"receiver_kecamatan"`
+	ReceiverKelurahan   string           `json:"receiver_kelurahan"`
+	ReceiverCity        string           `json:"receiver_kota"`
+	ReceiverProv        string           `json:"receiver_provinsi"`
+	ReceiverRT          int64            `json:"receiver_rt"`
+	ReceiverRW          int64            `json:"receiver_rw"`
+	ReceiverZIP         int64            `json:"receiver_zip"`
 	ReceiverPhoneNumber string           `json:"receiver_phone_number"`
 	ReceiverNotes       string           `json:"receiver_notes"`
 	CompanyID           int64            `json:"company_id"`
@@ -60,38 +70,49 @@ type OrderReponse struct {
 	UpdateTime          time.Time        `json:"update_time"`
 	DeliveryType        int64            `json:"delivery_type"`
 	DeliveryName        string           `json:"delivery_name"`
+	ArrivedTime         time.Time        `json:"arrived_time"`
 	Pickups             []PickUpResponse `json:"pickups"`
 
 	// This variable only used for displaying to user
-	TotalPickUp   int
-	CreateTimeStr string
-	UpdateTimeStr string
-	StatusBadge   string
+	TotalPickUp         int
+	ArrivedTimeStr      string
+	CreateTimeStr       string
+	UpdateTimeStr       string
+	ReceiverAddrDisplay string
+	StatusBadge         string
 }
 
 type PickUpResponse struct {
-	ID          int64          `json:"id"`
-	Name        string         `json:"name"`
-	Address     string         `json:"address"`
-	PhoneNumber string         `json:"phone_number"`
-	DriverName  string         `json:"driver_name"`
-	DriverPhone string         `json:"driver_phone"`
-	Status      int            `json:"status"`
-	StatusName  string         `json:"status_name"`
-	UpdateBy    int64          `json:"update_by"`
-	UpdateTime  time.Time      `json:"update_time"`
-	CreateTime  time.Time      `json:"create_time"`
-	Notes       string         `json:"notes"`
-	Items       []ItemResponse `json:"items"`
+	ID            int64          `json:"id"`
+	Name          string         `json:"name"`
+	Address       string         `json:"address"`
+	AddrRT        int64          `json:"rt"`
+	AddrRW        int64          `json:"rw"`
+	AddrKecamatan string         `json:"kecamatan"`
+	AddrKelurahan string         `json:"kelurahan"`
+	AddrCity      string         `json:"kota"`
+	AddrProv      string         `json:"provinsi"`
+	ZIP           int64          `json:"zip"`
+	PhoneNumber   string         `json:"phone_number"`
+	DriverName    string         `json:"driver_name"`
+	DriverPhone   string         `json:"driver_phone"`
+	Status        int            `json:"status"`
+	StatusName    string         `json:"status_name"`
+	UpdateBy      int64          `json:"update_by"`
+	UpdateTime    time.Time      `json:"update_time"`
+	CreateTime    time.Time      `json:"create_time"`
+	Notes         string         `json:"notes"`
+	Items         []ItemResponse `json:"items"`
 
 	// This variable only used for displaying to user
 	TotalItems    int
 	CreateTimeStr string
 	UpdateTimeStr string
+	FullAddress   string
 }
 
-type ItemResponse struct { 
-	ID 	int64 `json:"id"`
+type ItemResponse struct {
+	ID           int64     `json:"id"`
 	Name         string    `json:"name"`
 	Quantity     int64     `json:"quantity"`
 	Unit         int64     `json:"unit"`
@@ -108,7 +129,7 @@ type ItemResponse struct {
 	DeadlineStr   string
 	PickupTimeStr string
 }
- 
+
 // Handling standart unit data
 type Unit struct {
 	ID   int    `json:"id"`

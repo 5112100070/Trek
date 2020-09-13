@@ -27,7 +27,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; width: 10%">No AWB</th>
-                                                <th style="text-align: center; width: 10%">Klien</th>
+                                                <th style="text-align: center; width: 10%">Nama Klien</th>
                                                 <th style="text-align: center; width: 20%">Tujuan</th>
                                                 <th style="text-align: center; width: 15%">Preview Item</th>
                                                 <th style="text-align: center; width: 15%">Waktu diterima</th>
@@ -47,7 +47,7 @@
                                                     {{ $order.AWB }}
                                                     {{ end }}
                                                 </td>
-                                                <td>{{ $order.CompanyName }}</td>
+                                                <td>{{ $order.ReceiverName }}</td>
                                                 <td>{{ $order.ReceiverAddress }}</td>
                                                 <td style="text-align: center">
                                                     {{ $items := index $.mapItems $order.ID }}
@@ -65,7 +65,7 @@
                                                         </button>
                                                     {{ end }}
                                                 </td>
-                                                <td></td>
+                                                <td>{{ $order.ArrivedTimeStr }}</td>
                                                 <td style="text-align: center">
                                                     <div class="badge badge-pill {{ $order.StatusBadge }}">{{ $order.StatusName }}</div>
                                                 </td>

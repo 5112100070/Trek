@@ -165,7 +165,7 @@
                                                         <div class="col-12">                                
                                                             <div class="form-group">
                                                                 <label for="pickup-details-notes">Detail lokasi/Catatan</label> 
-                                                                <textarea class="form-control form-control-sm" id="pickup-details-notes" type="text" placeholder="Nama Perusahaan Pengirim" rows="3"></textarea>
+                                                                <textarea class="form-control form-control-sm" id="pickup-details-notes" type="text" placeholder="Detail lokasi/Catatan" rows="3"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -905,8 +905,8 @@
             StartLoading();
             promise.done(function(response){
                 response = response.data;
-                if(response.response.error != null){
-                    setError(true, response.response.error.detail);
+                if(response.error != null){
+                    setError(true, response.error.detail);
                 } else {
                     setError(false, "");
                     $("#success-alert").removeClass("hide");
@@ -920,6 +920,9 @@
                     $("#success-alert").html("Sukses membuat order baru");
 
                     gotoTop();
+ 
+                    // redirect to detail order page
+                    window.location.href = base_url + '/dashboard/order?id=' + response.data.order_id;
                 }
                 FinishLoading();
             }).fail(function(response){
@@ -941,7 +944,12 @@
                 type: 'POST',
                 data: JSON.stringify(payload),
                 contentType: 'application/json',
-                dataType: 'json'
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
             });
 
             return promise;

@@ -271,10 +271,41 @@ func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (O
 	result.CreateTimeStr = fmt.Sprintf("%s, %s", result.CreateTime.Weekday(), result.CreateTime.Format("02 Jan 2006 - 15:04:05"))
 	result.UpdateTimeStr = result.UpdateTime.Format("02 Jan 2006 - 15:04:05")
 
+	// Generate Fully Address
+	result.ReceiverAddrDisplay = result.ReceiverAddress
+
+	// Generate RT
+	if result.ReceiverRT > 0 {
+		result.ReceiverAddrDisplay = fmt.Sprintf("%s, RT: %d", result.ReceiverAddrDisplay, result.ReceiverRT)
+	}
+
+	// Generate RW
+	if result.ReceiverRW > 0 {
+		result.ReceiverAddrDisplay = fmt.Sprintf("%s, RW: %d", result.ReceiverAddrDisplay, result.ReceiverRW)
+	}
+
+	result.ReceiverAddrDisplay = fmt.Sprintf("%s, Kec. %s, Kel. %s, %s, %s, %d", result.ReceiverAddrDisplay, result.ReceiverKecamatan,
+		result.ReceiverKelurahan, result.ReceiverCity, result.ReceiverProv, result.ReceiverZIP)
+
 	for i, _ := range result.Pickups {
 		result.Pickups[i].CreateTimeStr = result.Pickups[i].CreateTime.Format("02 Jan 2006 - 15:04:05")
 		result.Pickups[i].UpdateTimeStr = result.Pickups[i].UpdateTime.Format("02 Jan 2006 - 15:04:05")
 		result.Pickups[i].TotalItems = len(result.Pickups[i].Items)
+
+		result.Pickups[i].FullAddress = result.Pickups[i].Address
+
+		// Generate RT for pickup
+		if result.Pickups[i].AddrRT > 0 {
+			result.Pickups[i].FullAddress = fmt.Sprintf("%s, RT: %d", result.Pickups[i].FullAddress, result.Pickups[i].AddrRT)
+		}
+
+		// Generate RW for pickup
+		if result.Pickups[i].AddrRW > 0 {
+			result.Pickups[i].FullAddress = fmt.Sprintf("%s, RW: %d", result.Pickups[i].FullAddress, result.Pickups[i].AddrRW)
+		}
+
+		result.Pickups[i].FullAddress = fmt.Sprintf("%s, Kec. %s, Kel. %s, %s, %s, %d", result.Pickups[i].FullAddress, result.Pickups[i].AddrKecamatan,
+			result.Pickups[i].AddrKelurahan, result.Pickups[i].AddrCity, result.Pickups[i].AddrProv, result.Pickups[i].ZIP)
 
 		for j, _ := range result.Pickups[i].Items {
 			result.Pickups[i].Items[j].CreateTimeStr = result.Pickups[i].Items[j].CreateTime.Format("02 Jan 2006 - 15:04:05")
@@ -336,6 +367,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	}
 
 	for i, _ := range result.Data.Orders {
+		result.Data.Orders[i].ArrivedTimeStr = result.Data.Orders[i].ArrivedTime.Format("02 Jan 2006")
 		result.Data.Orders[i].UpdateTimeStr = result.Data.Orders[i].UpdateTime.Format("02 Jan 2006")
 		result.Data.Orders[i].TotalPickUp = len(result.Data.Orders[i].Pickups)
 		result.Data.Orders[i].StatusBadge = statusConst.MAP_BADGE_BY_STATUS_ORDER[result.Data.Orders[i].Status]
