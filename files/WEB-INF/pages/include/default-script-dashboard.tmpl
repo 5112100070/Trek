@@ -16,6 +16,8 @@
     var base_url = {{.config.BaseUrlConfig.BaseDNS}};
     var product_url = {{.config.BaseUrlConfig.ProductDNS}};
 
+    var defaultServerError = "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.";
+
     function GoToHome(){
         GoToIndex('');
     }
@@ -34,5 +36,21 @@
     
     function FinishLoading(){
         document.getElementById('loading-pop-up').style.display = "none";
+    }
+
+    function GetCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     }
 </script>

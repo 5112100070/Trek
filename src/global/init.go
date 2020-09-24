@@ -1,10 +1,11 @@
 package global
 
 import (
-	"strconv"
 	"io"
 	"log"
+	"strconv"
 
+	"github.com/5112100070/Trek/src/app/module"
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/public"
 	"github.com/5112100070/Trek/src/app/session"
@@ -25,8 +26,8 @@ func InitRepoBundle(dbBundle DBBundle) {
 	}
 
 	var mapOrderStatus = make(map[int]string)
-	for k,v := range orderStatus {
-		key,_ := strconv.Atoi(k) 
+	for k, v := range orderStatus {
+		key, _ := strconv.Atoi(k)
 		mapOrderStatus[key] = v
 	}
 
@@ -37,17 +38,18 @@ func InitRepoBundle(dbBundle DBBundle) {
 	}
 
 	var mapPickupStatus = make(map[int]string)
-	for k,v := range pickupStatus {
-		key,_ := strconv.Atoi(k) 
+	for k, v := range pickupStatus {
+		key, _ := strconv.Atoi(k)
 		mapPickupStatus[key] = v
-	}	
+	}
 
 	Services = RepoBundle{
-		Session:        session.InitSessionRepo(dbBundle.RedisSession),
-		Public:         public.InitPublicRepo(dbBundle.DB),
-		User:           user.InitUserRepo(),
-		Order:          orderService,
-		MapOrderStatus: mapOrderStatus,
-		MapPickupStatus:mapPickupStatus,
+		Session:         session.InitSessionRepo(dbBundle.RedisSession),
+		Public:          public.InitPublicRepo(dbBundle.DB),
+		User:            user.InitUserRepo(),
+		Module:          module.InitModuleRepo(),
+		Order:           orderService,
+		MapOrderStatus:  mapOrderStatus,
+		MapPickupStatus: mapPickupStatus,
 	}
 }

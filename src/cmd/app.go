@@ -114,6 +114,7 @@ func main() {
 	r.GET("/dashboard/order", dashboard.OrdersDetailPageHandler)
 	r.GET("/dashboard/orders", dashboard.OrdersListPageHandler)
 	r.GET("/dashboard/order/create-order", dashboard.CreateOrderPageHandler)
+	r.GET("/dashboard/modules", dashboard.ModulesPageHandler)
 
 	// need to be removed
 	r.GET("/dashboard/tambah-anggota", app.AddMemberPageHandler)

@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/5112100070/Trek/src/app/module"
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/app/user"
@@ -20,6 +21,7 @@ type RepoBundle struct {
 	Public  PublicService
 	User    UserService
 	Order   OrderService
+	Module  ModuleService
 
 	// map order status
 	// get from response CGX server.
@@ -74,4 +76,8 @@ type OrderService interface {
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)
+}
+
+type ModuleService interface {
+	GetListModule(sessionID string, param module.ListModuleParam) (module.ModuleResponse, error)
 }

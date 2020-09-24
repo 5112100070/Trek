@@ -32,6 +32,10 @@ func GetServiceOrder() OrderService {
 	return Services.Order
 }
 
+func GetServiceModule() ModuleService {
+	return Services.Module
+}
+
 func GetDefaultUserAttribute(c *gin.Context, mapper map[string]interface{}) {
 	service := GetServiceSession()
 	cookie, errGetCookie := c.Cookie(UserCookie[GetEnv()])
