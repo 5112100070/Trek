@@ -80,4 +80,5 @@ type OrderService interface {
 
 type ModuleService interface {
 	GetListModule(sessionID string, param module.ListModuleParam) (module.ModuleResponse, error)
+	GetListFeature(sessionID string, param module.ListFeatureParam) (module.FeatureResponse, error)
 }
