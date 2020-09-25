@@ -43,6 +43,16 @@
                                                 <option value="2">Client</option>
                                             </select>
                                         </div>
+                                        
+                                        {{ if .IsGodUser }}
+                                        <div id="form-group-member-of-company" class="form-group" style="display: none;">
+                                            <label for="role">Member Dari Perusahaan</label>
+                                            <select class="form-control form-control-sm" id="member-of-company">
+                                                <option id="init-member-of-company"> - </option>
+                                            </select>
+                                        </div>
+                                        {{ end }}
+
                                         <div class="form-group">
                                             <label class="control-label">Image Perusahaan</label>
                                             <div class="row" style="margin-left: 50px">
@@ -75,8 +85,16 @@
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
-
+    {{ if .IsGodUser }}
+    <script src="/js/controller/admin/su-company.js"></script>
+    {{ end }}
     <script>
+        $(document).ready(function(){
+            {{ if .IsGodUser }}
+            FetchCompanyByAdminRole();
+            {{ end }}
+        });
+
         function ProcessRegister(){
             setError(false, "");
 
@@ -84,10 +102,15 @@
             var address = $("#address").val();
             var phone = $("#phone").val();
             var role = $('#role :selected').val();
-            var companyImage = $("#company-image")[0].files[0];
+           var companyImage = $("#company-image")[0].files[0];
+
+           var memberOfCompany = 0;
+           if($('#member-of-company').val() != undefined){
+                memberOfCompany = parseInt($('#member-of-company').val());
+           }
 
             StartLoading();
-            var promise = Register(companyName,address,phone,role,companyImage);
+            var promise = Register(companyName,address,phone,role,memberOfCompany,companyImage);
             promise.done(function(response){
                 response = response.data;
 
@@ -119,7 +142,7 @@
             });
         }
     
-        function Register(companyName, address, phone, role, companyImage){
+        function Register(companyName, address, phone, role, memberOfCompany, companyImage){
             var url = base_url + '/dashboard/company/register';
             
             var fd = new FormData();
@@ -128,6 +151,7 @@
             fd.append('phone', phone);
             fd.append('role', role);
             fd.append('company_image', companyImage);
+            fd.append('member_of_company', memberOfCompany);
             
             var promise = $.ajax({
                 url: url,

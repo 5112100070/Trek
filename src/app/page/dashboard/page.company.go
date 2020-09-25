@@ -195,6 +195,7 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
 		"config":     conf.GConfig,
+		"IsGodUser":  accountResp.Data.Company.Role == constRole.ROLE_COMPANY_GOD,
 	}
 	c.HTML(http.StatusOK, "create-company.tmpl", renderData)
 }
