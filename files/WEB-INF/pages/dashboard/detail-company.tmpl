@@ -34,10 +34,35 @@
                                             <div class="position-relative">
                                                 <div class="row align-items-center justify-content-between">
                                                     <div class="col position-relative">
-                                                        <p class="text-gray-700">Nama Perusahaan: {{ .company.CompanyName }}</p>
-                                                        <p class="text-gray-700">Alamat: {{ .company.Address }}</p>
-                                                        <p class="text-gray-700">Telepon Perusahaan: {{ .company.PhoneNumber }}</p>
-                                                        <p class="text-gray-700">Status Aktivasi: {{ .company.StatusActivation }}</p>
+                                                        <div class="col position-relative">
+                                                            <div class="row mb-3">
+                                                                 <div class="col-6 info" >
+                                                                    <p>Nama Perusahaan</p >
+                                                                    <p style="color:black; font-weight: 500;">
+                                                                        {{ .company.CompanyName }}
+                                                                    </p>
+                                                                 </div>
+                                                                 <div class="col-6 info"> 
+                                                                     <p>Alamat</p>
+                                                                        <p style="font-weight: 500;color: black;">
+                                                                            {{ .company.Address }}
+                                                                        </p>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <div class="col-6 info" >
+                                                                   <p>Telepon Perusahaan</p >
+                                                                   <p style="color:black; font-weight: 500;">
+                                                                        {{ .company.PhoneNumber }}
+                                                                   </p>
+                                                                </div>
+                                                                <div class="col-6 info"> 
+                                                                    <p>Status Aktivasi</p>
+                                                                       <p style="font-weight: 500;color: black;">
+                                                                            {{ .company.StatusActivation }}
+                                                                       </p>
+                                                                </div>
+                                                           </div>
                                                         
                                                         {{ if not .company.IsEnabled }}
                                                         <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
@@ -52,6 +77,24 @@
                                                         {{ end }}
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="active-module">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Aktif Module</div>
+                                        <div class="card-body">
+                                            <div class="datatable table-responsive">
+                                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nama</th>
+                                                            <th>Deskripsi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="module-list"></tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -88,61 +131,31 @@
                                     </div>
                                 </div> -->
                             </div>
-
-                            <!-- List Modals -->
-                            <div class="modal fade" id="toggle-account-activation" tabindex="-1" role="dialog" aria-labelledby="toggle-account-activation-title" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="toggle-account-activation-title">
-                                                {{ if .company.IsEnabled }}
-                                                    Konfirmasi untuk mematikan akun
-                                                {{ end }}
-                                                {{ if not .company.IsEnabled }}
-                                                    Konfirmasi untuk mengaktifkan akun
-                                                {{ end }}
-                                            </h5>
-                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        </div>
-                                        <div class="modal-body">                               
-                                            {{ if .company.IsEnabled }}
-                                                    Apakah anda yakin untuk mematikan akun dari perusahaan {{ .company.CompanyName }} ?
-                                            {{ end }}
-
-                                            {{ if not .company.IsEnabled }}
-                                                    Apakah anda yakin untuk mengaktifkan akun dari perusahaan {{ .company.CompanyName }} ?
-                                            {{ end }}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
-                                            <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal" onclick="javascript:ProcessChangeStatus()">Konfirmasi</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3">
-                                <div class="row">
-                                    {{ if ne .company.ImageLogo "" }}
-                                    <div class="col-lg-12">
-                                        <div class="nav-sticky">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <img src="{{ .company.ImageLogo }}" width="100%" height="100px" />
-                                                </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="row">
+                                {{ if ne .company.ImageLogo "" }}
+                                <div class="col-lg-12">
+                                    <div class="nav-sticky">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <img src="{{ .company.ImageLogo }}" width="100%" height="100px" />
                                             </div>
                                         </div>
                                     </div>
-                                    {{ end }}
+                                </div>
+                                {{ end }}
 
-                                    <div class="col-lg-12" style="margin-top: 10px">
-                                        <div class="nav-sticky">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <ul class="nav flex-column" id="stickyNav">
-                                                        <li class="nav-item"><a class="nav-link" href="/dashboard/update-company?id={{ .company.ID }}">Edit Data Perusahaan</a></li>
-                                                    </ul>
-                                                </div>
+                                <div class="col-lg-12" style="margin-top: 10px">
+                                    <div class="nav-sticky">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <ul class="nav flex-column" id="stickyNav">
+                                                    <li class="nav-item"><a class="nav-link" href="/dashboard/update-company?id={{ .company.ID }}">Edit Data Perusahaan</a></li>
+                                                    <li class="nav-item"><a class="nav-link" data-target="#modal-edit-module" data-toggle="modal" style="cursor: pointer; color: blue;">
+                                                        Edit Module Perusahaan
+                                                    </a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -151,6 +164,60 @@
                         </div>
                     </div>
                 </main>
+
+                <!-- Modal Edit Module To Company -->
+                <div class="modal fade" id="modal-edit-module" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-edit-module-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="receiver-name-label">Edit Module Perusahaan</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div id="modal-list-module" class="modal-body"></div>
+                            <div class="modal-footer">
+                                <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tutup</button>
+                                <a class="btn btn-success btn-sm" type="button" onclick="javascript:UpdateCompanyModule()" data-dismiss="modal" style="text-decoration: none; color: black;">
+                                    Simpan Pengaturan Module
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal Edit Module To Company -->
+
+                <!-- Modal Activate/Deactivate Account -->
+                <div class="modal fade" id="toggle-account-activation" tabindex="-1" role="dialog" aria-labelledby="toggle-account-activation-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="toggle-account-activation-title">
+                                    {{ if .company.IsEnabled }}
+                                        Konfirmasi untuk mematikan akun
+                                    {{ end }}
+                                    {{ if not .company.IsEnabled }}
+                                        Konfirmasi untuk mengaktifkan akun
+                                    {{ end }}
+                                </h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">                               
+                                {{ if .company.IsEnabled }}
+                                        Apakah anda yakin untuk mematikan akun dari perusahaan {{ .company.CompanyName }} ?
+                                {{ end }}
+
+                                {{ if not .company.IsEnabled }}
+                                        Apakah anda yakin untuk mengaktifkan akun dari perusahaan {{ .company.CompanyName }} ?
+                                {{ end }}
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-secondary" type="button" data-dismiss="modal">Batalkan</button>
+                                <button class="btn btn-success btn-secondary" type="button" data-dismiss="modal" onclick="javascript:ProcessChangeStatus()">Konfirmasi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Modal Activate/Deactivate Account -->
+
                 <footer class="footer mt-auto footer-light">
                     <div class="container-fluid">
                         <div class="row">
@@ -173,6 +240,12 @@
     <script>
         var companyID = {{ .company.ID }};
         var isEnabledAccount = {{ .company.IsEnabled  }};
+        var registeredModule = {{ .company.RegisteredModule }}
+        var module = [];
+
+        $(document).ready(function(){
+            FetchModule();
+        });
 
         function ProcessChangeStatus(){
             setError(false, "");
@@ -224,6 +297,143 @@
             });
 
             return promise;
+        }
+
+        function UpdateCompanyModule(){
+            var selectedModule = [];
+
+            StartLoading();
+
+            for(i=0; i<module.length; i++){
+                if ($("#"+module[i]).is(":checked")) {
+                    selectedModule.push(parseInt($("#"+module[i]).val()));
+                }
+            }
+
+            var url = product_url + '/admin/v1/update-module';
+
+            var payload = {
+                company_id: companyID,
+                module_ids: selectedModule
+            }
+
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payload),
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetCookie('_CGX_DEV_'),
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            });
+
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+
+                    $("#success-alert").html(response.message);
+
+                    window.location.reload();
+                }
+                FinishLoading();
+            }).fail(function(response){
+                response = response.responseJSON;
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    setError(true, defaultServerError);
+                }
+                FinishLoading();
+            });
+
+            return
+        }
+
+        function FetchModule(){
+            StartLoading();
+
+                var params = new URLSearchParams({
+                    page: 1,
+                    rows: 100,
+                    order_by: "desc"
+                })
+                var url = product_url + '/admin/v1/account-module?' + params;
+                
+
+                var promise = $.ajax({
+                    url: url,
+                    type: 'GET',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    headers: {
+                        "Authorization": GetCookie('_CGX_DEV_'),
+                        "Accept": "application/json"
+                    }
+                });
+
+            promise.done(function(response){
+                response = response.data;
+                response.modules.forEach(element => {                    
+                    // create and push component for detail registered module
+                    let isRegistered = "";
+                    for(let i=0; i<registeredModule.length;i++){
+                        if(registeredModule[i] == element.id){
+                            // generate new component for detail information
+                            let moduleComp = `
+                                <tr>
+                                    <td>
+                                        <b>` + element.name + `</b>
+                                    </td>
+                                    <td>
+                                        ` + element.description + `
+                                    </td>
+                                </tr>   
+                            `;
+                            
+                            $("#module-list").append(moduleComp);
+                            isRegistered = "checked";
+                            break;
+                        }
+                    }
+
+                    // push pattern module id for edit module
+                    module.push("module-id-"+element.id);
+
+                    // generate new component for modal input
+                    var comp = `
+                        <div class="form-check">
+                            <input class="form-check-input" id="module-id-` + element.id + `" value="` + element.id + `" type="checkbox" ` + isRegistered + `/>
+                            <label class="form-check-label" for=""module-id-` + element.id + `">` + element.name + `</label>
+                        </div>
+                    `;
+                    
+                    // create and push component for modal
+                    $("#modal-list-module").append(comp);
+                });
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                }
+                FinishLoading();
+            }).fail(function(response){
+                setError(true, defaultServerError);
+                FinishLoading();
+            });
+
+            return
         }
 
         function setError(isShow, message = "") {

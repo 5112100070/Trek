@@ -61,14 +61,15 @@ type ListCompanyResponse struct {
 }
 
 type CompanyProfile struct {
-	ID               int64  `json:"company_id"`
-	CompanyName      string `json:"company_name"`
-	Address          string `json:"address"`
-	PhoneNumber      string `json:"phone_number"`
-	IsEnabled        bool   `json:"is_enabled"`
-	StatusActivation string `json:"status_activation"`
-	Role             int    `json:"role"`
-	ImageLogo        string `json:"image_logo"`
+	ID               int64   `json:"company_id"`
+	CompanyName      string  `json:"company_name"`
+	Address          string  `json:"address"`
+	PhoneNumber      string  `json:"phone_number"`
+	IsEnabled        bool    `json:"is_enabled"`
+	StatusActivation string  `json:"status_activation"`
+	Role             int     `json:"role"`
+	ImageLogo        string  `json:"image_logo"`
+	RegisteredModule []int64 `json:"registered_module"`
 }
 
 type Error struct {
