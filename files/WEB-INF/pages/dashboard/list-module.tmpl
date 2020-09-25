@@ -111,8 +111,12 @@
                                     <input class="form-control" id="module-name" type="text" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="module-description"></label>Deskripsi Module</label>
+                                    <label for="module-description">Deskripsi Module</label>
                                     <textarea class="form-control" id="module-description"></textarea>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" id="module-mark-default" value="1" type="checkbox">
+                                    <label class="form-check-label" for="module-mark-default">Can Mark As Default Module</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -150,9 +154,17 @@
         function handleCreateModule(){
             var url = product_url + '/admin/v1/account-module';
 
+            var canMarkAsDefault = $('#module-mark-default').val();
+            if(canMarkAsDefault == "1"){
+                canMarkAsDefault = true;
+            } else {
+                canMarkAsDefault = false;
+            }
+
             var payload = {
                 name: $('#module-name').val(),
-                description: $('#module-description').val()
+                description: $('#module-description').val(),
+                can_mark_as_default: canMarkAsDefault
             }
 
             var promise = $.ajax({
