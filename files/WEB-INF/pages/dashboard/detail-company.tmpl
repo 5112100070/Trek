@@ -152,9 +152,11 @@
                                             <div class="card-body">
                                                 <ul class="nav flex-column" id="stickyNav">
                                                     <li class="nav-item"><a class="nav-link" href="/dashboard/update-company?id={{ .company.ID }}">Edit Data Perusahaan</a></li>
-                                                    <li class="nav-item"><a class="nav-link" data-target="#modal-edit-module" data-toggle="modal" style="cursor: pointer; color: blue;">
-                                                        Edit Module Perusahaan
-                                                    </a></li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-target="#modal-edit-module" data-toggle="modal" style="cursor: pointer; color: blue;">
+                                                            Edit Module Perusahaan
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -170,7 +172,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="receiver-name-label">Edit Module Perusahaan</h5>
+                                <h5 class="modal-title">Edit Module Perusahaan</h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div id="modal-list-module" class="modal-body"></div>

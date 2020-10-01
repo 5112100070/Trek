@@ -108,6 +108,11 @@
                                                 <div class="card-body">
                                                     <ul class="nav flex-column" id="stickyNav">
                                                         <li class="nav-item"><a class="nav-link" href="/dashboard/update-user?id={{ .account.ID }}">Edit Data Anggota</a></li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-target="#modal-edit-feature" data-toggle="modal" style="cursor: pointer; color: blue;">
+                                                                Edit Feature Pengguna
+                                                            </a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -209,17 +214,46 @@
             </div>
         </div>
 
-         <!-- Modal -->
+         <!-- Modal Loading -->
         <div id="loading-pop-up" class="modal-loading">
           <div class="lds-facebook"><div></div><div></div><div></div></div>
         </div>
+        <!-- End Of Modal Loading -->
+
+        <!-- Modal Edit Feature To Pengguna -->
+        <div class="modal fade" id="modal-edit-feature" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-edit-feature-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Feature Pengguna</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div id="modal-list-feature" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-red btn-sm" type="button" data-dismiss="modal">Tutup</button>
+                        <a class="btn btn-success btn-sm" type="button" onclick="javascript:UpdateUserFeature()" data-dismiss="modal" style="text-decoration: none; color: black;">
+                            Simpan Pengaturan Feature
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Modal Edit Feature To Company -->
+        
     </body>
 
     {{ template "default-script-dashboard.tmpl" .}}
     <script>
         var userID = {{ .account.ID }};
+        var companyID = {{ .account.Company.ID }};
         var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
         
+        var features = [];
+
+        $(document).ready(function(){
+            FetchFeature();
+        });
+
         function ProcessChangePassword(){
             setError(false, "");
 
@@ -327,6 +361,122 @@
             });
 
             return promise;
+        }
+
+        function UpdateUserFeature(){
+            var selectedFeature = [];
+
+            StartLoading();
+
+            for(i=0; i<features.length; i++){
+                if ($("#"+features[i]).is(":checked")) {
+                    selectedFeature.push(parseInt($("#"+features[i]).val()));
+                }
+            }
+
+            var url = product_url + '/admin/v1/update-feature';
+
+            var payload = {
+                account_id: userID,
+                feature_ids: selectedFeature
+            }
+
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payload),
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetCookie('_CGX_DEV_'),
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            });
+
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    setError(false, "");
+                    $("#success-alert").removeClass("hide");
+
+                    $("#success-alert").html(response.message);
+
+                    window.location.reload();
+                }
+                FinishLoading();
+            }).fail(function(response){
+                response = response.responseJSON;
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    setError(true, defaultServerError);
+                }
+                FinishLoading();
+            });
+
+            return
+        }
+
+        function FetchFeature(){
+            StartLoading();
+
+                var params = new URLSearchParams({
+                    page: 1,
+                    rows: 100,
+                    order_by: "desc",
+                    company_id: companyID
+                })
+                var url = product_url + '/admin/v1/account-feature?' + params;
+                
+
+                var promise = $.ajax({
+                    url: url,
+                    type: 'GET',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    headers: {
+                        "Authorization": GetCookie('_CGX_DEV_'),
+                        "Accept": "application/json"
+                    }
+                });
+
+            promise.done(function(response){
+                response = response.data;
+                response.features.forEach(element => {                    
+                    // push pattern feature id for edit feature 
+                    features.push("feature-id-"+element.id);
+
+                    // generate new component for modal input
+                    var comp = `
+                        <div class="form-check">
+                            <input class="form-check-input" id="feature-id-` + element.id + `" value="` + element.id + `" type="checkbox"/>
+                            <label class="form-check-label" for=""feature-id-` + element.id + `">` + element.name + `</label>
+                        </div>
+                    `;
+                    
+                    // create and push component for modal
+                    $("#modal-list-feature").append(comp);
+                });
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                }
+                FinishLoading();
+            }).fail(function(response){
+                setError(true, defaultServerError);
+                FinishLoading();
+            });
+
+            return
         }
 
         function setError(isShow, message = "") {
