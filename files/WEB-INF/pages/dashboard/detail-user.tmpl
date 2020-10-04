@@ -200,6 +200,25 @@
                                 </div>
                             </div>
 
+                            <div class="col-lg-9">
+                                <div class="card mb-4">
+                                    <div class="card-header">Aktif Feature</div>
+                                    <div class="card-body">
+                                        <div class="datatable table-responsive">
+                                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <th>Deskripsi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="feature-list"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </main>
@@ -247,6 +266,7 @@
         var userID = {{ .account.ID }};
         var companyID = {{ .account.Company.ID }};
         var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
+        var registeredFeature = {{ .account.RegisteredFeature }}
         
         var features = [];
 
@@ -452,14 +472,36 @@
 
             promise.done(function(response){
                 response = response.data;
-                response.features.forEach(element => {                    
+                response.features.forEach(element => {
+                    // create and push component for detail registered feature
+                    let isRegistered = "";
+                    for(let i=0; i<registeredFeature.length;i++){
+                        if(registeredFeature[i] == element.id){
+                            // generate new component for detail information
+                            let moduleComp = `
+                                <tr>
+                                    <td>
+                                        <b>` + element.name + `</b>
+                                    </td>
+                                    <td>
+                                        ` + element.description + `
+                                    </td>
+                                </tr>   
+                            `;
+                            
+                            $("#feature-list").append(moduleComp);
+                            isRegistered = "checked";
+                            break;
+                        }
+                    }
+
                     // push pattern feature id for edit feature 
                     features.push("feature-id-"+element.id);
 
                     // generate new component for modal input
                     var comp = `
                         <div class="form-check">
-                            <input class="form-check-input" id="feature-id-` + element.id + `" value="` + element.id + `" type="checkbox"/>
+                            <input class="form-check-input" id="feature-id-` + element.id + `" value="` + element.id + `" type="checkbox" ` + isRegistered + `/>
                             <label class="form-check-label" for=""feature-id-` + element.id + `">` + element.name + `</label>
                         </div>
                     `;

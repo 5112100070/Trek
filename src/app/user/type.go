@@ -19,18 +19,19 @@ type ListAccountsResponse struct {
 }
 
 type User struct {
-	ID           int64         `json:"user_id"`
-	Fullname     string        `json:"fullname"`
-	CompanyID    int64         `json:"company_id"`
-	Company      UserCompany   `json:"company"`
-	PhoneNumber  string        `json:"phone_number"`
-	Email        string        `json:"email"`
-	CreateTime   string        `json:"create_time"`
-	Role         int           `json:"role"`
-	RoleWording  string        `json:"role_wording"`
-	RoleColor    string        `json:"role_color"`
-	Attribute    UserAttribute `json:"attribute"`
-	ProfileImage string        `json:"profile_image"`
+	ID                int64         `json:"user_id"`
+	Fullname          string        `json:"fullname"`
+	CompanyID         int64         `json:"company_id"`
+	Company           UserCompany   `json:"company"`
+	PhoneNumber       string        `json:"phone_number"`
+	Email             string        `json:"email"`
+	CreateTime        string        `json:"create_time"`
+	Role              int           `json:"role"`
+	RoleWording       string        `json:"role_wording"`
+	RoleColor         string        `json:"role_color"`
+	Attribute         UserAttribute `json:"attribute"`
+	ProfileImage      string        `json:"profile_image"`
+	RegisteredFeature []int64       `json:"registered_feature"`
 }
 
 type UserCompany struct {
