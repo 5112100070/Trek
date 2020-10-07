@@ -99,13 +99,8 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// get list param
@@ -154,13 +149,8 @@ func OrdersListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// get list param
@@ -263,6 +253,19 @@ func handleSessionErrorPage(c *gin.Context, sessionErr session.Error, needRedire
 		return
 	} else {
 		// Error Internal server - redirect to problem page
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+}
+
+func handleErrorCheckFeature(c *gin.Context, featureCheckResp session.FeatureCheckResponse) {
+	if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+		global.RenderUnAuthorizePage(c)
+		return
+	} else if featureCheckResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+		handleSessionErrorPage(c, *featureCheckResp.Error, true)
+		return
+	} else {
 		global.RenderInternalServerErrorPage(c)
 		return
 	}

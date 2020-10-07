@@ -40,13 +40,8 @@ func UserListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// get list param
@@ -130,6 +125,12 @@ func UserDetailPageHandler(c *gin.Context) {
 		return
 	}
 
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
 	// validate access to this feature
 	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_DETAIL_ACCOUNT, http.MethodGet)
 	if err != nil {
@@ -139,18 +140,7 @@ func UserDetailPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
-	}
-
-	// expire - we remove cookie and redirect it
-	if accountResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -216,13 +206,8 @@ func UserCreatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// all admin can get this page
@@ -321,13 +306,8 @@ func UserUpdatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	accountID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)

@@ -39,13 +39,8 @@ func CreateOrderPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	unitsResp, errGetUnitData := global.GetServiceOrder().GetListUnitInOrder(sessionID)

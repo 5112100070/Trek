@@ -65,21 +65,10 @@
                                                              </div>
                                                         </div>
 
-                                                        {{ if not .account.Attribute.IsEnabled }}
-                                                        <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
+                                                        <div id="button-account-activation"></div>
 
-                                                        {{ if .account.Attribute.IsEnabled }}
-                                                        <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Non Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
-
-                                                        <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
-                                                            Ubah Password
-                                                        </button>
+                                                        <div id="button-change-password"></div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -348,7 +337,7 @@
                     setError(false, "");
                     $("#success-alert").removeClass("hide");
 
-                    if(toggleIsEnabledAccount == true) {
+                    if(!toggleIsEnabledAccount) {
                         $("#success-alert").html("Sukses melakukan update. Akun sekarang telah di non aktifkan");
                     } else {
                         $("#success-alert").html("Sukses melakukan update akun. Akun sekarang telah di aktifkan");
@@ -357,7 +346,9 @@
                 }
 
                 FinishLoading();
-                window.location.reload();
+                setTimeout(function(){
+                    window.location.reload();
+                }, 5000);
             }).fail(function(response){
                 FinishLoading();
                 setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
@@ -445,6 +436,35 @@
             return
         }
 
+        function InitButtonChangeActivation(){
+            var activationAccComp;
+            if(!isEnabledAccount){
+                activationAccComp = `
+                    <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                        Aktifkan Akun
+                    </button>
+                `;
+            } else {
+                activationAccComp = `
+                    <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                        Non Aktifkan Akun
+                    </button>
+                `;
+            }
+
+            $('#button-account-activation').append(activationAccComp);
+        }
+
+        function InitButtonChangePassword(){
+            var changePasswordBtn = `
+                <button class="btn btn-primary btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-change-password" style="color: white; margin: 1rem 0;">
+                    Ubah Password
+                </button>
+            `;
+
+            $('#button-change-password').append(changePasswordBtn);
+        }
+
         function FetchFeature(){
             StartLoading();
 
@@ -456,7 +476,6 @@
                 })
                 var url = product_url + '/admin/v1/account-feature?' + params;
                 
-
                 var promise = $.ajax({
                     url: url,
                     type: 'GET',
@@ -470,6 +489,9 @@
                     }
                 });
 
+            // Check is user have feature activation account or not
+            let isHaveFeatureActivationAcc = false;
+            let isHaveFeatureChangePass = false;
             promise.done(function(response){
                 response = response.data;
                 response.features.forEach(element => {
@@ -477,6 +499,16 @@
                     let isRegistered = "";
                     for(let i=0; i<registeredFeature.length;i++){
                         if(registeredFeature[i] == element.id){
+                            // if user is god or have access to status activation feature
+                            if((element.path_url == '/admin/v1/change-status-activation' && element.method == 'POST') || companyID == -999){
+                                isHaveFeatureActivationAcc = true;
+                            }
+
+                            // if user is god or have access to status change account password
+                            if((element.path_url == '/admin/v1/change-password' && element.method == 'POST') || companyID == -999){
+                                isHaveFeatureChangePass = true;
+                            }
+
                             // generate new component for detail information
                             let moduleComp = `
                                 <tr>
@@ -509,10 +541,20 @@
                     // create and push component for modal
                     $("#modal-list-feature").append(comp);
                 });
+                
+                FinishLoading();
                 if(response.error!=null){
                     setError(true, response.error.detail);
+                    return
                 }
-                FinishLoading();
+
+                if(isHaveFeatureActivationAcc){
+                    InitButtonChangeActivation();
+                }
+
+                if(isHaveFeatureChangePass){
+                    InitButtonChangePassword();
+                }
             }).fail(function(response){
                 setError(true, defaultServerError);
                 FinishLoading();

@@ -42,13 +42,8 @@ func CompaniesListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// get list param
@@ -148,13 +143,8 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// get list param
@@ -224,13 +214,8 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// all client company cannot get this page
@@ -280,13 +265,8 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
-			global.RenderUnAuthorizePage(c)
-			return
-		} else {
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
 	}
 
 	// all client company cannot get this page
