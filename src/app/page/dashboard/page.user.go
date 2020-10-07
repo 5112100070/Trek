@@ -10,6 +10,7 @@ import (
 	"github.com/5112100070/Trek/src/conf"
 	constErr "github.com/5112100070/Trek/src/constants/error"
 	constRole "github.com/5112100070/Trek/src/constants/role"
+	constUrl "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -28,6 +29,24 @@ func UserListPageHandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_LIST_USER, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func UserListPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 	}
 
 	// get list param
@@ -111,6 +130,24 @@ func UserDetailPageHandler(c *gin.Context) {
 		return
 	}
 
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_DETAIL_ACCOUNT, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func UserDetailPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
+	}
+
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
@@ -170,6 +207,24 @@ func UserCreatePagehandler(c *gin.Context) {
 		return
 	}
 
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_CREATE_ACCOUNT, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func UserCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
+	}
+
 	// all admin can get this page
 	if accountResp.Data.Role != constRole.ROLE_ACCOUNT_ADMIN {
 		global.RenderUnAuthorizePage(c)
@@ -195,7 +250,7 @@ func UserCreatePagehandler(c *gin.Context) {
 			if listCompResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
 				// ERROR_CODE_SESSION_EXPIRE
 				handleSessionErrorPage(c, *accountResp.Error, true)
-			} else if listCompResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS {
+			} else if listCompResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listCompResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
 				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
 				global.RenderUnAuthorizePage(c)
 			} else {
@@ -255,6 +310,24 @@ func UserUpdatePagehandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_UPDATE_ACCOUNT, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func UserCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 	}
 
 	accountID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)

@@ -1,6 +1,7 @@
 package session
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -156,6 +157,59 @@ func (repo sessionRepo) RequestLogin(email, password string) (LoginResponse, err
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
 		log.Println(errUnMarshal)
+		return result, errUnMarshal
+	}
+
+	return result, nil
+}
+
+func (repo sessionRepo) CheckFeature(sessionID, pathURL, method string) (FeatureCheckResponse, error) {
+	var result FeatureCheckResponse
+	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
+	u.Path = urlConst.URL_CHECK_FEATURE
+	urlStr := u.String()
+
+	bodyPayload := struct {
+		PathURL string `json:"path_url"`
+		Method  string `json:"method"`
+	}{
+		PathURL: pathURL,
+		Method:  method,
+	}
+
+	payload, _ := json.Marshal(bodyPayload)
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, urlStr, bytes.NewBuffer(payload))
+	if err != nil {
+		log.Println("func CheckFeature error when create request: ", err)
+		return result, err
+	}
+
+	// set header
+	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+
+	resp, errGetResp := client.Do(req)
+	if err != nil {
+		log.Println(errGetResp)
+		return result, errGetResp
+	}
+
+	if resp == nil || resp.Body == nil {
+		log.Println("no response from cgx service")
+		return result, errors.New("no response from cgx service")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	errUnMarshal := json.Unmarshal(body, &result)
+	if errUnMarshal != nil {
+		log.Println("func CheckFeature error when unMarshal: ", errUnMarshal)
 		return result, errUnMarshal
 	}
 

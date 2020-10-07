@@ -136,17 +136,6 @@ func main() {
 	r.POST("/admin/change-account-activation", dashboard.AdminChangeActivation)
 	r.POST("/admin/create-order", dashboard.CreateOrderForAdmin)
 
-	// Update Status
-	r.POST("/admin/approve-order", dashboard.ApproveOrderForAdmin)
-	r.POST("/admin/reject-order", dashboard.RejectOrderForAdmin)
-	r.POST("/admin/dispatch-order", dashboard.DispatchOrder)
-	r.POST("/admin/pickup-item-order", dashboard.PickUpItem)
-	r.POST("/admin/reject-pickup", dashboard.RejectPickUpItem)
-	r.POST("/admin/finish-pickup", dashboard.FinishPickUpItem)
-	r.POST("/admin/transit-order", dashboard.TransitOrder)
-	r.POST("/admin/finish-order", dashboard.FinishOrder)
-	r.POST("/admin/delivery-order", dashboard.DeliveryOrder)
-
 	r.GET("/admin", app.AdminDashboardPage)
 	r.GET("/admin/product", app.AdminProductList)
 	r.GET("/admin/product/new", app.AdminProductNew)

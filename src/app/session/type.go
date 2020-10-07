@@ -21,6 +21,12 @@ type AccountResponse struct {
 	ServerProcessTime string   `json:"server_process_time"`
 }
 
+type FeatureCheckResponse struct {
+	IsSuccess bool   `json:"is_success"`
+	Error     *Error `json:"error", omitempty`
+	Message   string `json:"message"`
+}
+
 type LoginResponse struct {
 	Data              *LoginDataResponse `json:"data", omitempty`
 	Error             *Error             `json:"error", omitempty`

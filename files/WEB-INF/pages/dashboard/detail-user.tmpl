@@ -432,6 +432,7 @@
                 }
                 FinishLoading();
             }).fail(function(response){
+                FinishLoading();
                 response = response.responseJSON;
                 if(response.error!=null){
                     setError(true, response.error.detail);
@@ -439,7 +440,6 @@
                 } else {
                     setError(true, defaultServerError);
                 }
-                FinishLoading();
             });
 
             return

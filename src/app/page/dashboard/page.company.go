@@ -12,6 +12,7 @@ import (
 	constErr "github.com/5112100070/Trek/src/constants/error"
 	constRole "github.com/5112100070/Trek/src/constants/role"
 	statusConst "github.com/5112100070/Trek/src/constants/status"
+	constUrl "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -32,13 +33,31 @@ func CompaniesListPageHandler(c *gin.Context) {
 		return
 	}
 
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_LIST_COMPANY, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func CompaniesListPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
+	}
+
 	// get list param
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 	isEnabled := c.Query("is_enabled")
 
-	listUserResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
+	listCompanyResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
 		Page:             int(page),
 		Rows:             int(rows),
 		OrderType:        orderType,
@@ -50,15 +69,15 @@ func CompaniesListPageHandler(c *gin.Context) {
 		return
 	}
 
-	if listUserResp.Error != nil {
+	if listCompanyResp.Error != nil {
 		// possibility error
-		if listUserResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+		if listCompanyResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
 			// ERROR_CODE_SESSION_EXPIRE
 			handleSessionErrorPage(c, *accountResp.Error, true)
-		} else if listUserResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listUserResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_RESULT {
+		} else if listCompanyResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listCompanyResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_RESULT {
 			// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
 			global.RenderUnAuthorizePage(c)
-		} else if listUserResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
+		} else if listCompanyResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
 			// ERROR_CODE_INVALID_PARAMETER
 			global.RenderNotFoundPage(c)
 		} else {
@@ -70,17 +89,17 @@ func CompaniesListPageHandler(c *gin.Context) {
 	}
 
 	// define status activation company
-	for i, c := range listUserResp.Data.Companies {
-		listUserResp.Data.Companies[i].StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[c.IsEnabled]
+	for i, c := range listCompanyResp.Data.Companies {
+		listCompanyResp.Data.Companies[i].StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[c.IsEnabled]
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/companies"
-	totalPage := listUserResp.Data.Total / int(rows)
+	totalPage := listCompanyResp.Data.Total / int(rows)
 
 	// get additional page
 	// total data 22 row 10
 	// must result 3 pages
-	if listUserResp.Data.Total%int(rows) > 0 {
+	if listCompanyResp.Data.Total%int(rows) > 0 {
 		totalPage++
 	}
 
@@ -97,7 +116,7 @@ func CompaniesListPageHandler(c *gin.Context) {
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
-		"companies":  listUserResp.Data.Companies,
+		"companies":  listCompanyResp.Data.Companies,
 		"pagination": pagination,
 		"config":     conf.GConfig,
 	}
@@ -118,6 +137,24 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_DETAIL_COMPANY, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func CompanyDetailPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 	}
 
 	// get list param
@@ -165,7 +202,7 @@ func CompanyDetailPageHandler(c *gin.Context) {
 // func CompanyCreatePagehandler is handler for show form create company
 func CompanyCreatePagehandler(c *gin.Context) {
 	// Check user session
-	accountResp, _, errGetResponse := getUserProfile(c)
+	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func CompanyCreatePagehandler error get detail account: ", errGetResponse)
 		global.RenderInternalServerErrorPage(c)
@@ -176,6 +213,24 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_CREATE_COMPANY, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func CompanyCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 	}
 
 	// all client company cannot get this page
@@ -214,6 +269,24 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
 		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_UPDATE_COMPANY, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func CompanyUpdatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+			global.RenderUnAuthorizePage(c)
+			return
+		} else {
+			global.RenderInternalServerErrorPage(c)
+			return
+		}
 	}
 
 	// all client company cannot get this page
