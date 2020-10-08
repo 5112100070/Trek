@@ -15,6 +15,7 @@
 <script>
     var base_url = {{.config.BaseUrlConfig.BaseDNS}};
     var product_url = {{.config.BaseUrlConfig.ProductDNS}};
+    var session_detail = JSON.parse("{{ .UserDetailJSON }}");
 
     var defaultServerError = "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.";
 

@@ -253,7 +253,6 @@
     {{ template "default-script-dashboard.tmpl" .}}
     <script>
         var userID = {{ .account.ID }};
-        var companyID = {{ .account.Company.ID }};
         var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
         var registeredFeature = {{ .account.RegisteredFeature }}
         
@@ -472,7 +471,7 @@
                     page: 1,
                     rows: 100,
                     order_by: "desc",
-                    company_id: companyID
+                    company_id: session_detail.company.company_id
                 })
                 var url = product_url + '/admin/v1/account-feature?' + params;
                 
@@ -492,6 +491,12 @@
             // Check is user have feature activation account or not
             let isHaveFeatureActivationAcc = false;
             let isHaveFeatureChangePass = false;
+
+            if(session_detail.company.role == -999) {
+                isHaveFeatureActivationAcc = true;
+                isHaveFeatureChangePass = true;
+            }
+
             promise.done(function(response){
                 response = response.data;
                 response.features.forEach(element => {
@@ -500,12 +505,12 @@
                     for(let i=0; i<registeredFeature.length;i++){
                         if(registeredFeature[i] == element.id){
                             // if user is god or have access to status activation feature
-                            if((element.path_url == '/admin/v1/change-status-activation' && element.method == 'POST') || companyID == -999){
+                            if((element.path_url == '/admin/v1/change-status-activation' && element.method == 'POST')){
                                 isHaveFeatureActivationAcc = true;
                             }
 
                             // if user is god or have access to status change account password
-                            if((element.path_url == '/admin/v1/change-password' && element.method == 'POST') || companyID == -999){
+                            if((element.path_url == '/admin/v1/change-password' && element.method == 'POST')){
                                 isHaveFeatureChangePass = true;
                             }
 

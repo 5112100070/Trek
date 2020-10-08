@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -173,10 +174,13 @@ func UserDetailPageHandler(c *gin.Context) {
 		return
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"account":    accDetail.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"account":        accDetail.Data,
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-user.tmpl", renderData)
 }
