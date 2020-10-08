@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"strings"
@@ -181,10 +182,13 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	companyDetail.Data.CompanyName = strings.ToUpper(companyDetail.Data.CompanyName)
 	companyDetail.Data.StatusActivation = strings.ToUpper(companyDetail.Data.StatusActivation)
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"company":    companyDetail.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"company":        companyDetail.Data,
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-company.tmpl", renderData)
 }

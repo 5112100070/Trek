@@ -64,17 +64,7 @@
                                                                 </div>
                                                            </div>
                                                         
-                                                        {{ if not .company.IsEnabled }}
-                                                        <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
-
-                                                        {{ if .company.IsEnabled }}
-                                                        <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
-                                                            Non Aktifkan Akun
-                                                        </button>
-                                                        {{ end }}
+                                                           <div id="button-account-activation-company"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -246,7 +236,12 @@
         var module = [];
 
         $(document).ready(function(){
+            StartLoading();
+
             FetchModule();
+            CheckAllNeededFeature();
+
+            FinishLoading();
         });
 
         function ProcessChangeStatus(){
@@ -265,7 +260,7 @@
                     setError(false, "");
                     $("#success-alert").removeClass("hide");
 
-                    if(toggleIsEnabledAccount == true) {
+                    if(!toggleIsEnabledAccount) {
                         $("#success-alert").html("Sukses melakukan update. Akun perusahaan sekarang telah di non aktifkan");
                     } else {
                         $("#success-alert").html("Sukses melakukan update akun. Akun perusahaan sekarang telah di aktifkan");
@@ -277,14 +272,18 @@
                     window.location.reload();
                 }, 5000);
             }).fail(function(response){
-                FinishLoading();
-                setError(true, "Ada kendala pada server, silahkan mencoba sekali lagi");                
+                if  (response.status < 500) {
+                    setError(true, response.responseJSON.error.detail);
+                } else {
+                    setError(true, defaultServerError);
+                }
+                FinishLoading();            
             });
-        }
+        } 
 
         function UpdateStatusActivation(companyID, isEnabled){
-            var url = base_url + '/admin/change-account-activation';
-            var data = {
+            var url = product_url + '/admin/v1/change-status-activation-company';
+            var payload = {
                 company_id: companyID,
                 is_enabled: isEnabled,
             };
@@ -292,9 +291,15 @@
             var promise = $.ajax({
                 url: url,
                 type: 'POST',
-                data: data,
+                data: JSON.stringify(payload),
+                crossDomain: true,
                 xhrFields: {
                     withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetCookie('_CGX_DEV_'),
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 }
             });
 
@@ -363,9 +368,38 @@
             return
         }
 
-        function FetchModule(){
-            StartLoading();
+        function CheckAllNeededFeature(){
+            promise = CheckFeature('/admin/v1/change-status-activation-company', 'POST');
 
+            promise.done(function(response){
+                InitButtonChangeActivation();
+            }).fail(function(response){
+                if  (response.status > 500) {
+                    setError(true, defaultServerError);
+                }
+            });
+        }
+
+        function InitButtonChangeActivation(){
+            var activationAccComp;
+            if(!isEnabledAccount){
+                activationAccComp = `
+                    <button class="btn btn-success col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                        Aktifkan Akun
+                    </button>
+                `;
+            } else {
+                activationAccComp = `
+                    <button class="btn btn-danger btn-sm col-sm-12" data-toggle="modal" data-target="#toggle-account-activation" style="color: white;">
+                        Non Aktifkan Akun
+                    </button>
+                `;
+            }
+
+            $('#button-account-activation-company').append(activationAccComp);
+        }
+
+        function FetchModule(){
                 var params = new URLSearchParams({
                     page: 1,
                     rows: 100,
@@ -429,23 +463,12 @@
                 if(response.error!=null){
                     setError(true, response.error.detail);
                 }
-                FinishLoading();
             }).fail(function(response){
                 setError(true, defaultServerError);
-                FinishLoading();
             });
 
             return
         }
 
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
-        }
     </script>
 </html>
