@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -48,12 +49,14 @@ func UserListPageHandler(c *gin.Context) {
 	// get list param
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
+	companyID, _ := strconv.ParseInt(c.DefaultQuery("company_id", "0"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 
 	listUserResp, err := global.GetServiceUser().GetListUsers(token, user.ListUserParam{
 		Page:      int(page),
 		Rows:      int(rows),
 		OrderType: orderType,
+		CompanyID: companyID,
 	})
 	if err != nil {
 		global.Error.Println("func UserListPageHandler error get list user: ", err)
@@ -107,11 +110,20 @@ func UserListPageHandler(c *gin.Context) {
 		ListPage:  global.GenerateListPage(totalPage),
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
+	var filterBy string
+	if companyID > 0 {
+		filterBy = fmt.Sprintf("&company_id=%d", companyID)
+	}
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"accounts":   listUserResp.Data.Accounts,
-		"pagination": pagination,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"accounts":       listUserResp.Data.Accounts,
+		"pagination":     pagination,
+		"config":         conf.GConfig,
+		"filterBy":       filterBy,
 	}
 	c.HTML(http.StatusOK, "list-user.tmpl", renderData)
 }
