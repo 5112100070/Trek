@@ -143,13 +143,9 @@
 
         function InitResources(){
             if(session_detail.company.role == -999){
-                $("#filter-main-company").css("display", "flex");
-                $("#filter-main-button").css("display", "flex");
                 // god company will get only about admin company
                 FetchListCompany(1);
             } else if(session_detail.company.role == 1){
-                $("#filter-main-company").css("display", "flex");
-                $("#filter-main-button").css("display", "flex");
                 // admin company will get company which registered as its members
                 FetchListCompany(0);
             } 
@@ -199,8 +195,13 @@
                     
                 // create and push component for filter company dropdown
                 $("#filter-by-company").append(components);
+
+                $("#filter-main-company").css("display", "flex");
+                $("#filter-main-button").css("display", "flex");
             }).fail(function(response){
-                setError(true, defaultServerError);
+                if(response.status > 500){
+                    setError(true, defaultServerError+" cannot show filter by company");
+                }
                 FinishLoading();
             });
 

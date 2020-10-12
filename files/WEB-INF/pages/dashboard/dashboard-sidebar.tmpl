@@ -45,6 +45,7 @@
                     </ul>
                 </li>
 
+                {{ if eq .UserDetail.Company.Role -999 }}
                 <div class="sidenav-menu-heading">PENGATURAN ADMIN</div>
                 <li>
                     <a href="#module-sub-menu" 
@@ -65,6 +66,7 @@
                         </li>
                     </ul>
                 </li>
+                {{ end }}
             </div>
         </div>
         <div class="sidenav-footer">

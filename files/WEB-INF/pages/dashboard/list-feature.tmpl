@@ -124,6 +124,16 @@
                                     <label for="feature-path-url">Path URL</label>
                                     <input class="form-control" id="feature-path-url" type="text" placeholder="Identifier url. example: /dashboard/features" />
                                 </div>
+                                <div class="form-group">
+                                    <label for="feature-method">Feature Method</label>
+                                    <select id="feature-method" class="form-control">
+                                        <option value="GET"> GET </option>
+                                        <option value="POST"> POST </option>
+                                        <option value="PUT"> PUT </option>
+                                        <option value="PATCH"> PATCH </option>
+                                        <option value="HEAD"> HEAD </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-red btn-sm" type="button" onclick="javascript:handleCloseCreateFeature()" data-dismiss="modal">Tutup</button>
@@ -170,7 +180,8 @@
                 account_module_id: parseInt($('#feature-module-id').val()),
                 name: $('#feature-name').val(),
                 description: $('#feature-description').val(),
-                path_url: $('#feature-path-url').val()
+                path_url: $('#feature-path-url').val(),
+                method:$('#feature-method').val(),
             }
 
             var promise = $.ajax({
