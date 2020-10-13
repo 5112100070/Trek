@@ -36,6 +36,7 @@
                                             <label for="phone">Nomor Telepon</label>
                                             <input class="form-control form-control-sm" id="phone" type="phone" placeholder="nomor telepon perusahaan" />
                                         </div>
+                                        {{ if .IsGodUser }}
                                         <div class="form-group">
                                             <label for="role">Role</label>
                                             <select class="form-control form-control-sm" id="role">
@@ -44,7 +45,6 @@
                                             </select>
                                         </div>
                                         
-                                        {{ if .IsGodUser }}
                                         <div id="form-group-member-of-company" class="form-group" style="display: none;">
                                             <label for="role">Member Dari Perusahaan</label>
                                             <select class="form-control form-control-sm" id="member-of-company">
@@ -101,13 +101,19 @@
             var companyName = $("#company-name").val();
             var address = $("#address").val();
             var phone = $("#phone").val();
-            var role = $('#role :selected').val();
-           var companyImage = $("#company-image")[0].files[0];
+            var companyImage = $("#company-image")[0].files[0];
 
            var memberOfCompany = 0;
            if($('#member-of-company').val() != undefined){
                 memberOfCompany = parseInt($('#member-of-company').val());
            }
+
+           var role;
+           if(session_detail.company.role == -999){
+                role = $('#role :selected').val();
+            } else {
+                role = 2;
+            }
 
             StartLoading();
             var promise = Register(companyName,address,phone,role,memberOfCompany,companyImage);
@@ -125,9 +131,13 @@
                     $("#company-name").val("");
                     $("#address").val("");
                     $("#phone").val("");
-                    $('#role :selected').val(1);
                     $("#company-image").val("");
                     $("#company-image-banner").empty();
+                    
+                    // this feature only can access for god only
+                    if(session_detail.company.role == -999){
+                        $('#role :selected').val(1);
+                    }
                 }
                 gotoTop();
                 FinishLoading();

@@ -42,7 +42,7 @@ func UserListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -222,7 +222,7 @@ func UserCreatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -322,7 +322,7 @@ func UserUpdatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 

@@ -43,7 +43,7 @@ func CompaniesListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -144,7 +144,7 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -218,7 +218,7 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -236,10 +236,13 @@ func CompanyCreatePagehandler(c *gin.Context) {
 		}
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"config":     conf.GConfig,
-		"IsGodUser":  accountResp.Data.Company.Role == constRole.ROLE_COMPANY_GOD,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"config":         conf.GConfig,
+		"IsGodUser":      accountResp.Data.Company.Role == constRole.ROLE_COMPANY_GOD,
 	}
 	c.HTML(http.StatusOK, "create-company.tmpl", renderData)
 }
@@ -269,7 +272,7 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 

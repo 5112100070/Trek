@@ -103,7 +103,7 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -153,7 +153,7 @@ func OrdersListPageHandler(c *gin.Context) {
 	}
 
 	if featureCheckResp.Error != nil {
-		handleSessionErrorPage(c, *accountResp.Error, true)
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
