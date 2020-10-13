@@ -141,8 +141,12 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <ul class="nav flex-column" id="stickyNav">
-                                                    <li class="nav-item"><a class="nav-link" href="/dashboard/update-company?id={{ .company.ID }}">Edit Data Perusahaan</a></li>
-                                                    <li class="nav-item">
+                                                    <li id="div-edit-company" class="nav-item" style="display: none;">
+                                                        <a class="nav-link" href="/dashboard/update-company?id={{ .company.ID }}">
+                                                            Edit Data Perusahaan
+                                                        </a>
+                                                    </li>
+                                                    <li id="div-edit-module" class="nav-item" style="display: none;">
                                                         <a class="nav-link" data-target="#modal-edit-module" data-toggle="modal" style="cursor: pointer; color: blue;">
                                                             Edit Module Perusahaan
                                                         </a>
@@ -378,6 +382,22 @@
                     setError(true, defaultServerError);
                 }
             });
+
+            let promiseCheckEditComp = CheckFeature('/admin/v1/update-account', 'POST');
+
+            promiseCheckEditComp.done(function(response){
+                $('#div-edit-company').css("display", "flex");
+            }).fail(function(response){
+                if  (response.status > 500) {
+                    setError(true, defaultServerError);
+                }
+            });
+
+            // check is have feature add/or remove feature
+            // only god and admin can have this feature
+            if(!(session_detail.company.role == -999 || (session_detail.company.role == 1 && session_detail.role == 1))){
+                $('#div-edit-module').css("display", "flex");
+            }
         }
 
         function InitButtonChangeActivation(){

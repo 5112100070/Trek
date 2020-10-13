@@ -254,6 +254,7 @@
     <script>
         var userID = {{ .account.ID }};
         var isEnabledAccount = {{ .account.Attribute.IsEnabled  }};
+        // registeredFeature targetted account
         var registeredFeature = {{ .account.RegisteredFeature }}
         
         var features = [];
@@ -500,16 +501,6 @@
                     let isRegistered = "";
                     for(let i=0; i<registeredFeature.length;i++){
                         if(registeredFeature[i] == element.id){
-                            // if user is god or have access to status activation feature
-                            if((element.path_url == '/admin/v1/change-status-activation' && element.method == 'POST')){
-                                isHaveFeatureActivationAcc = true;
-                            }
-
-                            // if user is god or have access to status change account password
-                            if((element.path_url == '/admin/v1/change-password' && element.method == 'POST')){
-                                isHaveFeatureChangePass = true;
-                            }
-
                             // generate new component for detail information
                             let moduleComp = `
                                 <tr>
@@ -524,6 +515,22 @@
                             
                             $("#feature-list").append(moduleComp);
                             isRegistered = "checked";
+                            break;
+                        }
+                    }
+
+                    let sessionRegFeature = session_detail.registered_feature;
+                    for(let i=0; i<sessionRegFeature.length;i++){
+                        if(sessionRegFeature[i] == element.id){
+                            // if user is god or have access to status activation feature
+                            if((element.path_url == '/admin/v1/change-status-activation' && element.method == 'POST')){
+                                isHaveFeatureActivationAcc = true;
+                            }
+
+                            // if user is god or have access to status change account password
+                            if((element.path_url == '/admin/v1/change-password' && element.method == 'POST')){
+                                isHaveFeatureChangePass = true;
+                            }
                             break;
                         }
                     }

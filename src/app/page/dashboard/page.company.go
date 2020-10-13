@@ -276,20 +276,6 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 		return
 	}
 
-	// all client company cannot get this page
-	if accountResp.Data.Company.Role == constRole.ROLE_COMPANY_CLIENT {
-		global.RenderUnAuthorizePage(c)
-		return
-	}
-
-	// only admin on admin company cannot get this page
-	if accountResp.Data.Company.Role != constRole.ROLE_COMPANY_CLIENT {
-		if accountResp.Data.Role != constRole.ROLE_ACCOUNT_ADMIN {
-			global.RenderUnAuthorizePage(c)
-			return
-		}
-	}
-
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 	accDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
 	if err != nil {
