@@ -96,8 +96,12 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <ul class="nav flex-column" id="stickyNav">
-                                                        <li id="div-edit-account" class="nav-item" style="display: none;"><a class="nav-link" href="/dashboard/update-user?id={{ .account.ID }}">Edit Data Anggota</a></li>
-                                                        <li id="div-edit-feature" class="nav-item">
+                                                        <li id="div-edit-account" class="nav-item" style="display: none;">
+                                                            <a class="nav-link" href="/dashboard/update-user?id={{ .account.ID }}">
+                                                                Edit Data Anggota
+                                                            </a>
+                                                        </li>
+                                                        <li id="div-edit-feature" class="nav-item" style="display: none;">
                                                             <a class="nav-link" data-target="#modal-edit-feature" data-toggle="modal" style="cursor: pointer; color: blue;">
                                                                 Edit Feature Pengguna
                                                             </a>
@@ -574,6 +578,7 @@
         function CheckAllNeededFeature(){
             // check feature edit user
             promise = CheckFeature('/admin/v1/update-account', 'POST');
+            promiseCheckFeaturing = CheckFeature('/admin/v1/update-feature', 'POST');
 
             promise.done(function(response){
                 $('#div-edit-account').css("display", "inline");
@@ -584,11 +589,14 @@
                 }
             });
 
-            // check is have feature add/or remove feature
-            // only god and admin can have this feature
-            if(!(session_detail.company.role == -999 || session_detail.role == 1)){
-                $('#div-edit-feature').css("display", "none");
-            }
+            promiseCheckFeaturing.done(function(response){
+                $('#div-edit-feature').css("display", "inline");
+            }).fail(function(response){
+                if(response.status > 500) {
+                    setError(true, defaultServerError);
+                    return
+                }
+            });
         }
     </script>
 </html>

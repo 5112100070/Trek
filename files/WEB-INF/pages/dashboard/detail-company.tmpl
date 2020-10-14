@@ -345,24 +345,14 @@
 
             promise.done(function(response){
                 response = response.data;
-
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    setError(false, "");
-                    $("#success-alert").removeClass("hide");
-
-                    $("#success-alert").html(response.message);
-
-                    window.location.reload();
-                }
+                setError(false, "");
+                $("#success-alert").removeClass("hide");
+                $("#success-alert").html(response.message);
+                window.location.reload();
                 FinishLoading();
             }).fail(function(response){
-                response = response.responseJSON;
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
+                if(response.status < 500){
+                    setError(true, response.responseJSON.error.detail);
                 } else {
                     setError(true, defaultServerError);
                 }
@@ -395,7 +385,7 @@
 
             // check is have feature add/or remove feature
             // only god and admin can have this feature
-            if(!(session_detail.company.role == -999 || (session_detail.company.role == 1 && session_detail.role == 1))){
+            if(session_detail.company.role == -999){
                 $('#div-edit-module').css("display", "flex");
             }
         }
