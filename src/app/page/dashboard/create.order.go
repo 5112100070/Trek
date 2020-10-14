@@ -54,6 +54,7 @@ func CreateOrderPageHandler(c *gin.Context) {
 	if unitsResp.Error != nil {
 		log.Println("func CreateOrderPageHandler error expected when call get list unit from CGX: ", unitsResp.Error.Detail)
 		global.RenderInternalServerErrorPage(c)
+		return
 	}
 
 	var listCompany []user.CompanyProfile

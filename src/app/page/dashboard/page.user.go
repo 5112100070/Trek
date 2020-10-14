@@ -226,12 +226,6 @@ func UserCreatePagehandler(c *gin.Context) {
 		return
 	}
 
-	// all admin can get this page
-	if accountResp.Data.Role != constRole.ROLE_ACCOUNT_ADMIN {
-		global.RenderUnAuthorizePage(c)
-		return
-	}
-
 	var listCompany []user.CompanyProfile
 	if accountResp.Data.Company.Role != constRole.ROLE_COMPANY_CLIENT {
 		listCompResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
@@ -264,29 +258,11 @@ func UserCreatePagehandler(c *gin.Context) {
 
 		listCompany = listCompResp.Data.Companies
 	} else {
-		detailResp, err := global.GetServiceUser().GetDetailCompany(token, accountResp.Data.Company.ID)
-		if err != nil {
-			global.Error.Println("func UserCreatePagehandler error get detail company: ", err)
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
-
-		if detailResp.Error != nil {
-			// possibility error
-			if detailResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
-				// ERROR_CODE_SESSION_EXPIRE
-				handleSessionErrorPage(c, *accountResp.Error, true)
-			} else if detailResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS {
-				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
-				global.RenderUnAuthorizePage(c)
-			} else {
-				// ERROR_CODE_INTERNAL_SERVER
-				global.RenderInternalServerErrorPage(c)
-			}
-			return
-		}
-
-		listCompany = append(listCompany, detailResp.Data)
+		// for client only can create account for theirselves
+		listCompany = append(listCompany, user.CompanyProfile{
+			ID:          accountResp.Data.Company.ID,
+			CompanyName: accountResp.Data.Company.CompanyName,
+		})
 	}
 
 	renderData := gin.H{
