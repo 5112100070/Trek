@@ -955,18 +955,6 @@
             return promise;
         }
 
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-                $("#success-alert").addClass("hide");
-
-                gotoTop();
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
-        }
 
         function gotoTop(){
             document.body.scrollTop = 0;

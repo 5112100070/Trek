@@ -145,6 +145,8 @@ func CreateNewCompany(c *gin.Context) {
 		return
 	}
 
+	memberOfCompany, _ := strconv.ParseInt(c.PostForm("member_of_company"), 10, 64)
+
 	form, err := c.MultipartForm()
 	if err != nil {
 		global.Error.Println("func CreateNewCompany error when get multipart form: ", err)
@@ -198,11 +200,12 @@ func CreateNewCompany(c *gin.Context) {
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.CreateCompanyParam{
-		Name:      companyName,
-		Phone:     phone,
-		Address:   address,
-		Role:      role,
-		ImageLogo: filename,
+		Name:            companyName,
+		Phone:           phone,
+		Address:         address,
+		Role:            role,
+		ImageLogo:       filename,
+		MemberOfCompany: memberOfCompany,
 	}
 
 	// send request to cgx to create company data

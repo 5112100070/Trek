@@ -24,6 +24,25 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="datatable table-responsive">
+                                    <div id="filter-main-company" class="row" style="margin-bottom: 10px; display: none;">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="role">Filter Perusahaan</label>
+                                                <select class="form-control form-control-sm" id="filter-by-company">
+                                                    <option>-</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="filter-main-button" class="row" style="margin-bottom: 10px; display: none;">
+                                        <div class="col-lg-6"></div>
+                                        <div class="col-lg-6">
+                                            <button class="btn btn-primary col-lg-6" style="float: right;" onclick="javascript:handleFilterAccount()">
+                                                <i data-feather="search"></i> Filter
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <table class="table table-bordered table-hover middle-table" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -59,7 +78,7 @@
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary col-sm-12" type="button" onclick="javascript:window.location='/dashboard/user?id={{ $account.ID }}'">
-                                                        view
+                                                        Detail
                                                     </button>
                                                 </td>
                                             </tr>
@@ -74,7 +93,7 @@
                                         <a 
                                             class="page-link"
                                             {{ if (gt $pagination.Page 1 ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
+                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}{{ $.filterBy }}" 
                                             {{ end }}>
                                             Sebelumnnya
                                         </a>
@@ -83,7 +102,7 @@
                                     <li class="page-item  
                                         {{ if (eq $pagination.Page $index) }} active {{ end }}">
                                         <a class="page-link" 
-                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
+                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}{{ $.filterBy }}">
                                             {{ $index }}
                                         </a>
                                     </li>
@@ -92,7 +111,7 @@
                                         <a 
                                             class="page-link" 
                                             {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
+                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}{{ $.filterBy }}"
                                             {{ end }}
                                         >
                                             Selanjutnya
@@ -116,4 +135,85 @@
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        $(document).ready(function(){
+            InitResources();
+        });
+
+        function InitResources(){
+            if(session_detail.company.role == -999){
+                // god company will get only about admin company
+                FetchListCompany(1);
+            } else if(session_detail.company.role == 1){
+                // admin company will get company which registered as its members
+                FetchListCompany(0);
+            } 
+        };
+
+        function FetchListCompany(role){
+                var params = new URLSearchParams({
+                    page: 1,
+                    rows: 50,
+                    order_by: "desc",
+                    role: role,
+                })
+                var url = product_url + '/admin/v1/get-list-company?' + params;
+                
+                var promise = $.ajax({
+                    url: url,
+                    type: 'GET',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    headers: {
+                        "Authorization": GetCookie('_CGX_DEV_'),
+                        "Accept": "application/json"
+                    }
+                });
+
+            promise.done(function(response){
+                let companies = response.data.companies;
+
+                const params = new URLSearchParams(window.location.search);
+                let companyID = 0;
+                if(params.get('company_id')!=null){
+                    companyID = parseInt(params.get('company_id'));
+                }
+
+                let components;
+                for(let i=0; i<companies.length; i++){
+                    let comp;
+                    if(companyID == companies[i].company_id){
+                        comp = `<option value="` + companies[i].company_id + `" selected>` + companies[i].company_name + `</option>`;  
+                    } else {
+                        comp = `<option value="` + companies[i].company_id + `">` + companies[i].company_name + `</option>`;
+                    }
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $("#filter-by-company").append(components);
+
+                $("#filter-main-company").css("display", "flex");
+                $("#filter-main-button").css("display", "flex");
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" cannot show filter by company");
+                }
+                FinishLoading();
+            });
+
+            return
+        }
+    
+        function handleFilterAccount(){
+            let companyID = $('#filter-by-company').val();
+            if(companyID != null && companyID != '' && companyID >= 0) {
+                window.location.href = base_url + '/dashboard/users?company_id=' + companyID;
+            } 
+        }
+    </script>
+
 </html>

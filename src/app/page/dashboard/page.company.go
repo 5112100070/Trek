@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,6 +13,7 @@ import (
 	constErr "github.com/5112100070/Trek/src/constants/error"
 	constRole "github.com/5112100070/Trek/src/constants/role"
 	statusConst "github.com/5112100070/Trek/src/constants/status"
+	constUrl "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -32,13 +34,26 @@ func CompaniesListPageHandler(c *gin.Context) {
 		return
 	}
 
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_LIST_COMPANY, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func CompaniesListPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
+		return
+	}
+
 	// get list param
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 	isEnabled := c.Query("is_enabled")
 
-	listUserResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
+	listCompanyResp, err := global.GetServiceUser().GetListCompany(token, user.ListCompanyParam{
 		Page:             int(page),
 		Rows:             int(rows),
 		OrderType:        orderType,
@@ -50,15 +65,15 @@ func CompaniesListPageHandler(c *gin.Context) {
 		return
 	}
 
-	if listUserResp.Error != nil {
+	if listCompanyResp.Error != nil {
 		// possibility error
-		if listUserResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+		if listCompanyResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
 			// ERROR_CODE_SESSION_EXPIRE
 			handleSessionErrorPage(c, *accountResp.Error, true)
-		} else if listUserResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listUserResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_RESULT {
+		} else if listCompanyResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listCompanyResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_RESULT {
 			// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
 			global.RenderUnAuthorizePage(c)
-		} else if listUserResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
+		} else if listCompanyResp.Error.Code == constErr.ERROR_CODE_INVALID_PARAMETER {
 			// ERROR_CODE_INVALID_PARAMETER
 			global.RenderNotFoundPage(c)
 		} else {
@@ -70,17 +85,17 @@ func CompaniesListPageHandler(c *gin.Context) {
 	}
 
 	// define status activation company
-	for i, c := range listUserResp.Data.Companies {
-		listUserResp.Data.Companies[i].StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[c.IsEnabled]
+	for i, c := range listCompanyResp.Data.Companies {
+		listCompanyResp.Data.Companies[i].StatusActivation = statusConst.COMPANY_IS_ENABLED_WORDING[c.IsEnabled]
 	}
 
 	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/companies"
-	totalPage := listUserResp.Data.Total / int(rows)
+	totalPage := listCompanyResp.Data.Total / int(rows)
 
 	// get additional page
 	// total data 22 row 10
 	// must result 3 pages
-	if listUserResp.Data.Total%int(rows) > 0 {
+	if listCompanyResp.Data.Total%int(rows) > 0 {
 		totalPage++
 	}
 
@@ -97,7 +112,7 @@ func CompaniesListPageHandler(c *gin.Context) {
 
 	renderData := gin.H{
 		"UserDetail": accountResp.Data,
-		"companies":  listUserResp.Data.Companies,
+		"companies":  listCompanyResp.Data.Companies,
 		"pagination": pagination,
 		"config":     conf.GConfig,
 	}
@@ -117,6 +132,19 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_DETAIL_COMPANY, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func CompanyDetailPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -154,10 +182,13 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	companyDetail.Data.CompanyName = strings.ToUpper(companyDetail.Data.CompanyName)
 	companyDetail.Data.StatusActivation = strings.ToUpper(companyDetail.Data.StatusActivation)
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"company":    companyDetail.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"company":        companyDetail.Data,
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-company.tmpl", renderData)
 }
@@ -165,7 +196,7 @@ func CompanyDetailPageHandler(c *gin.Context) {
 // func CompanyCreatePagehandler is handler for show form create company
 func CompanyCreatePagehandler(c *gin.Context) {
 	// Check user session
-	accountResp, _, errGetResponse := getUserProfile(c)
+	accountResp, token, errGetResponse := getUserProfile(c)
 	if errGetResponse != nil {
 		global.Error.Println("func CompanyCreatePagehandler error get detail account: ", errGetResponse)
 		global.RenderInternalServerErrorPage(c)
@@ -175,6 +206,19 @@ func CompanyCreatePagehandler(c *gin.Context) {
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_CREATE_COMPANY, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func CompanyCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -192,9 +236,13 @@ func CompanyCreatePagehandler(c *gin.Context) {
 		}
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"config":         conf.GConfig,
+		"IsGodUser":      accountResp.Data.Company.Role == constRole.ROLE_COMPANY_GOD,
 	}
 	c.HTML(http.StatusOK, "create-company.tmpl", renderData)
 }
@@ -215,18 +263,17 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 		return
 	}
 
-	// all client company cannot get this page
-	if accountResp.Data.Company.Role == constRole.ROLE_COMPANY_CLIENT {
-		global.RenderUnAuthorizePage(c)
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_UPDATE_COMPANY, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func CompanyUpdatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
 		return
 	}
 
-	// only admin on admin company cannot get this page
-	if accountResp.Data.Company.Role != constRole.ROLE_COMPANY_CLIENT {
-		if accountResp.Data.Role != constRole.ROLE_ACCOUNT_ADMIN {
-			global.RenderUnAuthorizePage(c)
-			return
-		}
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
+		return
 	}
 
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)

@@ -40,29 +40,3 @@ type ListOrderParam struct {
 	Rows      int
 	OrderType string
 }
-
-type PickUpParam struct {
-	PickUpIDs   []int64 `json:"pickup_ids"`
-	DriverName  string  `json:"driver_name"`
-	DriverPhone string  `json:"driver_phone"`
-}
-
-type FinishPickupParam struct {
-	PickUpIDs []int64           `json:"pickup_ids"`
-	Items     []ItemPickUpParam `json:"items"`
-}
-
-type DeliveryParam struct {
-	DriverName  string            `json:"driver_name"`
-	DriverPhone string            `json:"driver_phone"`
-	Items       []ItemPickUpParam `json:"items"`
-}
-
-type FinishParam struct {
-	ReceiverName string `json:"receiver"`
-}
-
-type ItemPickUpParam struct {
-	ID       int64 `json:"id"`
-	Quantity int64 `json:"quantity"`
-}

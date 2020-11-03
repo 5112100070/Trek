@@ -99,6 +99,25 @@
                                 </div>
                             </div>
 
+                            <div class="col-lg-9">
+                                <div class="card mb-4">
+                                    <div class="card-header">Aktif Feature</div>
+                                    <div class="card-body">
+                                        <div class="datatable table-responsive">
+                                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <th>Deskripsi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="feature-list"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- List Modals -->
                             <div class="modal fade" id="toggle-change-password" tabindex="-1" role="dialog" aria-labelledby="toggle-change-password-title" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -151,6 +170,14 @@
 
     {{ template "default-script-dashboard.tmpl" .}}
     <script>
+        $(document).ready(function(){
+            StartLoading();
+
+            FetchFeature();
+
+            FinishLoading();
+        });
+
         function ProcessChangePassword(){
             setError(false, "");
 
@@ -207,15 +234,61 @@
 
             return promise;
         }
+    
+        function FetchFeature(){
+                var params = new URLSearchParams({
+                    page: 1,
+                    rows: 100,
+                    order_by: "desc",
+                    company_id: session_detail.company.company_id
+                })
+                var url = product_url + '/admin/v1/account-feature?' + params;
+                
+                var promise = $.ajax({
+                    url: url,
+                    type: 'GET',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    headers: {
+                        "Authorization": GetCookie('_CGX_DEV_'),
+                        "Accept": "application/json"
+                    }
+                });
 
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
+            promise.done(function(response){
+                let registeredFeature = session_detail.registered_feature;
+
+                response = response.data;
+                response.features.forEach(element => {
+                    for(let i=0; i<registeredFeature.length;i++){
+                        if(registeredFeature[i] == element.id){
+
+                            // generate new component for detail information
+                            let moduleComp = `
+                                <tr>
+                                    <td>
+                                        <b>` + element.name + `</b>
+                                    </td>
+                                    <td>
+                                        ` + element.description + `
+                                    </td>
+                                </tr>   
+                            `;
+                            
+                            $("#feature-list").append(moduleComp);
+                            break;
+                        }
+                    }
+                });
+            }).fail(function(response){
+                if(response.status >= 500){
+                    setError(true, defaultServerError);
+                }
+            });
+
+            return
         }
     </script>
 </html>

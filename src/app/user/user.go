@@ -141,6 +141,10 @@ func (repo userRepo) GetListUsers(sessionID string, param ListUserParam) (MainLi
 	q.Add("page", strconv.FormatInt(int64(param.Page), 10))
 	q.Add("order_by", param.OrderType)
 
+	if param.CompanyID != 0 {
+		q.Add("company_id", strconv.FormatInt(param.CompanyID, 10))
+	}
+
 	req.URL.RawQuery = q.Encode()
 
 	resp, errGetResp := client.Do(req)

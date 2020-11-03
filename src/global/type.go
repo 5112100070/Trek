@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/5112100070/Trek/src/app/module"
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/app/user"
@@ -20,6 +21,7 @@ type RepoBundle struct {
 	Public  PublicService
 	User    UserService
 	Order   OrderService
+	Module  ModuleService
 
 	// map order status
 	// get from response CGX server.
@@ -32,6 +34,7 @@ type RepoBundle struct {
 }
 
 type SessionService interface {
+	CheckFeature(sessionID, pathURL, method string) (session.FeatureCheckResponse, error)
 	GetUser(string) (session.AccountResponse, error)
 	RequestLogin(string, string) (session.LoginResponse, error)
 	RequestLogout(string) (*session.Error, error)
@@ -61,17 +64,12 @@ type OrderService interface {
 	GetListOrderStatusCGX() (map[string]string, error)
 	GetListPickupStatusCGX() (map[string]string, error)
 	CreateOrderForAdmin(sessionID string, payload order.CreateOrderParam) (*order.CreateOrderForAdminResponse, error)
-	ApproveOrderForAdmin(sessionID string, orderID int64, awb string) (*order.CreateOrderForAdminResponse, error)
-	RejectOrderForAdmin(sessionID string, orderID int64) (*order.CreateOrderForAdminResponse, error)
-	DispatchOrderToFulfilmentCenter(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
-	DispatchOrderToDriver(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
-	PickUpOrderToDriver(sessionID string, orderID int64, param order.PickUpParam) (*order.SuccessCRUDResponse, error)
-	RejectPickUpOrder(sessionID string, orderID int64, pickupID ...int64) (*order.SuccessCRUDResponse, error)
-	FinishPickUpOrder(sessionID string, orderID int64, param order.FinishPickupParam) (*order.SuccessCRUDResponse, error)
-	DeliveryOrder(sessionID string, orderID int64, param order.DeliveryParam) (*order.SuccessCRUDResponse, error)
-	TransitOnCGXOrder(sessionID string, orderID int64) (*order.SuccessCRUDResponse, error)
-	FinishCGXOrder(sessionID string, orderID int64, param order.FinishParam) (*order.SuccessCRUDResponse, error)
 	GetOrderDetailForAdmin(sessionID string, orderID int64) (order.OrderReponse, *order.ErrorOrder, error)
 	GetListOrders(sessionID string, param order.ListOrderParam) (order.MainListOrderResponse, error)
 	GetListUnitInOrder(sessionID string) (order.MainListUnitResponse, error)
+}
+
+type ModuleService interface {
+	GetListModule(sessionID string, param module.ListModuleParam) (module.ModuleResponse, error)
+	GetListFeature(sessionID string, param module.ListFeatureParam) (module.FeatureResponse, error)
 }

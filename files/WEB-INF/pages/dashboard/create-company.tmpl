@@ -36,6 +36,7 @@
                                             <label for="phone">Nomor Telepon</label>
                                             <input class="form-control form-control-sm" id="phone" type="phone" placeholder="nomor telepon perusahaan" />
                                         </div>
+                                        {{ if .IsGodUser }}
                                         <div class="form-group">
                                             <label for="role">Role</label>
                                             <select class="form-control form-control-sm" id="role">
@@ -43,6 +44,15 @@
                                                 <option value="2">Client</option>
                                             </select>
                                         </div>
+                                        
+                                        <div id="form-group-member-of-company" class="form-group" style="display: none;">
+                                            <label for="role">Member Dari Perusahaan</label>
+                                            <select class="form-control form-control-sm" id="member-of-company">
+                                                <option id="init-member-of-company"> - </option>
+                                            </select>
+                                        </div>
+                                        {{ end }}
+
                                         <div class="form-group">
                                             <label class="control-label">Image Perusahaan</label>
                                             <div class="row" style="margin-left: 50px">
@@ -75,19 +85,38 @@
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
-
+    {{ if .IsGodUser }}
+    <script src="/js/controller/admin/su-company.js"></script>
+    {{ end }}
     <script>
+        $(document).ready(function(){
+            {{ if .IsGodUser }}
+            FetchCompanyByAdminRole();
+            {{ end }}
+        });
+
         function ProcessRegister(){
             setError(false, "");
 
             var companyName = $("#company-name").val();
             var address = $("#address").val();
             var phone = $("#phone").val();
-            var role = $('#role :selected').val();
             var companyImage = $("#company-image")[0].files[0];
 
+           var memberOfCompany = 0;
+           if($('#member-of-company').val() != undefined){
+                memberOfCompany = parseInt($('#member-of-company').val());
+           }
+
+           var role;
+           if(session_detail.company.role == -999){
+                role = $('#role :selected').val();
+            } else {
+                role = 2;
+            }
+
             StartLoading();
-            var promise = Register(companyName,address,phone,role,companyImage);
+            var promise = Register(companyName,address,phone,role,memberOfCompany,companyImage);
             promise.done(function(response){
                 response = response.data;
 
@@ -102,9 +131,13 @@
                     $("#company-name").val("");
                     $("#address").val("");
                     $("#phone").val("");
-                    $('#role :selected').val(1);
                     $("#company-image").val("");
                     $("#company-image-banner").empty();
+                    
+                    // this feature only can access for god only
+                    if(session_detail.company.role == -999){
+                        $('#role :selected').val(1);
+                    }
                 }
                 gotoTop();
                 FinishLoading();
@@ -119,7 +152,7 @@
             });
         }
     
-        function Register(companyName, address, phone, role, companyImage){
+        function Register(companyName, address, phone, role, memberOfCompany, companyImage){
             var url = base_url + '/dashboard/company/register';
             
             var fd = new FormData();
@@ -128,6 +161,7 @@
             fd.append('phone', phone);
             fd.append('role', role);
             fd.append('company_image', companyImage);
+            fd.append('member_of_company', memberOfCompany);
             
             var promise = $.ajax({
                 url: url,
@@ -144,19 +178,6 @@
             return promise;
         }
 
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-                $("#success-alert").addClass("hide");
-
-                gotoTop();
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
-        }
-    
         function uploadImage() {
             /* 200KB */
             var imageSizeValidation = 200000;

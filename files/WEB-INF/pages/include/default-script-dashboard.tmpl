@@ -15,6 +15,9 @@
 <script>
     var base_url = {{.config.BaseUrlConfig.BaseDNS}};
     var product_url = {{.config.BaseUrlConfig.ProductDNS}};
+    var session_detail = JSON.parse("{{ .UserDetailJSON }}");
+
+    var defaultServerError = "Mohon maaf sedang terjadi kesalahan. Silahkan coba lagi.";
 
     function GoToHome(){
         GoToIndex('');
@@ -34,5 +37,56 @@
     
     function FinishLoading(){
         document.getElementById('loading-pop-up').style.display = "none";
+    }
+
+    function GetCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function CheckFeature(path, method) {
+        let path_url = product_url + '/auth/v1/validate-feature';
+        let payload = {
+            path_url: path,
+            method: method
+        };
+
+        var promise = $.ajax({
+            url: path_url,
+            type: 'POST',
+            data: JSON.stringify(payload),
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
+            headers: {
+                "Authorization": GetCookie('_CGX_DEV_'),
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        });
+
+        return promise;
+    }
+
+    function setError(isShow, message = "") {
+        if (isShow) {
+            $("#failed-alert").removeClass("hide");
+            $("#failed-alert").html(message);
+        } else {
+            $("#failed-alert").addClass("hide");
+            $("#failed-alert").html("");
+        }
     }
 </script>

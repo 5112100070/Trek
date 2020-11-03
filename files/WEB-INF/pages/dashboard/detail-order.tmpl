@@ -532,128 +532,51 @@
         }
 
         function handleApproveOrder(){
+            $('#konfirmasi').modal("toggle");   
+
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
 
-            StartLoading();
 
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-            
-            var promise = $.ajax({
-                url: base_url + '/admin/approve-order',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-            
-            $('#konfirmasi').modal("toggle");   
+            var url = product_url + '/order/internal/v1/update/' + orderID + '/approved';
+            var payload = {};
 
-            promise.done(function(response){
-                response = response.data;
-
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();    
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            handleChangeStatus(url, JSON.stringify(payload));
         }
 
         function handleRejectOrder(){
+            $('#reject-order').modal("toggle");   
+            
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
-
-            StartLoading();
-
-            var fd = new FormData();
-            fd.append('order_id', orderID);
             
-            var promise = $.ajax({
-                url: base_url + '/admin/reject-order',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-            
-            $('#reject-order').modal("toggle");
+            var url = product_url + '/order/internal/v1/update/' + orderID + '/reject';
+            var payload = {};
 
-            promise.done(function(response){
-                response = response.data;
+            handleChangeStatus(url, JSON.stringify(payload));
 
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            return
         }
 
         function handleDispatchOrder(action){
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
 
-            StartLoading();
-
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-            fd.append('action', action);
-
-            var promise = $.ajax({
-                url: base_url + '/admin/dispatch-order',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-            
+            var url;
+            var payload = {};
             if(action == "DISPATCH_TO_FULFILMENT_CENTER"){
                 $('#dispatch-fulfilment-center').modal("toggle");
+                url = product_url + '/order/internal/v1/update/' + orderID + '/dispatch_order';
             } else if(action == "DISPATCH_TO_FULFILMENT_DRIVER"){
                 $('#dispatch-pickup').modal("toggle");
+                url = product_url + '/order/internal/v1/update/' + orderID + '/pick_up';
+            } else {
+                return
             }
+            
+            handleChangeStatus(url, JSON.stringify(payload));
 
-            promise.done(function(response){
-                response = response.data;
-
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            return
         }
 
         function handlePickUpOrder(){
@@ -661,91 +584,41 @@
 
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
-            var pickupID = $("#pickup-pickup-id").val();
+            var pickupID = parseInt($("#pickup-pickup-id").val());
             var driverName = $("#pickup-driver-name").val();
             var driverPhone = $("#pickup-driver-phone").val();             
 
-            StartLoading();
-
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-            fd.append('pickup_id', pickupID);
-            fd.append('driver_name', driverName);
-            fd.append('driver_phone', driverPhone);
-
-            var promise = $.ajax({
-                url: base_url + '/admin/pickup-item-order',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
+            var path_url = product_url + '/order/internal/v1/update/' + orderID + '/pick_up';
+            var payload = {
+                driver_pickup: {
+                    pickup_ids: [pickupID],
+                    driver_name: driverName,
+                    driver_phone: driverPhone
                 }
-            });
-            
-            promise.done(function(response){
-                response = response.data;
+            };
 
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            handleChangeStatus(path_url, JSON.stringify(payload));
         }
 
         function handleRejectPickUp(){
-            var url = new URL(window.location.href);
-            var orderID = url.searchParams.get("id");
-            var pickUpID = $("#reject-pick-up-id").val();
-
-            StartLoading();
-
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-            fd.append("pickup_id", pickUpID);
-
-            var promise = $.ajax({
-                url: base_url + '/admin/reject-pickup',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-            
             $('#reject-pick-up').modal("toggle");
 
-            promise.done(function(response){
-                response = response.data;
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            var pickUpID = parseInt($("#reject-pick-up-id").val());
 
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
+            var path_url = product_url + '/order/internal/v1/update/' + orderID + '/pick_up_reject'
+            var payload = {
+                driver_pickup: {
+                    pickup_ids: [pickUpID]
                 }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            };
+            
+            handleChangeStatus(path_url, JSON.stringify(payload));
         }
 
         function handleFinishPickUp(){
-            StartLoading();
+            $('#finish-pick-up').modal("toggle");
 
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
@@ -766,83 +639,37 @@
                 });
             }
 
+            
+            let path_url = product_url + '/order/internal/v1/update/' + orderID + '/pick_up_finish';
             let payload = {
-                order_id: parseInt(orderID),
-                pickup_ids: [parseInt(pickupID)],
-                items: itemsPayload
+                driver_pickup: {
+                    pickup_ids: [parseInt(pickupID)],
+                    items: itemsPayload
+                }
             };
 
-            var promise = $.ajax({
-                url: base_url + '/admin/finish-pickup',
-                type: 'POST',
-                data: JSON.stringify(payload),
-                contentType: 'application/json',
-                dataType: "json"
-            });
-            
-            $('#finish-pick-up').modal("toggle");
-
-            promise.done(function(response){
-                response = response.data;
-
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            handleChangeStatus(path_url, JSON.stringify(payload));
         }
 
         function handleTransitOrder(){
-            var url = new URL(window.location.href);
-            var orderID = url.searchParams.get("id");
-            StartLoading();
-
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-
             $('#transit-on-cgx').modal("toggle");
 
-            var promise = $.ajax({
-                url: base_url + '/admin/transit-order',
-                type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
- 
-            promise.done(function(response){
-                response = response.data;
+            var url = new URL(window.location.href);
+            var orderID = url.searchParams.get("id");
+            
+            let path_url = product_url + '/order/internal/v1/update/' + orderID + '/on_cgx';
+            let payload = {};
 
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            handleChangeStatus(path_url, JSON.stringify(payload));
         }
 
         function handleDeliverOrder(){
-            StartLoading();
+            $('#delivery-order').modal("toggle");
 
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
+
+            let path_url = product_url + '/order/internal/v1/update/' + orderID + '/delivery';
 
             // generate payload to hit
             var itemsPayload = [];
@@ -860,76 +687,66 @@
             }
 
             let payload = {
-                order_id: parseInt(orderID),
-                driver_name: $("#delivery-driver-name").val(),
-                driver_phone: $("#delivery-driver-phone").val(),
-                items: itemsPayload
+                driver_delivery: {
+                    driver_name: $("#delivery-driver-name").val(),
+                    driver_phone: $("#delivery-driver-phone").val(),
+                    items: itemsPayload
+                }
             };
 
-            var promise = $.ajax({
-                url: base_url + '/admin/delivery-order',
-                type: 'POST',
-                data: JSON.stringify(payload),
-                contentType: 'application/json',
-                dataType: "json"
-            });
+            handleChangeStatus(path_url, JSON.stringify(payload));
 
-            $('#delivery-order').modal("toggle");
-
-            promise.done(function(response){
-                response = response.data;
-
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
-                }
-            }).fail(function(response){
-                FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
-            });
+            return
         }
 
         function handleFinishOrder(){
             var url = new URL(window.location.href);
             var orderID = url.searchParams.get("id");
 
+            let path_url = product_url + '/order/internal/v1/update/' + orderID + '/finish';
+
+            var receiverName = $("#receiver-name").val();
+            let payload = {
+                delivery: {
+                    receiver: receiverName
+                }
+            };
+
+            handleChangeStatus(path_url, JSON.stringify(payload));
+
+            return
+        }
+
+        function handleChangeStatus(url, payload){
             StartLoading();
 
-            var fd = new FormData();
-            fd.append('order_id', orderID);
-            fd.append('receiver_name', $("#receiver-name").val());
-
             var promise = $.ajax({
-                url: base_url + '/admin/finish-order',
+                url: url,
                 type: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false,
-                cache : false,
+                data: payload,
+                crossDomain: true,
                 xhrFields: {
                     withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetCookie('_CGX_DEV_'),
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 }
             });
 
             promise.done(function(response){
-                response = response.data;
-
-                FinishLoading();
-                if(response.error!=null){
-                    setError(true, response.error.detail);
-                    gotoTop();
-                } else {
-                    window.location.reload();   
-                }
+                window.location.reload();
             }).fail(function(response){
                 FinishLoading();
-                var status = response.status;
-                setError(true, response.responseJSON.data);
+                if  (response.status < 500) {
+                    setError(true, response.responseJSON.error.detail);
+                } else {
+                    setError(true, defaultServerError);
+                }
             });
+
+            return
         }
 
         function showModalRejectPickUp(pickupID, recieverName, recieverAddress){
@@ -1008,19 +825,6 @@
             // generate component
             $('#delivery-order-body').html(component);
         };
-
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-                $("#success-alert").addClass("hide");
-
-                gotoTop();
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
-        }
 
         function gotoTop(){
             document.body.scrollTop = 0;

@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -9,8 +10,10 @@ import (
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
 	"github.com/5112100070/Trek/src/conf"
+	constErr "github.com/5112100070/Trek/src/constants/error"
 	errorConst "github.com/5112100070/Trek/src/constants/error"
 	statusConst "github.com/5112100070/Trek/src/constants/status"
+	constUrl "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	gSession "github.com/5112100070/Trek/src/global/session"
 	"github.com/gin-gonic/gin"
@@ -65,9 +68,12 @@ func ConfigPageHandler(c *gin.Context) {
 		return
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "config.tmpl", renderData)
 }
@@ -85,6 +91,19 @@ func OrdersDetailPageHandler(c *gin.Context) {
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_ORDER_DETAIL, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func OrdersDetailPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -122,6 +141,19 @@ func OrdersListPageHandler(c *gin.Context) {
 	if accountResp.Error != nil {
 		global.Error.Println("func OrdersListPageHandler error session: ", accountResp.Error.Detail)
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_ORDER, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func OrdersListPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -225,6 +257,19 @@ func handleSessionErrorPage(c *gin.Context, sessionErr session.Error, needRedire
 		return
 	} else {
 		// Error Internal server - redirect to problem page
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+}
+
+func handleErrorCheckFeature(c *gin.Context, featureCheckResp session.FeatureCheckResponse) {
+	if featureCheckResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
+		global.RenderUnAuthorizePage(c)
+		return
+	} else if featureCheckResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
+		handleSessionErrorPage(c, *featureCheckResp.Error, true)
+		return
+	} else {
 		global.RenderInternalServerErrorPage(c)
 		return
 	}

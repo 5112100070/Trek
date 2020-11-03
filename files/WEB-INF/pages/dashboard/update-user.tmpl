@@ -141,19 +141,6 @@
             return promise;
         }
 
-        function setError(isShow, message = "") {
-            if (isShow) {
-                $("#failed-alert").removeClass("hide");
-                $("#failed-alert").html(message);
-                $("#success-alert").addClass("hide");
-
-                gotoTop();
-            } else {
-                $("#failed-alert").addClass("hide");
-                $("#failed-alert").html("");
-            }
-        }
-
         function uploadImage() {
             /* 200KB */
             var imageSizeValidation = 200000;

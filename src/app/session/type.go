@@ -21,6 +21,12 @@ type AccountResponse struct {
 	ServerProcessTime string   `json:"server_process_time"`
 }
 
+type FeatureCheckResponse struct {
+	IsSuccess bool   `json:"is_success"`
+	Error     *Error `json:"error", omitempty`
+	Message   string `json:"message"`
+}
+
 type LoginResponse struct {
 	Data              *LoginDataResponse `json:"data", omitempty`
 	Error             *Error             `json:"error", omitempty`
@@ -28,14 +34,15 @@ type LoginResponse struct {
 }
 
 type Account struct {
-	ID           int64          `json:"user_id"`
-	Fullname     string         `json:"fullname"`
-	PhoneNumber  string         `json:"phone_number"`
-	Email        string         `json:"email"`
-	CreateTime   string         `json:"create_time"`
-	Role         int            `json:"role"`
-	ImageProfile string         `json:"image_profile"`
-	Company      CompanyProfile `json:"company"`
+	ID                int64          `json:"user_id"`
+	Fullname          string         `json:"fullname"`
+	PhoneNumber       string         `json:"phone_number"`
+	Email             string         `json:"email"`
+	CreateTime        string         `json:"create_time"`
+	Role              int            `json:"role"`
+	ImageProfile      string         `json:"image_profile"`
+	RegisteredFeature []int64        `json:"registered_feature"`
+	Company           CompanyProfile `json:"company"`
 }
 
 type LoginDataResponse struct {

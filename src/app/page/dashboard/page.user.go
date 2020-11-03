@@ -1,6 +1,8 @@
 package dashboard
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/5112100070/Trek/src/conf"
 	constErr "github.com/5112100070/Trek/src/constants/error"
 	constRole "github.com/5112100070/Trek/src/constants/role"
+	constUrl "github.com/5112100070/Trek/src/constants/url"
 	"github.com/5112100070/Trek/src/global"
 	"github.com/gin-gonic/gin"
 )
@@ -30,15 +33,30 @@ func UserListPageHandler(c *gin.Context) {
 		return
 	}
 
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_LIST_USER, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func UserListPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
+		return
+	}
+
 	// get list param
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
+	companyID, _ := strconv.ParseInt(c.DefaultQuery("company_id", "0"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 
 	listUserResp, err := global.GetServiceUser().GetListUsers(token, user.ListUserParam{
 		Page:      int(page),
 		Rows:      int(rows),
 		OrderType: orderType,
+		CompanyID: companyID,
 	})
 	if err != nil {
 		global.Error.Println("func UserListPageHandler error get list user: ", err)
@@ -92,11 +110,20 @@ func UserListPageHandler(c *gin.Context) {
 		ListPage:  global.GenerateListPage(totalPage),
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
+	var filterBy string
+	if companyID > 0 {
+		filterBy = fmt.Sprintf("&company_id=%d", companyID)
+	}
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"accounts":   listUserResp.Data.Accounts,
-		"pagination": pagination,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"accounts":       listUserResp.Data.Accounts,
+		"pagination":     pagination,
+		"config":         conf.GConfig,
+		"filterBy":       filterBy,
 	}
 	c.HTML(http.StatusOK, "list-user.tmpl", renderData)
 }
@@ -114,6 +141,19 @@ func UserDetailPageHandler(c *gin.Context) {
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_GET_DETAIL_ACCOUNT, http.MethodGet)
+	if err != nil {
+		global.Error.Println("func UserDetailPageHandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -146,10 +186,13 @@ func UserDetailPageHandler(c *gin.Context) {
 		return
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"account":    accDetail.Data,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"account":        accDetail.Data,
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "detail-user.tmpl", renderData)
 }
@@ -170,9 +213,16 @@ func UserCreatePagehandler(c *gin.Context) {
 		return
 	}
 
-	// all admin can get this page
-	if accountResp.Data.Role != constRole.ROLE_ACCOUNT_ADMIN {
-		global.RenderUnAuthorizePage(c)
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_CREATE_ACCOUNT, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func UserCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
@@ -195,7 +245,7 @@ func UserCreatePagehandler(c *gin.Context) {
 			if listCompResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
 				// ERROR_CODE_SESSION_EXPIRE
 				handleSessionErrorPage(c, *accountResp.Error, true)
-			} else if listCompResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS {
+			} else if listCompResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS || listCompResp.Error.Code == constErr.ERROR_CODE_NOT_HAVE_PERMISSION_ON_FEATURE {
 				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
 				global.RenderUnAuthorizePage(c)
 			} else {
@@ -208,29 +258,11 @@ func UserCreatePagehandler(c *gin.Context) {
 
 		listCompany = listCompResp.Data.Companies
 	} else {
-		detailResp, err := global.GetServiceUser().GetDetailCompany(token, accountResp.Data.Company.ID)
-		if err != nil {
-			global.Error.Println("func UserCreatePagehandler error get detail company: ", err)
-			global.RenderInternalServerErrorPage(c)
-			return
-		}
-
-		if detailResp.Error != nil {
-			// possibility error
-			if detailResp.Error.Code == constErr.ERROR_CODE_SESSION_EXPIRE {
-				// ERROR_CODE_SESSION_EXPIRE
-				handleSessionErrorPage(c, *accountResp.Error, true)
-			} else if detailResp.Error.Code == constErr.ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS {
-				// ERROR_CODE_ACCOUNT_NOT_HAVE_ACCESS
-				global.RenderUnAuthorizePage(c)
-			} else {
-				// ERROR_CODE_INTERNAL_SERVER
-				global.RenderInternalServerErrorPage(c)
-			}
-			return
-		}
-
-		listCompany = append(listCompany, detailResp.Data)
+		// for client only can create account for theirselves
+		listCompany = append(listCompany, user.CompanyProfile{
+			ID:          accountResp.Data.Company.ID,
+			CompanyName: accountResp.Data.Company.CompanyName,
+		})
 	}
 
 	renderData := gin.H{
@@ -254,6 +286,19 @@ func UserUpdatePagehandler(c *gin.Context) {
 	// expire - we remove cookie and redirect it
 	if accountResp.Error != nil {
 		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	// validate access to this feature
+	featureCheckResp, err := global.GetServiceSession().CheckFeature(token, constUrl.URL_ADMIN_UPDATE_ACCOUNT, http.MethodPost)
+	if err != nil {
+		global.Error.Println("func UserCreatePagehandler error when check feature: ", err)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	if featureCheckResp.Error != nil {
+		handleErrorCheckFeature(c, featureCheckResp)
 		return
 	}
 
