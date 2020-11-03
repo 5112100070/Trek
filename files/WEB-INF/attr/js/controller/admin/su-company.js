@@ -30,7 +30,7 @@ function FetchCompanyByAdminRole(){
                 withCredentials: true
             },
             headers: {
-                "Authorization": GetCookie('_CGX_DEV_'),
+                "Authorization": GetSessionBasedOnEnv(),
                 "Accept": "application/json"
             }
         });

@@ -39,6 +39,15 @@
         document.getElementById('loading-pop-up').style.display = "none";
     }
 
+    function GetSessionBasedOnEnv() {
+        var hostname = window.location.hostname;
+        if(hostname.includes("cgx.co.id")){
+            return GetCookie('_CGX_');
+        } else {
+            return GetCookie('_CGX_DEV_');
+        }
+    }; 
+
     function GetCookie(cname) {
         var name = cname + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -71,7 +80,7 @@
                 withCredentials: true
             },
             headers: {
-                "Authorization": GetCookie('_CGX_DEV_'),
+                "Authorization": GetSessionBasedOnEnv(),
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             }
