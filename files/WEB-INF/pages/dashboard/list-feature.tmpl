@@ -206,10 +206,10 @@
                     setError(true, response.error.detail);
                     gotoTop();
                 } else {
+                    handleCloseCreateFeature();
                     window.location.reload();   
                 }
             }).fail(function(response){
-                handleCloseCreateFeature();
                 setError(true, defaultServerError);
             });
 
