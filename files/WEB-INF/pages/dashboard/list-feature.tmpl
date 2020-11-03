@@ -224,6 +224,9 @@
             var url = product_url + '/admin/v1/account-module?' + params;
             
 
+            console.log("TESTING2 data nih");
+            console.log(GetCookie('_CGX_DEV_'));
+
             var promise = $.ajax({
                 url: url,
                 type: 'GET',
