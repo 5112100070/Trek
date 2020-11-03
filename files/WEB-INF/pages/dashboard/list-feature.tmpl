@@ -209,6 +209,7 @@
                     window.location.reload();   
                 }
             }).fail(function(response){
+                handleCloseCreateFeature();
                 setError(true, defaultServerError);
             });
 
