@@ -292,11 +292,6 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	option.Offset = &offset
 	option.SortType = &param.OrderType
 
-	log.Println(urlStr)
-	log.Println(limit)
-	log.Println(offset)
-	log.Println(param.OrderType)
-
 	if param.CompanyID > 0 {
 		companyID := int64(param.CompanyID)
 		option.CompanyID = &companyID
