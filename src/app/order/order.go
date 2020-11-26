@@ -327,6 +327,8 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	}
 	defer resp.Body.Close()
 
+	log.Println(string(body))
+
 	errUnMarshal := json.Unmarshal(body, &result)
 	if errUnMarshal != nil {
 		log.Printf("func GetListOrders error hit:%v when unmarshal: %v. error: %v", u.String(), string(body), errUnMarshal)
