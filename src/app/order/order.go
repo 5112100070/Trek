@@ -279,7 +279,7 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 
 	// build param
 	limit := int64(param.Rows)
-	offset := int64(((param.Page - 1) * param.Rows) + 1)
+	offset := int64(((param.Page - 1) * param.Rows))
 
 	var option struct {
 		CompanyID *int64  `json:"company_id"`
