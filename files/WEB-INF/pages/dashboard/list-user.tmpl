@@ -152,26 +152,26 @@
         };
 
         function FetchListCompany(role){
-                var params = new URLSearchParams({
-                    page: 1,
-                    rows: 50,
-                    order_by: "desc",
-                    role: role,
-                })
-                var url = product_url + '/admin/v1/get-list-company?' + params;
-                
-                var promise = $.ajax({
-                    url: url,
-                    type: 'GET',
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    headers: {
-                        "Authorization": GetSessionBasedOnEnv(),
-                        "Accept": "application/json"
-                    }
-                });
+            var params = new URLSearchParams({
+                page: 1,
+                rows: 50,
+                order_by: "desc",
+                role: role,
+            })
+            var url = product_url + '/admin/v1/get-list-company?' + params;
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Accept": "application/json"
+                }
+            });
 
             promise.done(function(response){
                 let companies = response.data.companies;
@@ -212,7 +212,9 @@
             let companyID = $('#filter-by-company').val();
             if(companyID != null && companyID != '' && companyID >= 0) {
                 window.location.href = base_url + '/dashboard/users?company_id=' + companyID;
-            } 
+            } else {
+                window.location.href = base_url + '/dashboard/users';
+            }
         }
     </script>
 

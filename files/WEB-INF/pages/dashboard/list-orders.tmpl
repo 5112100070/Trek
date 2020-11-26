@@ -23,6 +23,27 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="datatable table-responsive">
+                                    <div>
+                                        <div id="filter-main-company" class="row" style="margin-bottom: 10px; display: none;">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="role">Filter Perusahaan</label>
+                                                    <select class="form-control form-control-sm" id="filter-by-company">
+                                                        <option>-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="filter-main-button" class="row" style="margin-bottom: 10px; display: none;">
+                                            <div class="col-lg-6"></div>
+                                            <div class="col-lg-6">
+                                                <button class="btn btn-primary col-lg-6" style="float: right;" onclick="javascript:handleFilterOrder()">
+                                                    <i data-feather="search"></i> Filter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -79,23 +100,13 @@
                                 </div>
                                 <nav aria-label="...">
                                   <ul class="pagination">
-                                    {{ $pagination := .pagination }}
-                                    <li class="page-item {{ if (le $pagination.Page 1 ) }} disable {{ end }}">
-                                        <a 
-                                            class="page-link"
-                                            {{ if (gt $pagination.Page 1 ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
-                                            {{ end }}>
+                                    <li class="page-item">
+                                        <a id="prev-page" class="page-link" href="">
                                             Sebelumnnya
                                         </a>
                                     </li>
-                                    <li class="page-item {{ if (ge $pagination.Page $pagination.TotalPage ) }}disable{{ end }}">
-                                        <a 
-                                            class="page-link" 
-                                            {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
-                                            {{ end }}
-                                        >
+                                    <li class="page-item">
+                                        <a id="next-page" class="page-link" href="">
                                             Selanjutnya
                                         </a>
                                     </li>
@@ -163,4 +174,123 @@
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
+    <script>
+        var haveNext = {{ .next }};
+
+        $(document).ready(function(){
+            if(session_detail.company.role == -999 || session_detail.company.role == 1){
+                FetchListCompany();
+            }
+
+            setPagination();
+        });
+
+        function setPagination(){
+            var url = window.location.origin + window.location.pathname;
+            var payload = {
+                page: 0
+            };
+             
+            var currParams = new URLSearchParams(window.location.search);
+            
+            var companyID = parseInt(currParams.get("company_id"));
+            if(!(companyID <= 0 || companyID == NaN || currParams.get("company_id") == null)){
+                payload.company_id = companyID;
+            }
+
+            var page = parseInt(currParams.get("page"));
+            if(page <= 0 || page == NaN || currParams.get("page") == null){
+                page = 1;
+            }
+            
+            if(haveNext){
+                $("#next-page").css("cursor", "pointer");
+                payload.page = page + 1;
+
+                let params = new URLSearchParams(payload);    
+                $("#next-page").attr("href", url + "?" + params);
+            } else {
+                $("#next-page").css("cursor", "inherit");
+                $("#next-page").css("pointer-events", "none");
+                $("#next-page").attr("href", "");
+            }
+
+            if(page > 1){
+                $("#prev-page").css("cursor", "pointer");
+                payload.page = page - 1;
+
+                let params = new URLSearchParams(payload);    
+                $("#prev-page").attr("href", url + "?" + params);
+            } else {
+                $("#prev-page").css("cursor", "inherit");
+                $("#prev-page").css("pointer-events", "none");
+                $("#prev-page").attr("href", "");
+            }
+        }
+
+        function FetchListCompany(){
+            var params = new URLSearchParams({
+                page: 1,
+                rows: 50,
+                order_by: "desc",
+            })
+            var url = product_url + '/admin/v1/get-list-company?' + params;
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Accept": "application/json"
+                }
+            });
+
+            promise.done(function(response){
+                let companies = response.data.companies;
+
+                const params = new URLSearchParams(window.location.search);
+                let companyID = 0;
+                if(params.get('company_id')!=null){
+                    companyID = parseInt(params.get('company_id'));
+                }
+
+                let components;
+                for(let i=0; i<companies.length; i++){
+                    let comp;
+                    if(companyID == companies[i].company_id){
+                        comp = `<option value="` + companies[i].company_id + `" selected>` + companies[i].company_name + `</option>`;  
+                    } else {
+                        comp = `<option value="` + companies[i].company_id + `">` + companies[i].company_name + `</option>`;
+                    }
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $("#filter-by-company").append(components);
+
+                $("#filter-main-company").css("display", "flex");
+                $("#filter-main-button").css("display", "flex");
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" cannot show filter by company");
+                }
+                FinishLoading();
+            });
+
+            return
+        }
+
+        function handleFilterOrder(){
+            let companyID = $('#filter-by-company').val();
+            if(companyID != null && companyID != '' && companyID >= 0) {
+                window.location.href = base_url + '/dashboard/orders?company_id=' + companyID;
+            } else {
+                window.location.href = base_url + '/dashboard/orders';
+            }
+        }
+    </script>
 </html>

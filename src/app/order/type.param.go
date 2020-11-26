@@ -39,4 +39,6 @@ type ListOrderParam struct {
 	Page      int
 	Rows      int
 	OrderType string
+	// CompanyID used as filter based on company
+	CompanyID int64
 }

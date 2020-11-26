@@ -2,10 +2,9 @@ package dashboard
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
-
-	"github.com/5112100070/Trek/src/entity"
 
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
@@ -159,29 +158,24 @@ func OrdersListPageHandler(c *gin.Context) {
 
 	// get list param
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
-	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
+	if page <= 0 {
+		page = 1
+	}
+
+	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "8"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
+	companyID, _ := strconv.ParseInt(c.DefaultQuery("company_id", "0"), 10, 64)
 
 	listOrderResp, err := global.GetServiceOrder().GetListOrders(token, order.ListOrderParam{
 		Page:      int(page),
 		Rows:      int(rows),
 		OrderType: orderType,
+		CompanyID: companyID,
 	})
 	if err != nil {
 		global.Error.Println("func OrdersListPageHandler error get list order: ", err)
 		global.RenderInternalServerErrorPage(c)
 		return
-	}
-
-	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/orders"
-
-	// handle pagination
-	pagination := entity.Pagination{
-		Template: templatePage,
-		Page:     int(page),
-		NextPage: int(page) + 1,
-		PrevPage: int(page) - 1,
-		Rows:     int(rows),
 	}
 
 	// fetching item data
@@ -196,12 +190,21 @@ func OrdersListPageHandler(c *gin.Context) {
 		mapItems[orderDetail.ID] = items
 	}
 
+	var filterBy string
+	if companyID > 0 {
+		filterBy = fmt.Sprintf("&company_id=%d", companyID)
+	}
+
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"orders":     listOrderResp.Data.Orders,
-		"mapItems":   mapItems,
-		"pagination": pagination,
-		"config":     conf.GConfig,
+		"UserDetail":     accountResp.Data,
+		"UserDetailJSON": string(accountRespJSON),
+		"orders":         listOrderResp.Data.Orders,
+		"next":           listOrderResp.Data.Next,
+		"mapItems":       mapItems,
+		"config":         conf.GConfig,
+		"filterBy":       filterBy,
 	}
 	c.HTML(http.StatusOK, "list-orders.tmpl", renderData)
 }

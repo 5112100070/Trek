@@ -277,8 +277,30 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	u.Path = urlConst.URL_ADMIN_GET_ORDER
 	urlStr := u.String()
 
+	// build param
+	limit := int64(param.Rows)
+	offset := int64((param.Page + 1) * param.Rows)
+
+	var option struct {
+		CompanyID *int64  `json:"company_id"`
+		Offset    *int64  `json:"offset"`
+		Limit     *int64  `json:"limit"`
+		SortType  *string `json:"sort_type"`
+	}
+
+	option.Limit = &limit
+	option.Offset = &offset
+	option.SortType = &param.OrderType
+
+	if param.CompanyID > 0 {
+		companyID := int64(param.CompanyID)
+		option.CompanyID = &companyID
+	}
+
+	payload, _ := json.Marshal(option)
+
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodGet, urlStr, strings.NewReader(""))
+	req, err := http.NewRequest(http.MethodGet, urlStr, bytes.NewBuffer(payload))
 	if err != nil {
 		log.Printf("func GetListOrders error create request. error: %v", err)
 		return result, err
@@ -286,13 +308,6 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 
 	// set header
 	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
-	// set query param
-	q := req.URL.Query()
-	q.Add("rows", strconv.FormatInt(int64(param.Rows), 10))
-	q.Add("page", strconv.FormatInt(int64(param.Page), 10))
-	q.Add("order_by", param.OrderType)
-
-	req.URL.RawQuery = q.Encode()
 
 	resp, errGetResp := client.Do(req)
 	if err != nil {
