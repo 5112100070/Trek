@@ -50,6 +50,7 @@ type OrderReponse struct {
 	ID                  int64            `json:"id"`
 	AWB                 string           `json:"awb"`
 	RequestorID         int64            `json:"requestor_id"`
+	ActualReceiverName  string           `json:"actual_receiver_name"`
 	ReceiverName        string           `json:"receiver_name""`
 	ReceiverAddress     string           `json:"receiver_address"`
 	ReceiverKecamatan   string           `json:"receiver_kecamatan"`
@@ -85,6 +86,7 @@ type OrderReponse struct {
 type PickUpResponse struct {
 	ID            int64          `json:"id"`
 	Name          string         `json:"name"`
+	PIC           string         `json:"pic"`
 	Address       string         `json:"address"`
 	AddrRT        int64          `json:"rt"`
 	AddrRW        int64          `json:"rw"`

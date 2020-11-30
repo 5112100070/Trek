@@ -96,15 +96,26 @@
                                                                           <span class="text-grey-500">
                                                                               {{ .order.DeliveryName }}
                                                                           </span>
-                                                                          <br>
                                                                             {{ .order.CreateTimeStr }}
                                                                        </p>
                                                                 </div>
+                                                                {{ if eq .order.Status 7 }}
+                                                                <div class="col-12 info"> 
+                                                                    <p>
+                                                                        Nama Penerima
+                                                                       </p>
+                                                                       <p style="font-weight: 500;color: black;">
+                                                                          <h1>
+                                                                            {{ .order.ActualReceiverName }}
+                                                                          </h1>
+                                                                       </p>
+                                                                </div>
+                                                                {{ end }}
                                                            </div>
                                                            <div class="row mb-3">
                                                             <div class="col-4 info">
                                                                 <p >
-                                                                    Nama Penerima
+                                                                    Nama Pelanggan
                                                                     </p >
                                                                     <p style="color:black;" class="font-weight-bold" >
                                                                         {{ .order.ReceiverName }}
@@ -152,7 +163,7 @@
                                             <div class="card-body">
                                                <div class= "col-lg-12 p-4 mb-4" style="background-color:#e9edf3;">
                                                     <div class="position-relative">
-                                                        <div class="row">
+                                                        <div class="row" style="margin-bottom: 25px;">
                                                             <div class="col-6">
                                                                 <span class="badge {{ index $badgePickup $pickup.Status }} text-wrap ml-2">
                                                                     {{ $pickup.StatusName }}
@@ -196,18 +207,29 @@
                                                         <div class="row align-items-center justify-content-between">
                                                             <div class="col position-relative ">
                                                             <div class="row mb-3">
-                                                                <div class="col-4 info">
+                                                                <div class="col-6 info">
                                                                     <p >
-                                                                        PIC Pengambilan
+                                                                        PIC Pengirim
                                                                         </p >
                                                                         <p style="color:black;" class="font-weight-bold" >
-                                                                            {{ $pickup.Name }}
+                                                                            {{ $pickup.PIC }}
                                                                         </p>
                                                                         <p style="color:black;">
                                                                             {{ $pickup.PhoneNumber }}
                                                                         </p>
                                                                 </div>
-                                                                <div class="col-8 info" >
+                                                                <div class="col-6 info">
+                                                                    <p >
+                                                                        Nama Driver
+                                                                        </p >
+                                                                        <p style="color:black;" class="font-weight-bold" >
+                                                                            {{ $pickup.DriverName }}
+                                                                        </p>
+                                                                        <p style="color:black;">
+                                                                            {{ $pickup.DriverPhone }}
+                                                                        </p>
+                                                                </div>
+                                                                <div class="col-12 info" >
                                                                     <p >
                                                                     Alamat
                                                                     </p >
@@ -813,7 +835,7 @@
                     let description = "<td>"+ items[i].notes +"</td>";
                     
                     let inputID = "item-delivery-" + items[i].id;
-                    let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="0"></td>`;
+                    let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="` + items[i].quantity + `"></td>`;
 
                     activePickupItems.push(inputID);
 
