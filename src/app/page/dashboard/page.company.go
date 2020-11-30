@@ -151,7 +151,10 @@ func CompanyDetailPageHandler(c *gin.Context) {
 	// get list param
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
 
-	companyDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
+	companyDetail, err := global.GetServiceUser().GetDetailCompany(token, user.DetailCompanyParam{
+		CompanyID:  companyID,
+		IsInternal: true,
+	})
 	if err != nil {
 		global.Error.Println("func CompanyDetailPageHandler error get detail company: ", err)
 		global.RenderInternalServerErrorPage(c)
@@ -277,7 +280,10 @@ func CompanyUpdatePagehandler(c *gin.Context) {
 	}
 
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("id", "1"), 10, 64)
-	accDetail, err := global.GetServiceUser().GetDetailCompany(token, companyID)
+	accDetail, err := global.GetServiceUser().GetDetailCompany(token, user.DetailCompanyParam{
+		CompanyID:  companyID,
+		IsInternal: true,
+	})
 	if err != nil {
 		global.Error.Println("func CompanyUpdatePagehandler error get detail company: ", err)
 		global.RenderInternalServerErrorPage(c)

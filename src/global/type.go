@@ -48,7 +48,7 @@ type PublicService interface {
 
 type UserService interface {
 	GetDetailAccount(sessionID string, accountID int64) (user.MainDetailAccountResponse, error)
-	GetDetailCompany(sessionID string, companyID int64) (user.MainDetailCompanyResponse, error)
+	GetDetailCompany(sessionID string, param user.DetailCompanyParam) (user.MainDetailCompanyResponse, error)
 	GetListUsers(sessionID string, param user.ListUserParam) (user.MainListAccountResponse, error)
 	GetListCompany(sessionID string, param user.ListCompanyParam) (user.MainListCompanyResponse, error)
 	CreateUser(sessionID string, param user.CreateAccountParam) (*user.Error, error)

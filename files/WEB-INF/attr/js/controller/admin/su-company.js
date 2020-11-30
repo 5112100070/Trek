@@ -17,10 +17,18 @@ function FetchCompanyByAdminRole(){
         var params = new URLSearchParams({
             page: 1,
             rows: 50,
-            role: 1
+            role: 1,
+            is_enabled: "1"
         })
-        var url = product_url + '/admin/v1/get-list-company?' + params;
+        var path = '/admin/v1/get-list-company';
+        var url = product_url + path + '?' + params;
         
+        let now = moment();
+        // 02 Jan 06 15:04 MST
+        let stdHeaderTime = now.format("DD MMM gg HH:mm");
+        // datetime formatted version
+        let stdFormatTime = moment(stdHeaderTime);
+        let hash = generateHMACHash("GET", path, stdFormatTime.format("X") , "");
 
         var promise = $.ajax({
             url: url,
@@ -31,7 +39,10 @@ function FetchCompanyByAdminRole(){
             },
             headers: {
                 "Authorization": GetSessionBasedOnEnv(),
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "User-Agent": "cgx",
+                "Authorization-2": hash,
+                "Date-Auth": stdHeaderTime+" WIB"
             }
         });
 

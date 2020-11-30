@@ -10,10 +10,13 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/5112100070/Trek/src/conf"
 	headerConst "github.com/5112100070/Trek/src/constants/header"
 	urlConst "github.com/5112100070/Trek/src/constants/url"
+	"github.com/5112100070/publib/encoding"
+	publibTime "github.com/5112100070/publib/time"
 )
 
 // InitUserRepo - initialization for userRepo
@@ -70,7 +73,7 @@ func (repo userRepo) GetDetailAccount(sessionID string, accountID int64) (MainDe
 	return result, nil
 }
 
-func (repo userRepo) GetDetailCompany(sessionID string, companyID int64) (MainDetailCompanyResponse, error) {
+func (repo userRepo) GetDetailCompany(sessionID string, param DetailCompanyParam) (MainDetailCompanyResponse, error) {
 	var result MainDetailCompanyResponse
 
 	u, _ := url.ParseRequestURI(conf.GConfig.BaseUrlConfig.ProductDNS)
@@ -86,9 +89,25 @@ func (repo userRepo) GetDetailCompany(sessionID string, companyID int64) (MainDe
 
 	// set header
 	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	headerTime := publibTime.GetTimeWIB().Format(time.RFC822)
+	req.Header.Add(headerConst.DATE, headerTime)
+
+	if param.IsInternal {
+		req.Header.Add(headerConst.USER_AGENT, "cgx")
+
+		stdHeaderTime, _ := time.Parse(time.RFC822, headerTime)
+		hmacPayload := encoding.HMACAuthData{
+			Method: http.MethodGet,
+			Date:   stdHeaderTime.Unix(),
+			Path:   urlConst.URL_ADMIN_GET_LIST_COMPANY,
+		}
+
+		req.Header.Add(headerConst.PROXY_AUTHORIZATION, hmacPayload.GenerateHMACHash(""))
+	}
+
 	// set query param
 	q := req.URL.Query()
-	q.Add("id", strconv.FormatInt(companyID, 10))
+	q.Add("id", strconv.FormatInt(param.CompanyID, 10))
 
 	req.URL.RawQuery = q.Encode()
 
@@ -190,6 +209,22 @@ func (repo userRepo) GetListCompany(sessionID string, param ListCompanyParam) (M
 
 	// set header
 	req.Header.Add(headerConst.AUTHORIZATION, sessionID)
+	headerTime := publibTime.GetTimeWIB().Format(time.RFC822)
+	req.Header.Add(headerConst.DATE, headerTime)
+
+	if param.IsInternal {
+		req.Header.Add(headerConst.USER_AGENT, "cgx")
+
+		stdHeaderTime, _ := time.Parse(time.RFC822, headerTime)
+		hmacPayload := encoding.HMACAuthData{
+			Method: http.MethodGet,
+			Date:   stdHeaderTime.Unix(),
+			Path:   urlConst.URL_ADMIN_GET_LIST_COMPANY,
+		}
+
+		req.Header.Add(headerConst.PROXY_AUTHORIZATION, hmacPayload.GenerateHMACHash(""))
+	}
+
 	// set query param
 	q := req.URL.Query()
 	q.Add("rows", strconv.FormatInt(int64(param.Rows), 10))

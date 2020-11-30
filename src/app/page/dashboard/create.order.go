@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -64,10 +65,11 @@ func CreateOrderPageHandler(c *gin.Context) {
 			Rows:             50,
 			OrderType:        "desc",
 			FilterByIsEnable: "1",
+			IsInternal:       true,
 		})
 		if errGetCompany != nil {
 			// add internal server error page response
-			log.Println("func CreateOrderPageHandler error when call get list unit to CGX: ", errGetCompany)
+			log.Println("func CreateOrderPageHandler error when call get list company: ", errGetCompany)
 			global.RenderInternalServerErrorPage(c)
 			return
 		}
@@ -93,7 +95,10 @@ func CreateOrderPageHandler(c *gin.Context) {
 
 		listCompany = companiesResp.Data.Companies
 	} else {
-		detailResp, err := global.GetServiceUser().GetDetailCompany(sessionID, accountResp.Data.Company.ID)
+		detailResp, err := global.GetServiceUser().GetDetailCompany(sessionID, user.DetailCompanyParam{
+			CompanyID:  accountResp.Data.Company.ID,
+			IsInternal: true,
+		})
 		if err != nil {
 			global.Error.Println("func UserCreatePagehandler error get detail company: ", err)
 			global.RenderInternalServerErrorPage(c)
@@ -118,11 +123,14 @@ func CreateOrderPageHandler(c *gin.Context) {
 		listCompany = append(listCompany, detailResp.Data)
 	}
 
+	accountRespJSON, _ := json.Marshal(accountResp.Data)
+
 	renderData := gin.H{
-		"UserDetail": accountResp.Data,
-		"Units":      unitsResp.Data,
-		"Companies":  listCompany,
-		"config":     conf.GConfig,
+		"UserDetailJSON": string(accountRespJSON),
+		"UserDetail":     accountResp.Data,
+		"Units":          unitsResp.Data,
+		"Companies":      listCompany,
+		"config":         conf.GConfig,
 	}
 	c.HTML(http.StatusOK, "create-order.tmpl", renderData)
 }

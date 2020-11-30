@@ -4,6 +4,8 @@
 <script src="/dashboard/assets/demo/chart-area-demo.js"></script>
 <script src="/dashboard/assets/demo/chart-bar-demo.js"></script>
 <script src="/dashboard/js/scripts.js"></script>
+<script src="/vendor/datetime-picker/js/moment-with-locales.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 
 
 <script src="/js/controller/dashboard/user.js"></script>
@@ -87,6 +89,15 @@
         });
 
         return promise;
+    }
+
+    function generateHMACHash(method, path, unixTime, secret){
+        let message = method + "\n" + path + "\n" + unixTime;
+
+        let hash = CryptoJS.HmacSHA1(message, secret);
+            
+        let hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+        return hashInBase64 = hashInBase64.replace(" ", "-");
     }
 
     function setError(isShow, message = "") {

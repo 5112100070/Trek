@@ -233,6 +233,7 @@ func UserCreatePagehandler(c *gin.Context) {
 			Rows:             20,
 			OrderType:        "desc",
 			FilterByIsEnable: "1",
+			IsInternal:       true,
 		})
 		if err != nil {
 			global.Error.Println("func UserCreatePagehandler error get list company: ", err)

@@ -15,6 +15,15 @@ type ListCompanyParam struct {
 	Rows             int
 	OrderType        string
 	FilterByIsEnable string
+	// Using Public Endpoint Version
+	IsInternal bool
+}
+
+// DetailCompanyParam This struct is used as parameter input for method GetDetailCompany
+type DetailCompanyParam struct {
+	CompanyID int64
+	// Using Public Endpoint Version
+	IsInternal bool
 }
 
 // CreateAccountParam This struct is used as parameter to create new account
