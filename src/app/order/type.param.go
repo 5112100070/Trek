@@ -17,7 +17,7 @@ type CreateOrderParam struct {
 	} `json:"pickups"`
 	Airwaybill   string `json:"airwaybill"`
 	DeliveryType int    `json:"delivery_type"`
-	CompanyID    int    `json:"company_id"`
+	CompanyID    int64  `json:"company_id"`
 	Deadline     string `json:"deadline"`
 }
 

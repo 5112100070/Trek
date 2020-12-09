@@ -88,29 +88,27 @@
                                                                             {{ .order.CompanyName }}
                                                                        </p>
                                                                 </div>
+                                                           </div>
+                                                           <div class="row mb-3">
                                                                 <div class="col-4 info"> 
                                                                     <p>
                                                                         Order Created
-                                                                       </p>
-                                                                       <p style="font-weight: 500;color: black;">
-                                                                          <span class="text-grey-500">
-                                                                              {{ .order.DeliveryName }}
-                                                                          </span>
+                                                                    </p>
+                                                                    <p style="font-weight: 500;color: black;">
+                                                                        <span class="text-grey-500">
+                                                                            {{ .order.DeliveryName }}
+                                                                        </span>
                                                                             {{ .order.CreateTimeStr }}
-                                                                       </p>
+                                                                    </p>
                                                                 </div>
-                                                                {{ if eq .order.Status 7 }}
-                                                                <div class="col-12 info"> 
+                                                                <div class="col-4 info"> 
                                                                     <p>
-                                                                        Nama Penerima
-                                                                       </p>
-                                                                       <p style="font-weight: 500;color: black;">
-                                                                          <h1>
-                                                                            {{ .order.ActualReceiverName }}
-                                                                          </h1>
-                                                                       </p>
+                                                                        Deadline Pickup
+                                                                    </p>
+                                                                    <p style="font-weight: 500;color: black;">
+                                                                        {{ .order.PickUpDeadlineStr }}
+                                                                    </p>
                                                                 </div>
-                                                                {{ end }}
                                                            </div>
                                                            <div class="row mb-3">
                                                             <div class="col-4 info">
@@ -124,17 +122,29 @@
                                                                         {{ .order.ReceiverPhoneNumber }}
                                                                     </p>
                                                              </div>
-                                                            <div class="col-8 info" >
-                                                                <p >
-                                                                Alamat
-                                                                </p >
-                                                                <p style="color:black;" class="font-weight-bold" >
-                                                                    {{ .order.ReceiverAddrDisplay }}
-                                                                    <p style="color:black;">
-                                                                        {{ .order.ReceiverNotes }}
-                                                                    </p>
-                                                                </p>
-                                                             </div>
+                                                             <div class="col-4 info"> 
+                                                                <p>
+                                                                    Nama Penerima
+                                                                   </p>
+                                                                   <p style="font-weight: 500;color: black;">
+                                                                    {{ if eq .order.Status 7 }}
+                                                                        {{ .order.ActualReceiverName }}
+                                                                    {{ end }}
+                                                                   </p>
+                                                              </div>
+                                                           </div>
+                                                           <div class="row mb-3">
+                                                                <div class="col-12 info" >
+                                                                   <p >
+                                                                   Alamat
+                                                                   </p >
+                                                                   <p style="color:black;" class="font-weight-bold" >
+                                                                       {{ .order.ReceiverAddrDisplay }}
+                                                                       <p style="color:black;">
+                                                                           {{ .order.ReceiverNotes }}
+                                                                       </p>
+                                                                   </p>
+                                                                </div>
                                                            </div>
                                                         </div>
                                                     </div>

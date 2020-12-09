@@ -222,6 +222,7 @@ func (repo orderRepo) GetOrderDetailForAdmin(sessionID string, orderID int64) (O
 	result.TotalPickUp = len(result.Pickups)
 	result.CreateTimeStr = fmt.Sprintf("%s, %s", result.CreateTime.Weekday(), result.CreateTime.Format("02 Jan 2006 - 15:04:05"))
 	result.UpdateTimeStr = result.UpdateTime.Format("02 Jan 2006 - 15:04:05")
+	result.PickUpDeadlineStr = fmt.Sprintf("%s, %s", result.CreateTime.Weekday(), result.PickUpDeadline.Format("02 Jan 2006 - 15:04:05"))
 
 	// Generate Fully Address
 	result.ReceiverAddrDisplay = result.ReceiverAddress

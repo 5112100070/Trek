@@ -72,6 +72,7 @@ type OrderReponse struct {
 	DeliveryType        int64            `json:"delivery_type"`
 	DeliveryName        string           `json:"delivery_name"`
 	ArrivedTime         time.Time        `json:"arrived_time"`
+	PickUpDeadline      time.Time        `json:"pickup_deadline"`
 	Pickups             []PickUpResponse `json:"pickups"`
 
 	// This variable only used for displaying to user
@@ -79,6 +80,7 @@ type OrderReponse struct {
 	ArrivedTimeStr      string
 	CreateTimeStr       string
 	UpdateTimeStr       string
+	PickUpDeadlineStr   string
 	ReceiverAddrDisplay string
 	StatusBadge         string
 }
