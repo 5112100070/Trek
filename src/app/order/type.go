@@ -70,7 +70,7 @@ type OrderReponse struct {
 	CreateTime          time.Time        `json:"create_time"`
 	UpdateTime          time.Time        `json:"update_time"`
 	DeliveryType        int64            `json:"delivery_type"`
-	DeliveryName        string           `json:"delivery_name"`
+	DeliveryName        string           `json:"delivery_type_name"`
 	ArrivedTime         time.Time        `json:"arrived_time"`
 	PickUpDeadline      time.Time        `json:"pickup_deadline"`
 	Pickups             []PickUpResponse `json:"pickups"`

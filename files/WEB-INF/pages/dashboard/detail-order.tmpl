@@ -80,6 +80,16 @@
                                                                        </h1>
                                                                    </p>
                                                                 </div>
+                                                                <div class="col-4 info" >
+                                                                   <p >
+                                                                    Jenis Pengiriman
+                                                                   </p >
+                                                                   <p style="color:black;" class="font-weight-bold" >
+                                                                       <h1>
+                                                                            {{ .order.DeliveryName }}
+                                                                       </h1>
+                                                                   </p>
+                                                                </div>
                                                                 <div class="col-4 info"> 
                                                                     <p >
                                                                         Klien
@@ -95,9 +105,6 @@
                                                                         Order Created
                                                                     </p>
                                                                     <p style="font-weight: 500;color: black;">
-                                                                        <span class="text-grey-500">
-                                                                            {{ .order.DeliveryName }}
-                                                                        </span>
                                                                             {{ .order.CreateTimeStr }}
                                                                     </p>
                                                                 </div>

@@ -3,4 +3,7 @@ bin/.
 bin/
 config/
 *.exe
+vendor/
 vendor/.
+files/WEB-INF/attr/img/partner/
+files/WEB-INF/attr/img/user/
