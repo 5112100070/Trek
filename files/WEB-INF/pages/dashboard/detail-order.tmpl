@@ -833,7 +833,7 @@
                 let description = "<td>"+ items[i].notes +"</td>";
                 
                 let inputID = "item-" + items[i].id;
-                let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="0"></td>`;
+                let input = `<td><input id="` + inputID +`" class="form-control form-control-sm" type="number" min="0" value="` + items[i].quantity + `"></td>`;
                 activePickupItems.push(inputID);
 
                 let newComponent = `<tr>`+ name + description + input +`</tr>`
