@@ -73,6 +73,8 @@ type OrderReponse struct {
 	DeliveryName        string           `json:"delivery_type_name"`
 	ArrivedTime         time.Time        `json:"arrived_time"`
 	PickUpDeadline      time.Time        `json:"pickup_deadline"`
+	DriverName          string           `json:"driver_name"`
+	DriverPhone         string           `json:"driver_phone"`
 	Pickups             []PickUpResponse `json:"pickups"`
 
 	// This variable only used for displaying to user
