@@ -283,10 +283,13 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	offset := int64(((param.Page - 1) * param.Rows))
 
 	var option struct {
-		CompanyID *int64  `json:"company_id"`
-		Offset    *int64  `json:"offset"`
-		Limit     *int64  `json:"limit"`
-		SortType  *string `json:"sort_type"`
+		CompanyID      *int64  `json:"company_id"`
+		Status         *int    `json:"status"`
+		CreateTimeFrom *string `json:"create_time_from"`
+		CreateTimeTo   *string `json:"create_time_to"`
+		Offset         *int64  `json:"offset"`
+		Limit          *int64  `json:"limit"`
+		SortType       *string `json:"sort_type"`
 	}
 
 	option.Limit = &limit
@@ -296,7 +299,18 @@ func (repo orderRepo) GetListOrders(sessionID string, param ListOrderParam) (Mai
 	if param.CompanyID > 0 {
 		companyID := int64(param.CompanyID)
 		option.CompanyID = &companyID
-		log.Println(companyID)
+	}
+
+	if param.Status >= 0 {
+		option.Status = &param.Status
+	}
+
+	if param.CreateTimeFrom != "" {
+		option.CreateTimeFrom = &param.CreateTimeFrom
+	}
+
+	if param.CreateTimeTo != "" {
+		option.CreateTimeTo = &param.CreateTimeTo
 	}
 
 	payload, _ := json.Marshal(option)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/5112100070/Trek/src/app/order"
 	"github.com/5112100070/Trek/src/app/session"
@@ -165,12 +166,38 @@ func OrdersListPageHandler(c *gin.Context) {
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "8"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("company_id", "0"), 10, 64)
+	status, _ := strconv.Atoi(c.DefaultQuery("status", "0"))
+	createTimeFrom := c.DefaultQuery("create_time_from", "")
+	createTimeTo := c.DefaultQuery("create_time_to", "")
+
+	// check is valid parameter date
+	if createTimeFrom != "" {
+		_, errParse := time.Parse("2006-01-02", createTimeFrom)
+		if errParse != nil {
+			global.RenderNotFoundPage(c)
+			return
+		}
+		createTimeFrom = createTimeFrom + " 00:00:00"
+	}
+
+	// check is valid parameter date
+	if createTimeTo != "" {
+		_, errParse := time.Parse("2006-01-02", createTimeTo)
+		if errParse != nil {
+			global.RenderNotFoundPage(c)
+			return
+		}
+		createTimeTo = createTimeTo + " 23:59:59"
+	}
 
 	listOrderResp, err := global.GetServiceOrder().GetListOrders(token, order.ListOrderParam{
-		Page:      int(page),
-		Rows:      int(rows),
-		OrderType: orderType,
-		CompanyID: companyID,
+		Page:           int(page),
+		Rows:           int(rows),
+		OrderType:      orderType,
+		CompanyID:      companyID,
+		Status:         status,
+		CreateTimeFrom: createTimeFrom,
+		CreateTimeTo:   createTimeTo,
 	})
 	if err != nil {
 		global.Error.Println("func OrdersListPageHandler error get list order: ", err)

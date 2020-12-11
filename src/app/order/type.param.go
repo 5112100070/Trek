@@ -41,4 +41,9 @@ type ListOrderParam struct {
 	OrderType string
 	// CompanyID used as filter based on company
 	CompanyID int64
+	// Status used as filter based on status
+	Status int
+	// CreateTimeFrom used as filter based on create time order
+	CreateTimeFrom string
+	CreateTimeTo   string
 }

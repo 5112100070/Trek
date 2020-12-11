@@ -24,8 +24,16 @@
                             <div class="card-body">
                                 <div class="datatable table-responsive">
                                     <div>
-                                        <div id="filter-main-company" class="row" style="margin-bottom: 10px; display: none;">
-                                            <div class="col-lg-6">
+                                        <div class="row" style="margin-bottom: 10px;">
+                                            <div id="filter-main-status" class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="filter-by-status">Filter Status</label>
+                                                    <select class="form-control form-control-sm" id="filter-by-status">
+                                                        <option>-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="filter-main-company" class="col-lg-6" style="display: none;">
                                                 <div class="form-group">
                                                     <label for="role">Filter Perusahaan</label>
                                                     <select class="form-control form-control-sm" id="filter-by-company">
@@ -34,7 +42,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="filter-main-button" class="row" style="margin-bottom: 10px; display: none;">
+                                        <div id="filter-main-create-time" class="row" style="margin-bottom: 10px;">
+                                            <div class="col-lg-12" style="font-weight: bold">
+                                                <label for="role">Filter Tanggal Buat</label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="create-time-for" style="font-weight: bold">Dari</label>
+                                                    <input class="form-control" id="create-time-for" type="date" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="create-time-to" style="font-weight: bold">Sampai</label>
+                                                    <input class="form-control" id="create-time-to" type="date" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="filter-main-button" class="row" style="margin-bottom: 10px;">
                                             <div class="col-lg-6"></div>
                                             <div class="col-lg-6">
                                                 <button class="btn btn-primary col-lg-6" style="float: right;" onclick="javascript:handleFilterOrder()">
@@ -178,10 +203,14 @@
         var haveNext = {{ .next }};
 
         $(document).ready(function(){
+            // generate status for order
+            FetchListStatus();
+            FetchCreateTimeVal();
+    
             if(session_detail.company.role == -999 || session_detail.company.role == 1){
                 FetchListCompany();
             }
-
+            
             setPagination();
         });
 
@@ -272,7 +301,7 @@
                     companyID = parseInt(params.get('company_id'));
                 }
 
-                let components;
+                let components = '';
                 for(let i=0; i<companies.length; i++){
                     let comp;
                     if(companyID == companies[i].company_id){
@@ -286,8 +315,7 @@
                 // create and push component for filter company dropdown
                 $("#filter-by-company").append(components);
 
-                $("#filter-main-company").css("display", "flex");
-                $("#filter-main-button").css("display", "flex");
+                $("#filter-main-company").css("display", "inline");
             }).fail(function(response){
                 if(response.status > 500){
                     setError(true, defaultServerError+" cannot show filter by company");
@@ -298,10 +326,92 @@
             return
         }
 
+        function FetchListStatus(){
+            var path = '/order/internal/v1/get/order-status';
+            var url = product_url + path;
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": GetSessionBasedOnEnv()
+                }
+            });
+
+            promise.done(function(response){
+                let listStatus = response.data;
+
+                const params = new URLSearchParams(window.location.search);
+                let activeStatus = -1;
+                if(params.get('status')!=null){
+                    activeStatus = parseInt(params.get('status'));
+                }
+
+                let components = '';
+                for(let i in listStatus){
+                    let comp;
+                    if(activeStatus == i){
+                        comp = `<option value="` + i + `" selected>` + listStatus[i] + `</option>`;  
+                    } else {
+                        comp = `<option value="` + i + `">` + listStatus[i] + `</option>`;
+                    }
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $("#filter-by-status").append(components);
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" cannot show filter by company");
+                }
+                FinishLoading();
+            });
+
+            return
+        }
+
+        function FetchCreateTimeVal(){
+            const params = new URLSearchParams(window.location.search);
+
+            if(params.get('create_time_from')!=null){
+                $('#create-time-for').val(params.get('create_time_from'));
+            }
+
+            if(params.get('create_time_to')!=null){
+                $('#create-time-to').val(params.get('create_time_to'));
+            }
+        }
+
         function handleFilterOrder(){
+            let queryParam = new URLSearchParams({});
+            
             let companyID = $('#filter-by-company').val();
             if(companyID != null && companyID != '' && companyID >= 0) {
-                window.location.href = base_url + '/dashboard/orders?company_id=' + companyID;
+                queryParam.set("company_id", companyID);
+            } 
+
+            let status = $('#filter-by-status').val();
+            if(status != null && status != '' && status >= 0) {
+                queryParam.set("status", status);
+            }
+
+            let createTimeFrom = $('#create-time-for').val();
+            if(createTimeFrom != null && createTimeFrom != '') {
+                queryParam.set("create_time_from", createTimeFrom);
+            }
+
+            let createTimeTo = $('#create-time-to').val();
+            if(createTimeTo != null && createTimeTo != '') {
+                queryParam.set("create_time_to", createTimeTo);
+            }
+            
+            if(queryParam.toString() != ""){
+                window.location.href = base_url + '/dashboard/orders?' + queryParam.toString();
             } else {
                 window.location.href = base_url + '/dashboard/orders';
             }
