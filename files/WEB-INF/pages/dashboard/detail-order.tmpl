@@ -272,23 +272,38 @@
                                                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>Nama produk</th>
-                                                                                <th>Deskripsi produk</th>
-                                                                                <th>Jumlah</th>
+                                                                                <th rowspan="2" style="text-align: center; vertical-align: middle">Nama produk</th>
+                                                                                <th rowspan="2" style="text-align: center; vertical-align: middle">Deskripsi produk</th>
+                                                                                <th colspan="3" style="text-align: center; vertical-align: middle">Jumlah</th>
+                                                                                <th rowspan="2" style="text-align: center; vertical-align: middle">Satuan</th>
                                                                                 <!-- <th>Aksi</th> -->
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th style="text-align: center; vertical-align: middle">Dari Cust</th>
+                                                                                <th style="text-align: center; vertical-align: middle">Di Pick Up</th>
+                                                                                <th style="text-align: center; vertical-align: middle">Di Kirim</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                             {{ range $indexItem, $item := $pickup.Items }}
                                                                             <tr>
-                                                                                <td>
+                                                                                <td style="text-align: center; vertical-align: middle">
                                                                                     {{ $item.Name }}
                                                                                 </td>
-                                                                                <td> 
+                                                                                <td style="text-align: center; vertical-align: middle"> 
                                                                                     {{ $item.Notes }}
                                                                                 </td>
-                                                                                <td>
-                                                                                    {{ $item.Quantity }} {{ $item.UnitName }}
+                                                                                <td style="text-align: center; vertical-align: middle">
+                                                                                    {{ $item.Quantity }}
+                                                                                </td>
+                                                                                <td style="text-align: center; vertical-align: middle">
+                                                                                    {{ $item.PickedUpQuantity }}
+                                                                                </td>
+                                                                                <td style="text-align: center; vertical-align: middle">
+                                                                                    {{ $item.DeliveryQuantity }}
+                                                                                </td>
+                                                                                <td style="text-align: center; vertical-align: middle">
+                                                                                    {{ $item.UnitName }}
                                                                                 </td>
                                                                                 <!-- <td>
                                                                                     <button class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="trash-2"></i></button>

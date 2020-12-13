@@ -118,16 +118,18 @@ type PickUpResponse struct {
 }
 
 type ItemResponse struct {
-	ID           int64     `json:"id"`
-	Name         string    `json:"name"`
-	Quantity     int64     `json:"quantity"`
-	Unit         int64     `json:"unit"`
-	UnitName     string    `json:"unit_name"`
-	Notes        string    `json:"notes"`
-	CreateTime   time.Time `json:"create_time"`
-	UpdateTime   time.Time `json:"update_time"`
-	PickUpTime   time.Time `json:"pickup_time"`
-	DeadlineTime time.Time `json:"deadline"`
+	ID               int64     `json:"id"`
+	Name             string    `json:"name"`
+	Quantity         int64     `json:"quantity"`
+	PickedUpQuantity int64     `json:"picked_up_quantity"`
+	DeliveryQuantity int64     `json:"delivery_quantity"`
+	Unit             int64     `json:"unit"`
+	UnitName         string    `json:"unit_name"`
+	Notes            string    `json:"notes"`
+	CreateTime       time.Time `json:"create_time"`
+	UpdateTime       time.Time `json:"update_time"`
+	PickUpTime       time.Time `json:"pickup_time"`
+	DeadlineTime     time.Time `json:"deadline"`
 
 	// This variable only used for displaying to user
 	CreateTimeStr string
