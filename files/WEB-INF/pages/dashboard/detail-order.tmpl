@@ -29,10 +29,10 @@
                     </div>
 
                     <div class="container-fluid mt-4" style="margin-top: 4.5rem !important;">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div id="sizing">
-                                        <div class="card mb-4 mt-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="sizing">
+                                    <div class="card mb-4 mt-4">
                                             <div class="card-header text-dark">
                                                 <div class="col-6">
                                                     Order #{{ .order.ID }}
@@ -320,10 +320,25 @@
                                                 </div>
                                             </div> 
                                             {{ end }}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card mb-4 mt-4">
+                                    <div class="card-header" style="color:black;">Riwayat dan Catatan</div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div>
+                                                    <ul id="order-log" class="timeline"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div> <!-- end of row -->
                     </div>
                 </main>
                 <!-- Footer -->
@@ -596,7 +611,11 @@
     {{ template "default-script-dashboard.tmpl" .}}
 
     <script>
-         function togglePickupField(comp){
+        $(document).ready(function(){
+            fetchAllLog();
+        });
+
+        function togglePickupField(comp){
             $(comp).css("display", "none");
         }
 
@@ -894,6 +913,162 @@
             // generate component
             $('#delivery-order-body').html(component);
         };
+
+        function fetchAllLog(){
+            const params = new URLSearchParams(window.location.search);
+
+            if(params.get('id') == null){
+                return;
+            }
+            
+            var orderID = parseInt(params.get('id'));
+            if(orderID == undefined){
+                return;
+            }
+
+            var promiseNotes = fetchOrderNotes(orderID)
+            var promiseLog = fetchOrderLog(orderID);
+
+            $.when(promiseNotes, promiseLog).done(function(respNotes, respLog){
+                let allLog = [];
+
+                respNotes = respNotes[0];
+                respLog = respLog[0];
+
+                // parsing
+                let notesCounter = 0;
+                for(let i = 0; i < respLog.length; i++){
+                    let m_create_time_log = moment(respLog[i].create_time, 'YYYY-MM-DD HH:mm:ss');
+                    let isFillByNotes = false;
+                    for(let j = notesCounter; j < respNotes.length; j++) {
+                        let m_create_time_notes = moment(respNotes[j].create_time, 'YYYY-MM-DD HH:mm:ss');
+                        
+                        if(m_create_time_notes.isBefore(m_create_time_log)){
+                            allLog.push({
+                                create_by: respLog[i].create_by_name,
+                                main_message: '',
+                                notes: respNotes[j].notes,
+                                create_time: m_create_time_notes.format("DD MMM YYYY HH:mm:ss"),
+                                type: "NOTES"
+                            });
+
+                            notesCounter = j++;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    allLog.push({
+                        create_by: respLog[i].create_by_name,
+                        main_message: respLog[i].status_name, 
+                        notes: respLog[i].notes,
+                        create_time: m_create_time_log.format("DD MMM YYYY HH:mm:ss"),
+                        type: "LOG"
+                    });
+                }
+
+                for(let j = notesCounter; j < respNotes.length; j++) {
+                    let m_create_time_notes = moment(respNotes[i].create_time, 'YYYY-MM-DD HH:mm:ss');
+                    allLog.push({
+                        create_by: respLog[i].create_by_name,
+                        main_message: '',
+                        notes: respNotes[i].notes,
+                        create_time: m_create_time_notes.format("DD MMM YYYY HH:mm:ss"),
+                        type: "NOTES"
+                    });
+                }
+                
+                // create component
+                let components = '';
+                for(let i = 0 ; i < allLog.length; i++){
+                    let comp;
+                    if(allLog[i].type == "LOG"){
+                        let notes = '';
+                        if(allLog[i].notes != ''){
+                            notes = `
+                                <p style="text-decoration: underline;">
+                                    notes: ` + allLog[i].notes + `
+                                </p>
+                            `;
+                        }
+
+                        comp = `
+                            <li>
+                                <p>` + allLog[i].create_time + `</p>
+                                ` + allLog[i].main_message + notes + `
+                                <p> Updated By: <span style="font-weight: bold">` + allLog[i].create_by + `</span></p>
+                            </li>
+                        `;  
+                    } else {
+                        comp = `
+                            <li>
+                                <p>` + allLog[i].create_time + `</p>
+                                ` + allLog[i].notes + `
+                                <p> Created By: </p>
+                                <p style="font-weight: bold">Wahyu Kukuh Herlambang</p>
+                            </li>
+                        `; 
+                    }
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $("#order-log").append(components);
+
+            }).fail(function(respNotes, respLog){
+                if(respNotes.status > 500){
+                    setError(true, defaultServerError+" cannot show order notes");
+                    return;
+                }
+
+                if(respLog.status > 500){
+                    setError(true, defaultServerError+" cannot show order logs");
+                    return;
+                }
+            });
+
+            return
+        }
+
+        function fetchOrderNotes(orderID){
+            var path = '/order/internal/v1/get/order-notes/';
+            var url = product_url + path + orderID;
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": GetSessionBasedOnEnv()
+                }
+            });
+
+            return promise;
+        }
+
+        function fetchOrderLog(orderID){
+            var path = '/order/internal/v1/get/order-log/';
+            var url = product_url + path + orderID;
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": GetSessionBasedOnEnv()
+                }
+            });
+
+            return promise;
+        }
 
         function gotoTop(){
             document.body.scrollTop = 0;
