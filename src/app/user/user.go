@@ -99,7 +99,7 @@ func (repo userRepo) GetDetailCompany(sessionID string, param DetailCompanyParam
 		hmacPayload := encoding.HMACAuthData{
 			Method: http.MethodGet,
 			Date:   stdHeaderTime.Unix(),
-			Path:   urlConst.URL_ADMIN_GET_LIST_COMPANY,
+			Path:   urlConst.URL_ADMIN_GET_DETAIL_COMPANY,
 		}
 
 		req.Header.Add(headerConst.PROXY_AUTHORIZATION, hmacPayload.GenerateHMACHash(""))
