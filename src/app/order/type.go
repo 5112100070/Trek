@@ -120,7 +120,7 @@ type PickUpResponse struct {
 type ItemResponse struct {
 	ID               int64     `json:"id"`
 	Name             string    `json:"name"`
-	Quantity         int64     `json:"quantity"`
+	Quantity         float64   `json:"quantity"`
 	PickedUpQuantity int64     `json:"picked_up_quantity"`
 	DeliveryQuantity int64     `json:"delivery_quantity"`
 	Unit             int64     `json:"unit"`
