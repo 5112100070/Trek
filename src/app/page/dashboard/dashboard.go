@@ -166,7 +166,7 @@ func OrdersListPageHandler(c *gin.Context) {
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "8"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
 	companyID, _ := strconv.ParseInt(c.DefaultQuery("company_id", "0"), 10, 64)
-	status, _ := strconv.Atoi(c.DefaultQuery("status", "0"))
+	status, _ := strconv.Atoi(c.DefaultQuery("status", "-1"))
 	createTimeFrom := c.DefaultQuery("create_time_from", "")
 	createTimeTo := c.DefaultQuery("create_time_to", "")
 
