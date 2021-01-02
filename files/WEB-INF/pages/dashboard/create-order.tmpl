@@ -114,6 +114,55 @@
                                                         </div>
                                                             </div>
 
+                                                    <div class="form-row">    
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-prov">Provinsi</label>
+                                                                <select class="form-control form-control-sm" id="pickup-details-address-prov" onchange="javascript:fetchListCityForPickUpPoint('0')">
+                                                                    <option value="">--Pilih Provinsi--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-city">Kota</label>
+                                                                <select class="form-control form-control-sm" id="pickup-details-address-city" onchange="javascript:fetchListSubDistrictForPickUpPoint('0')">
+                                                                    <option value="">--Pilih Provinsi Terlebih Dahulu--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-kec">Kecamatan</label>
+                                                                <select class="form-control form-control-sm" id="pickup-details-address-kec" onchange="javascript:fetchListUrbanForPickUpPoint('0')">
+                                                                    <option value="">--Pilih Kota Terlebih Dahulu--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-kel">Kelurahan</label>
+                                                                <select class="form-control form-control-sm" id="pickup-details-address-kel" onchange="javascript:fetchListPostalCodeForPickUpPoint('0')">
+                                                                    <option value="">--Pilih Kecamatan Terlebih Dahulu--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="pickup-details-address-zip">ZIP</label>
+                                                                <select class="form-control form-control-sm" id="pickup-details-address-zip">
+                                                                    <option value="">--Pilih Kelurahan Terlebih Dahulu--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="form-row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
@@ -123,44 +172,6 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="pickup-details-address-kec">Kecamatan</label>
-                                                                <input class="form-control form-control-sm" id="pickup-details-address-kec" placeholder="Nama Kecamatan" value="" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="pickup-details-address-kel">Kelurahan</label>
-                                                                <input class="form-control form-control-sm" id="pickup-details-address-kel" placeholder="Nama Kelurahan" value="" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-row">    
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="pickup-details-address-city">Kota</label>
-                                                                <input class="form-control form-control-sm" id="pickup-details-address-city" placeholder="Nama Kota" value="" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="pickup-details-address-prov">Provinsi</label>
-                                                                <input class="form-control form-control-sm" id="pickup-details-address-prov" placeholder="Nama Provinsi" value="" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="pickup-details-address-zip">ZIP</label>
-                                                                <input class="form-control form-control-sm" id="pickup-details-address-zip" type="number" placeholder="kode pos" min="0" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                     <div class="form-row">
                                                         <div class="col-12">                                
                                                             <div class="form-group">
@@ -257,40 +268,51 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="client-address">Alamat</label>
-                                                <input class="form-control" id="client-address" placeholder="Alamat RT/RW" value="" />
+                                                <label for="client-address-prov">Provinsi</label>
+                                                <select class="form-control form-control-sm" id="client-address-prov" onchange="javascript:fetchListCityForDropOff()">
+                                                    <option value="">--Pilih Provinsi--</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="client-address-city">Kota</label>
+                                                <select class="form-control form-control-sm" id="client-address-city" onchange="javascript:fetchListSubDistrictForDropOff()">
+                                                    <option value="">--Pilih Provinsi Terlebih Dahulu--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+     
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="client-address-kec">Kecamatan</label>
-                                                <input class="form-control" id="client-address-kec" placeholder="Nama Kecamatan" value="" />
+                                                <select class="form-control form-control-sm" id="client-address-kec" onchange="javascript:fetchListUrbanForDropOff()">
+                                                    <option value="">--Pilih Kota Terlebih Dahulu--</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="client-address-kel">Kelurahan</label>
-                                                <input class="form-control" id="client-address-kel" placeholder="Nama Kelurahan" value="" />
+                                                <select class="form-control form-control-sm" id="client-address-kel" onchange="javascript:fetchListPostalCodeForDropOff()">
+                                                    <option value="">--Pilih Kecamatan Terlebih Dahulu--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label for="client-address-zip">Zip</label>
+                                                <select class="form-control form-control-sm" id="client-address-zip">
+                                                    <option value="">-</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="client-address-city">Kota</label>
-                                                <input class="form-control" id="client-address-city" placeholder="Nama Kota" value="" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="client-address-prov">Provinsi</label>
-                                                <input class="form-control" id="client-address-prov" placeholder="Nama Provinsi" value="" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="client-address-zip">Zip</label>
-                                                <input class="form-control" id="client-address-zip" type="number" placeholder="kode pos" min="0" />
+                                                <label for="client-address">Alamat</label>
+                                                <input class="form-control" id="client-address" placeholder="Alamat RT/RW" value="" />
                                             </div>
                                         </div>
                                     </div>
@@ -374,6 +396,8 @@
         var mappingPickupsToPrefixItem = {};
         // This variable help us to mapping Prefix Items and Items
         var mappingPrefixItemAndItems = {};
+        // This variable hold about list provincies
+        var ListProvincies = [];
 
         /*
             all component will have ID's generate differently from variable totalgeneratedPickup
@@ -434,12 +458,14 @@
             var newPickupDetailNotes = defaultFormatPickupDetailsNotes + "-" + totalgeneratedPickup;
 
             /* Data Input PIC Destination Address*/
-            var newPickupDetailsAddress = defaultFormatPickupDetailsAddress + "-" + totalgeneratedPickup;
-            var newPickupDetailsAddressKec = defaultFormatPickupDetailsAddressKec + "-" + totalgeneratedPickup;
-            var newPickupDetailsAddressKel = defaultFormatPickupDetailsAddressKel + "-" + totalgeneratedPickup;
-            var newPickupDetailsAddressCity = defaultFormatPickupDetailsAddressCity + "-" + totalgeneratedPickup;
-            var newPickupDetailsAddressProv = defaultFormatPickupDetailsAddressProv + "-" + totalgeneratedPickup;
-            var newPickupDetailsAddressZip = defaultFormatPickupDetailsAddressZip + "-" + totalgeneratedPickup;
+            /* addrNum hold number arranged address for location*/
+            var addrNum = totalgeneratedPickup;
+            var newPickupDetailsAddress = defaultFormatPickupDetailsAddress + "-" + addrNum;
+            var newPickupDetailsAddressKec = defaultFormatPickupDetailsAddressKec + "-" + addrNum;
+            var newPickupDetailsAddressKel = defaultFormatPickupDetailsAddressKel + "-" + addrNum;
+            var newPickupDetailsAddressCity = defaultFormatPickupDetailsAddressCity + "-" + addrNum;
+            var newPickupDetailsAddressProv = defaultFormatPickupDetailsAddressProv + "-" + addrNum;
+            var newPickupDetailsAddressZip = defaultFormatPickupDetailsAddressZip + "-" + addrNum;
 
             totalgeneratedPickup++;
             var newPrefixItemFieldID = defaultFormatPrefixItemFieldID + "-" + totalgeneratedPickup;
@@ -457,6 +483,8 @@
             */
             mappingPickupsToPrefixItem[newPickupFieldID] = newPrefixItemFieldID;
             mappingPrefixItemAndItems[newPrefixItemFieldID] = [newItemField];
+
+            var provinciesComp = generateProvinciesComp();
 
             var pickUpField = `
             <div id="` + newPickupFieldID + `" class="mb-3">
@@ -503,14 +531,27 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="` + newPickupDetailsAddress + `">
-                                                Alamat
-                                            </label>
-                                            <input class="form-control form-control-sm" id="` + newPickupDetailsAddress + `" type="name" placeholder="Alamat RT/RW" value="" />
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressProv + `">
+                                            Provinsi
+                                        </label>
+                                        <select class="form-control form-control-sm" id="` + newPickupDetailsAddressProv + `" onchange="javascript:fetchListCityForPickUpPoint('`+ addrNum +`')">
+                                            <option value="">--Pilih Provinsi--</option>
+                                            ` + provinciesComp + `
+                                        </select>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddressCity + `">
+                                            Kota
+                                        </label>
+                                        <select class="form-control form-control-sm" id="` + newPickupDetailsAddressCity + `" onchange="javascript:fetchListSubDistrictForPickUpPoint('` + addrNum + `')">
+                                            <option value="">--Pilih Provinsi Terlebih Dahulu--</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-row">
                                 <div class="col-md-6">
@@ -518,7 +559,9 @@
                                         <label for="` + newPickupDetailsAddressKec + `">
                                             Kecamatan
                                         </label>
-                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressKec + `" type="name" placeholder="Nama Kecamatan" value="" />
+                                        <select class="form-control form-control-sm" id="` + newPickupDetailsAddressKec + `" onchange="javascript:fetchListUrbanForPickUpPoint('` + addrNum + `')">
+                                            <option value="">--Pilih Kota Terlebih Dahulu--</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -526,25 +569,9 @@
                                         <label for="` + newPickupDetailsAddressKel + `">
                                             Kelurahan
                                         </label>
-                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressKel + `" type="name" placeholder="Nama Kelurahan" value="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="` + newPickupDetailsAddressCity + `">
-                                            Kota
-                                        </label>
-                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressCity + `" type="name" placeholder="Nama Kota" value="" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="` + newPickupDetailsAddressProv + `">
-                                            Provinsi
-                                        </label>
-                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressProv + `" type="name" placeholder="Nama Provinsi" value="" />
+                                        <select class="form-control form-control-sm" id="` + newPickupDetailsAddressKel + `" onchange="javascript:fetchListPostalCodeForPickUpPoint('` + addrNum + `')">
+                                            <option value="">--Pilih Kecamatan Terlebih Dahulu--</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -554,7 +581,19 @@
                                         <label for="` + newPickupDetailsAddressZip + `">
                                             ZIP
                                         </label>
-                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddressZip + `" type="number" placeholder="kode pos" min="0" />
+                                        <select class="form-control form-control-sm" id="` + newPickupDetailsAddressZip + `">
+                                            <option value="">--Pilih Kelurahan Terlebih Dahulu--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="` + newPickupDetailsAddress + `">
+                                            Alamat
+                                        </label>
+                                        <input class="form-control form-control-sm" id="` + newPickupDetailsAddress + `" type="name" placeholder="Alamat RT/RW" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -961,8 +1000,346 @@
             document.documentElement.scrollTop = 0;
         }
 
+        function fetchListCityForPickUpPoint(id){
+            var idPickUpProv;
+            var idPickUpCity;
+            if(id == '0'){
+                idPickUpProv = "#pickup-details-address-prov";
+                idPickUpCity = "#pickup-details-address-city";
+            } else {
+                idPickUpProv = "#pickup-details-address-prov-"+id;
+                idPickUpCity = "#pickup-details-address-city-"+id;
+            }
+            
+            var prov_code = $(idPickUpProv).val();
+            var payload = {
+                province_code: prov_code
+            };
+            var promise = fetchDetailLoc("city", payload);
+
+            promise.done(function(response){
+                let listCity = response.data;
+
+                let components = `<option value="">Pilih Kota</option>`;;
+                for(let i in listCity){
+                    comp = `<option value="` + listCity[i].city + `">` + listCity[i].city + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idPickUpCity).empty();
+                $(idPickUpCity).append(components);
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" tidak dapat melihat daftar kota");
+                }
+                FinishLoading();
+            });
+        }
+
+        function fetchListSubDistrictForPickUpPoint(id){
+            var idPickUpProv;
+            var idPickUpCity;
+            var idPickUpSubDistrict;
+            if(id == '0'){
+                idPickUpProv = "#pickup-details-address-prov";
+                idPickUpCity = "#pickup-details-address-city";
+                idPickUpSubDistrict = "#pickup-details-address-kec";
+            } else {
+                idPickUpProv = "#pickup-details-address-prov-"+id;
+                idPickUpCity = "#pickup-details-address-city-"+id;
+                idPickUpSubDistrict = "#pickup-details-address-kec-"+id;
+            }
+            
+            var prov_code = $(idPickUpProv).val();
+            var city = $(idPickUpCity).val();
+            var payload = {
+                province_code: prov_code,
+                city: city
+            };
+            var promise = fetchDetailLoc("sub_district", payload);
+            
+            promise.done(function(response){
+                let listSubDistrict = response.data;
+
+                let components = `<option value="">Pilih Kecamatan</option>`;;
+                for(let i in listSubDistrict){
+                    comp = `<option value="` + listSubDistrict[i].sub_district + `">` + listSubDistrict[i].sub_district + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter sub district dropdown
+                $(idPickUpSubDistrict).empty();
+                $(idPickUpSubDistrict).append(components);
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" tidak dapat melihat daftar kecamatan");
+                }
+            });
+        }
+
+        function fetchListUrbanForPickUpPoint(id){
+            var idPickUpProv;
+            var idPickUpCity;
+            var idPickUpSubDistrict;
+            var idPickUpUrban;
+            if(id == '0'){
+                idPickUpProv = "#pickup-details-address-prov";
+                idPickUpCity = "#pickup-details-address-city";
+                idPickUpSubDistrict = "#pickup-details-address-kec";
+                idPickUpUrban = "#pickup-details-address-kel";
+            } else {
+                idPickUpProv = "#pickup-details-address-prov-"+id;
+                idPickUpCity = "#pickup-details-address-city-"+id;
+                idPickUpSubDistrict = "#pickup-details-address-kec-"+id;
+                idPickUpUrban = "#pickup-details-address-kel-"+id;
+            }
+            
+            var prov_code = $(idPickUpProv).val();
+            var city = $(idPickUpCity).val();
+            var sub_district = $(idPickUpSubDistrict).val();
+            var payload = {
+                province_code: prov_code,
+                city: city,
+                sub_district: sub_district
+            };
+            var promise = fetchDetailLoc("urban", payload);
+            
+            promise.done(function(response){
+                let listUrban = response.data;
+
+                let components = `<option value="">Pilih Kelurahan</option>`;;
+                for(let i in listUrban){
+                    comp = `<option value="` + listUrban[i].urban + `">` + listUrban[i].urban + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter sub district dropdown
+                $(idPickUpUrban).empty();
+                $(idPickUpUrban).append(components);
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" tidak dapat melihat daftar kelurahan");
+                }
+            });
+        }
+
+        function fetchListPostalCodeForPickUpPoint(id){
+            var idPickUpProv, idPickUpCity, idPickUpSubDistrict, idPickUpUrban, idPostalCode;
+
+            if(id == '0'){
+                idPickUpProv = "#pickup-details-address-prov";
+                idPickUpCity = "#pickup-details-address-city";
+                idPickUpSubDistrict = "#pickup-details-address-kec";
+                idPickUpUrban = "#pickup-details-address-kel";
+                idPostalCode = "#pickup-details-address-zip";
+            } else {
+                idPickUpProv = "#pickup-details-address-prov-"+id;
+                idPickUpCity = "#pickup-details-address-city-"+id;
+                idPickUpSubDistrict = "#pickup-details-address-kec-"+id;
+                idPickUpUrban = "#pickup-details-address-kel-"+id;
+                idPostalCode = "#pickup-details-address-zip-"+id;
+            }
+            
+            var prov_code = $(idPickUpProv).val();
+            var city = $(idPickUpCity).val();
+            var sub_district = $(idPickUpSubDistrict).val();
+            var urban = $(idPickUpUrban).val();
+            var payload = {
+                province_code: prov_code,
+                city: city,
+                sub_district: sub_district,
+                urban: urban
+            };
+            var promise = fetchDetailLoc("postal_code", payload);
+            
+            promise.done(function(response){
+                let listPostalCode = response.data;
+
+                let components = `<option value="">Pilih Kode Pos</option>`;;
+                for(let i in listPostalCode){
+                    comp = `<option value="` + listPostalCode[i].postal_code + `">` + listPostalCode[i].postal_code + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter sub district dropdown
+                $(idPostalCode).empty();
+                $(idPostalCode).append(components);
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" tidak dapat melihat daftar kode pos");
+                }
+            });
+        }
+
+        function fetchDetailLoc(typeLoc, payload){
+            var path = '/location/v1/get/geo-location/' + typeLoc;
+            var url = product_url + path;
+
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                data: payload, 
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": GetSessionBasedOnEnv()
+                }
+            });
+
+            return promise;
+        }
+
+        function generateProvinciesComp(){
+            let components = '';
+            for(let i in ListProvincies){
+                comp = `<option value="` + ListProvincies[i].province_code + `">` + ListProvincies[i].province_name + `</option>`;
+                components = components + comp;
+            }
+
+            return components;
+        }
+
+        function fetchListCityForDropOff(){
+            var idDropProv = "#client-address-prov";
+            var idDropCity = "#client-address-city";
+            
+            var prov_code = $(idDropProv).val();
+            var payload = {
+                province_code: prov_code
+            };
+
+            var promise = fetchDetailLoc("city", payload);
+            promise.done(function(response){
+                let listCity = response.data;
+
+                let components = `<option value="">Pilih Kota</option>`;;
+                for(let i in listCity){
+                    comp = `<option value="` + listCity[i].city + `">` + listCity[i].city + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idDropCity).empty();
+                $(idDropCity).append(components);
+            });
+        }
+
+        function fetchListSubDistrictForDropOff(){
+            var idDropProv = "#client-address-prov";
+            var idDropCity = "#client-address-city";
+            var idDropSubDistrict = "#client-address-kec";
+            
+            var prov_code = $(idDropProv).val();
+            var city = $(idDropCity).val();
+            var payload = {
+                province_code: prov_code,
+                city: city
+            };
+
+            var promise = fetchDetailLoc("sub_district", payload);
+            promise.done(function(response){
+                let listSubDistrict = response.data;
+
+                let components = `<option value="">Pilih Kecamatan</option>`;;
+                for(let i in listSubDistrict){
+                    comp = `<option value="` + listSubDistrict[i].sub_district + `">` + listSubDistrict[i].sub_district + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idDropSubDistrict).empty();
+                $(idDropSubDistrict).append(components);
+            });
+        }
+
+        function fetchListUrbanForDropOff(){
+            var idDropProv = "#client-address-prov";
+            var idDropCity = "#client-address-city";
+            var idDropSubDistrict = "#client-address-kec";
+            var idDropUrban = "#client-address-kel";
+            
+            var prov_code = $(idDropProv).val();
+            var city = $(idDropCity).val();
+            var sub_district = $(idDropSubDistrict).val();
+            var payload = {
+                province_code: prov_code,
+                city: city,
+                sub_district: sub_district
+            };
+
+            var promise = fetchDetailLoc("urban", payload);
+            promise.done(function(response){
+                let listUrban = response.data;
+
+                let components = `<option value="">Pilih Kelurahan</option>`;;
+                for(let i in listUrban){
+                    comp = `<option value="` + listUrban[i].urban + `">` + listUrban[i].urban + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idDropUrban).empty();
+                $(idDropUrban).append(components);
+            });
+        }
+
+        function fetchListPostalCodeForDropOff(){
+            var idDropProv = "#client-address-prov";
+            var idDropCity = "#client-address-city";
+            var idDropSubDistrict = "#client-address-kec";
+            var idDropUrban = "#client-address-kel";
+            var idDropZip = "#client-address-zip";
+
+            var prov_code = $(idDropProv).val();
+            var city = $(idDropCity).val();
+            var sub_district = $(idDropSubDistrict).val();
+            var urban = $(idDropUrban).val();
+            var payload = {
+                province_code: prov_code,
+                city: city,
+                sub_district: sub_district,
+                urban: urban
+            };
+
+            var promise = fetchDetailLoc("postal_code", payload);
+            promise.done(function(response){
+                let listPostalCode = response.data;
+
+                let components = `<option value="">Pilih Postal Code</option>`;;
+                for(let i in listPostalCode){
+                    comp = `<option value="` + listPostalCode[i].postal_code + `">` + listPostalCode[i].postal_code + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idDropZip).empty();
+                $(idDropZip).append(components);
+            });
+        }
+
         $(document).ready(function(){
             init();
+            
+            var promiseProvince = fetchDetailLoc("province", {});
+            promiseProvince.done(function(response){
+                let listProvince = response.data;
+                for(let i in listProvince){
+                    ListProvincies.push(listProvince[i]);
+                }
+                
+                // create and push component for filter company dropdown
+                $("#pickup-details-address-prov").append(generateProvinciesComp());
+                $("#client-address-prov").append(generateProvinciesComp());
+            }).fail(function(response){
+                if(response.status > 500){
+                    setError(true, defaultServerError+" tidak dapat melihat daftar provinsi");
+                }
+                FinishLoading();
+            });
         });
     </script>
 
