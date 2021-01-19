@@ -13,54 +13,61 @@
                 <main>
                     <div class="container-fluid mt-5">
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
-                            <div class="mr-4 mb-3 mb-sm-0">
-                                <h1 class="mb-0">Update Akun Perusahaan {{ .company.CompanyName }}</h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Kembali</button>                        
-                            </div>
-                            <div id="success-alert" class="alert alert-success hide" role="alert"></div>
-                            <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
+                            <div id="success-alert" class="col-lg-12 alert alert-success hide" role="alert"></div>
+                            <div id="failed-alert" class="col-lg-12 alert alert-danger hide" role="alert"></div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="">
                                     <form>
-                                        <div class="form-group">
-                                            <label for="company-name">Nama Perusahaan</label>
-                                            <input class="form-control form-control-sm" id="company-name" value="{{ .company.CompanyName }}" autocomplete="off" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company-address">Alamat Perusahaan</label>
-                                            <input class="form-control form-control-sm" id="company-address" value="{{ .company.Address }}" autocomplete="off" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phone">Nomor Telepon</label>
-                                            <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .company.PhoneNumber }}" autocomplete="off" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control form-control-sm" id="role">
-                                                <option value="1" {{ if eq .company.Role 1 }}selected{{ end }}>Admin</option>
-                                                <option value="2" {{ if eq .company.Role 2 }}selected{{ end }}>Client</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Image Perusahaan</label>
-                                            <div class="row" style="margin-left: 50px">
-                                                <div class="col-xs-6">
-                                                    <div id="company-image-banner">
-                                                        {{ if ne .company.ImageLogo "" }}
-                                                        <img class="image-cover" src="{{ .company.ImageLogo }}" />
-                                                        {{ end }}
-                                                    </div>
-                                                    <div id="upload_button-banner" class="upload_button-first">
-                                                        <label>
-                                                            <input id="company-image" type="file" onchange="javascript:uploadImage()" />
-                                                        </label>
+                                        <div class="row">
+                                            <div class="col-lg-12" style="text-align: center; border-bottom: 1px solid black; padding-bottom: 15px; margin-bottom: 30px">
+                                                <span style="font-weight: bold;">
+                                                    Update Data Perusahaan
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="company-name">Nama</label>
+                                                    <input class="form-control form-control-sm" id="company-name" value="{{ .company.CompanyName }}" autocomplete="off" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="company-address">Alamat</label>
+                                                    <input class="form-control form-control-sm" id="company-address" value="{{ .company.Address }}" autocomplete="off" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="phone">Nomor Telepon</label>
+                                                    <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .company.PhoneNumber }}" autocomplete="off" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="role">Role</label>
+                                                    <select class="form-control form-control-sm" id="role">
+                                                        <option value="1" {{ if eq .company.Role 1 }}selected{{ end }}>Admin</option>
+                                                        <option value="2" {{ if eq .company.Role 2 }}selected{{ end }}>Client</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Logo</label>
+                                                    <div class="row">
+                                                        <div class="col-lg-12" id="company-image-banner">
+                                                            {{ if ne .company.ImageLogo "" }}
+                                                            <img class="image-cover" style="width: 100%; max-height: 267px;" src="{{ .company.ImageLogo }}" />
+                                                            {{ end }}
+                                                        </div>
+                                                        <div id="upload_button-banner" class="upload_button-first" style="text-align: center;">
+                                                            <button class="btn btn-primary btn-sm" style="margin-top: 10px;" onClick="javascript:getFile()" type="button">
+                                                                <i data-feather="upload"></i> Unggah Gambar Perusahaan
+                                                            </button>
+                                                            <input id="company-image" type="file" onchange="javascript:uploadImage()" style="visibility: hidden;" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button class="col-lg-12 btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">SIMPAN</button>
+                                            <button class="col-lg-12 btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/companies'"><i data-feather="chevron-left"></i>Kembali</button>
                                         </div>
-                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">Update Data Perusahaan</button>
                                 </form>
                             </div>
                         </div>
@@ -147,11 +154,15 @@
             return promise;
         }
 
+        function getFile(){
+            $("#company-image").click();
+        }
+
         function uploadImage() {
             /* 200KB */
-            var imageSizeValidation = 200000;
+            var imageSizeValidation = 500000;
             var minWidth = 500;
-            var minHeight = 150;
+            var minHeight = 250;
 
             var companyImage = $("#company-image")[0].files[0];
             var $mainContainer = $("#company-image-banner");
@@ -159,7 +170,8 @@
             if(companyImage.size > imageSizeValidation){
                 $("#company-image").val("");
                 $mainContainer.empty();
-                setError(true, "Maksimal ukuran gambar adalah 200 KB");
+                setError(true, "Maksimal ukuran gambar adalah 500 KB");
+                gotoTop();
                 return
             }
 
@@ -176,12 +188,14 @@
                         $("#company-image").val("");
                         $mainContainer.empty();
                         setError(true, "Dimensi cover harus kurang dari width: "+minWidth+". height: "+minHeight);
+                        gotoTop();
                         return;
                     }
 
                     $mainContainer.empty();
-                    var imgs = $('<img class="image-cover' + '" src=' + image + " />");
+                    var imgs = $('<img class="image-cover" style="width: 100%; max-height: 267px;" src=' + image + " />");
                     $mainContainer.append(imgs);
+                    setError(false, "");
                 };
             };
 
