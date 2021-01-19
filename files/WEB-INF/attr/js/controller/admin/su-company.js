@@ -40,7 +40,7 @@ function FetchCompanyByAdminRole(){
             headers: {
                 "Authorization": GetSessionBasedOnEnv(),
                 "Accept": "application/json",
-                "User-Agent": "cgx",
+                "User-Agent-2": "cgx",
                 "Authorization-2": hash,
                 "Date-Auth": stdHeaderTime+" WIB"
             }
