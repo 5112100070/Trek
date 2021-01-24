@@ -13,50 +13,58 @@
                 <main>
                     <div class="container-fluid mt-5">
                         <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
-                            <div class="mr-4 mb-3 mb-sm-0">
-                                <h1 class="mb-0">Update Akun {{ .account.Fullname }}</h1>
-                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Kembali</button>                        
-                            </div>
+                            <div class="mr-4 mb-3 mb-sm-0"></div>
                             <div id="success-alert" class="alert alert-success hide" role="alert"></div>
                             <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form action="">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="fullname">Nama Lengkap</label>
-                                            <input class="form-control form-control-sm" id="fullname" value="{{ .account.Fullname }}" autocomplete="off" />
+                                <form>
+                                    <div class="row">
+                                        <div class="col-lg-12" style="text-align: center; border-bottom: 1px solid black; padding-bottom: 15px; margin-bottom: 30px">
+                                            <span style="font-weight: bold;">
+                                                Update Akun Pengguna
+                                            </span>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="phone">Nomor Telepon</label>
-                                            <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .account.PhoneNumber }}" autocomplete="off" />
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="fullname">Nama Lengkap</label>
+                                                <input class="form-control form-control-sm" id="fullname" value="{{ .account.Fullname }}" autocomplete="off" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Nomor Telepon</label>
+                                                <input class="form-control form-control-sm" id="phone" type="phone" value="{{ .account.PhoneNumber }}" autocomplete="off" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="role">Role</label>
+                                                <select class="form-control form-control-sm" id="role">
+                                                    <option value="1" {{ if eq .account.Role 1 }}selected{{ end }}>Admin</option>
+                                                    <option value="2" {{ if eq .account.Role 2 }}selected{{ end }}>Operator</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control form-control-sm" id="role">
-                                                <option value="1" {{ if eq .account.Role 1 }}selected{{ end }}>Admin</option>
-                                                <option value="2" {{ if eq .account.Role 2 }}selected{{ end }}>Operator</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Foto Profile</label>
-                                            <div class="row" style="margin-left: 50px">
-                                                <div class="col-xs-6">
-                                                    <div id="profile-image-banner">
-                                                        {{ if ne .account.ProfileImage "" }}
-                                                        <img class="image-cover" src="{{ .account.ProfileImage }}" />
-                                                        {{ end }}
-                                                    </div>
-                                                    <div id="upload_button-banner" class="upload_button-first">
-                                                        <label>
-                                                            <input id="profile-image" type="file" onchange="javascript:uploadImage()" />
-                                                        </label>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Foto Profile</label>
+                                                <div class="row" style="margin-left: 50px">
+                                                    <div class="col-xs-6">
+                                                        <div id="profile-image-banner">
+                                                            {{ if ne .account.ProfileImage "" }}
+                                                            <img class="image-cover" style="width: 100%; max-height: 267px;" src="{{ .account.ProfileImage }}" />
+                                                            {{ end }}
+                                                        </div>
+                                                        <div id="upload_button-banner" class="upload_button-first" style="text-align: center;">
+                                                            <label>
+                                                                <input id="profile-image" type="file" onchange="javascript:uploadImage()" />
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">Update User</button>
+                                    </div>
+                                    <button class="col-lg-12 btn btn-success btn-sm" onClick="javascript:ProcessUpdate()" type="button">Update User</button>
+                                    <button class="col-lg-12 btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/users'"><i data-feather="chevron-left"></i>Kembali</button>
                                 </form>
                             </div>
                         </div>
@@ -143,7 +151,7 @@
 
         function uploadImage() {
             /* 200KB */
-            var imageSizeValidation = 200000;
+            var imageSizeValidation = 500000;
             var minWidth = 500;
 
             var companyImage = $("#profile-image")[0].files[0];
@@ -152,7 +160,7 @@
             if(companyImage.size > imageSizeValidation){
                 $("#profile-image").val("");
                 $mainContainer.empty();
-                setError(true, "Maksimal ukuran gambar adalah 200 KB");
+                setError(true, "Maksimal ukuran gambar adalah 500 KB");
                 return
             }
 
@@ -173,7 +181,7 @@
                     }
 
                     $mainContainer.empty();
-                    var imgs = $('<img class="image-cover' + '" src=' + image + " />");
+                    var imgs = $('<img class="image-cover' + '" style="width: 100%; max-height: 267px;" src=' + image + " />");
                     $mainContainer.append(imgs);
                 };
             };
