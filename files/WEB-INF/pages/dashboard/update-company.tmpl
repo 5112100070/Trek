@@ -107,6 +107,7 @@
                 response = response.data;
 
                 if(response.error!=null){
+                    $("#success-alert").addClass("hide");
                     setError(true, response.error.detail);
                 } else {
                     setError(false, "");
@@ -116,6 +117,7 @@
                 FinishLoading();
                 gotoTop();
             }).fail(function(response){
+                $("#success-alert").addClass("hide");
                 FinishLoading();
                 var status = response.status;
                 if(status >= 500){
