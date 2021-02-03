@@ -90,6 +90,10 @@ func (repo moduleRepo) GetListFeature(sessionID string, param ListFeatureParam) 
 	q.Add("page", strconv.FormatInt(int64(param.Page), 10))
 	q.Add("order_by", param.OrderType)
 
+	if param.ModuleID > 0 {
+		q.Add("module_id", strconv.FormatInt(int64(param.ModuleID), 10))
+	}
+
 	req.URL.RawQuery = q.Encode()
 
 	resp, errGetResp := client.Do(req)

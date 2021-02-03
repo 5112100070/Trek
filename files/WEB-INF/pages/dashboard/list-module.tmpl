@@ -50,8 +50,8 @@
                                                     <button 
                                                         class="btn btn-sm btn-outline-primary col-sm-12" 
                                                         type="button"
-                                                        onclick="javascript:window.location='/dashboard/user?id={{ $module.ID }}'">
-                                                        view
+                                                        onclick="javascript:window.location='/dashboard/features?module_id={{ $module.ID }}'">
+                                                        list feature
                                                     </button>
                                                 </td>
                                             </tr>
@@ -196,11 +196,11 @@
                 FinishLoading();
                 setError(true, defaultServerError);
             });
+        }
 
-            function gotoTop(){
+        function gotoTop(){
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
             }
-        }
     </script>
 </html>

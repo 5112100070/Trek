@@ -30,6 +30,7 @@ type Features struct {
 	Name            string `json:"name"`
 	Description     string `json:"description"`
 	PathUrl         string `json:"path_url"`
+	Method          string `json:"method"`
 }
 
 type Error struct {

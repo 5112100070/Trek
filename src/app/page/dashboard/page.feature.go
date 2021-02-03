@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/5112100070/Trek/src/entity"
@@ -114,10 +115,12 @@ func FeaturePageHandler(c *gin.Context) {
 	page, _ := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
 	rows, _ := strconv.ParseInt(c.DefaultQuery("rows", "10"), 10, 64)
 	orderType := c.DefaultQuery("order_type", "desc")
+	moduleID, _ := strconv.ParseInt(c.DefaultQuery("module_id", "0"), 10, 64)
 
 	listModules, err := global.GetServiceModule().GetListFeature(token, module.ListFeatureParam{
 		Page:      int(page),
 		Rows:      int(rows),
+		ModuleID:  moduleID,
 		OrderType: orderType,
 	})
 	if err != nil {
@@ -145,8 +148,16 @@ func FeaturePageHandler(c *gin.Context) {
 		return
 	}
 
-	templatePage := conf.GConfig.BaseUrlConfig.BaseDNS + "/dashboard/features"
 	totalPage := listModules.Data.Total / int(rows)
+
+	Url, _ := url.Parse("")
+	Url.Path += "/dashboard/features"
+	parameters := url.Values{}
+	parameters.Add("rows", strconv.FormatInt(rows, 10))
+	if moduleID > 0 {
+		parameters.Add("module_id", strconv.FormatInt(moduleID, 10))
+	}
+	Url.RawQuery = parameters.Encode()
 
 	// get additional page
 	// total data 22 row 10
@@ -157,11 +168,10 @@ func FeaturePageHandler(c *gin.Context) {
 
 	// handle pagination
 	pagination := entity.Pagination{
-		Template:  templatePage,
+		Template:  Url.String(),
 		Page:      int(page),
 		NextPage:  int(page) + 1,
 		PrevPage:  int(page) - 1,
-		Rows:      int(rows),
 		TotalPage: totalPage,
 		ListPage:  global.GenerateListPage(totalPage),
 	}

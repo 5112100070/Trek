@@ -12,4 +12,6 @@ type ListFeatureParam struct {
 	Page      int
 	Rows      int
 	OrderType string
+	// filter based on module
+	ModuleID int64
 }

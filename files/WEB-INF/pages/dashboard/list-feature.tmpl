@@ -50,6 +50,13 @@
                                                     <button 
                                                         class="btn btn-sm btn-outline-primary col-sm-12" 
                                                         type="button"
+                                                        onclick="javascript:handleModalOpenUpdateFeature(
+                                                            {{ $feature.ID }}, 
+                                                            {{ $feature.AccountModuleID }} , 
+                                                            {{ $feature.Name }}, 
+                                                            {{ $feature.Description }}, 
+                                                            {{ $feature.Method }}, 
+                                                            {{ $feature.PathUrl }})"
                                                     >
                                                         view
                                                     </button>
@@ -66,7 +73,7 @@
                                         <a 
                                             class="page-link"
                                             {{ if (gt $pagination.Page 1 ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.PrevPage }}&rows={{ $pagination.Rows }}" 
+                                            href="{{ $pagination.Template }}&page={{ $pagination.PrevPage }}" 
                                             {{ end }}>
                                             Sebelumnnya
                                         </a>
@@ -75,7 +82,7 @@
                                     <li class="page-item  
                                         {{ if (eq $pagination.Page $index) }} active {{ end }}">
                                         <a class="page-link" 
-                                            href="{{ $pagination.Template }}?page={{ $index }}&rows={{ $pagination.Rows }}">
+                                            href="{{ $pagination.Template }}&page={{ $index }}">
                                             {{ $index }}
                                         </a>
                                     </li>
@@ -84,7 +91,7 @@
                                         <a 
                                             class="page-link" 
                                             {{ if (lt $pagination.Page $pagination.TotalPage ) }} 
-                                            href="{{ $pagination.Template }}?page={{ $pagination.NextPage }}&rows={{ $pagination.Rows }}"
+                                            href="{{ $pagination.Template }}&page={{ $pagination.NextPage }}"
                                             {{ end }}
                                         >
                                             Selanjutnya
@@ -92,6 +99,7 @@
                                     </li>
                                   </ul>
                                 </nav>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -146,8 +154,57 @@
                 </div>
                 <!-- End Modal Create Feature -->
 
-                <!-- Footer -->
-                {{ template "dashboard-footer.tmpl" .}}
+                <!-- Modal Create Feature -->
+                <div class="modal fade" id="modal-update-feature" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-update-feature-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="muf-receiver-name-label">Detail Feature Data</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="javascript:handleModalCloseUpdateFeature()">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="muf-feature-name">Nama Feature</label>
+                                    <input class="form-control" id="muf-feature-id" type="text" style="display: none;" />
+                                    <input class="form-control" id="muf-feature-name" type="text" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="muf-feature-description"></label>Deskripsi Feature</label>
+                                    <textarea class="form-control" id="muf-feature-description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="muf-feature-module-id">Member Of Module</label>
+                                    <select id="muf-feature-module-id" class="form-control">
+                                        <option id="initial-module-muf" value="0"> - </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="feature-path-url">Path URL</label>
+                                    <input class="form-control" id="muf-feature-path-url" type="text" placeholder="Identifier url. example: /dashboard/features" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="muf-feature-method">Feature Method</label>
+                                    <select id="muf-feature-method" class="form-control">
+                                        <option value="GET"> GET </option>
+                                        <option value="POST"> POST </option>
+                                        <option value="PUT"> PUT </option>
+                                        <option value="PATCH"> PATCH </option>
+                                        <option value="HEAD"> HEAD </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-red btn-sm" type="button" onclick="javascript:handleModalCloseUpdateFeature()" data-dismiss="modal">Tutup</button>
+                                <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleUpdateFeature()" style="text-decoration: none; color: black;">
+                                    Update Feature
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal Create Feature -->
             </div>
       </div>
       
@@ -155,6 +212,9 @@
       <div id="loading-pop-up" class="modal-loading">
         <div class="lds-facebook"><div></div><div></div><div></div></div>
       </div>
+
+      <!-- Footer -->
+      {{ template "dashboard-footer.tmpl" .}}
 
     </body>
     {{ template "default-script-dashboard.tmpl" .}}
@@ -171,6 +231,28 @@
             $('#feature-path-url').val('');
             
             $('#initial-module').attr('selected', true);
+        }
+
+        function handleModalOpenUpdateFeature(featureID, moduleID, name, description, method, pathURL){
+            $("#modal-update-feature").modal("show");
+            
+            $('#muf-feature-id').val(featureID);
+            $('#muf-feature-module-id').val(moduleID);
+            $('#muf-feature-name').val(name);
+            $('#muf-feature-description').text(description);
+            $('#muf-feature-path-url').val(pathURL);
+            $('#muf-feature-method').val(method);
+        }
+
+        function handleModalCloseUpdateFeature(){
+            $("#modal-update-feature").modal("hide");
+            
+            $('#muf-feature-id').val('');
+            $('#muf-feature-module-id').val('');
+            $('#muf-feature-name').val('');
+            $('#muf-feature-description').text('');
+            $('#muf-feature-path-url').val();
+            $('#muf-feature-method').val('');
         }
 
         function handleCreateFeature(){
@@ -218,6 +300,52 @@
             return
         }
 
+        function handleUpdateFeature(){
+            StartLoading();
+            var url = product_url + '/admin/v1/account-feature';
+
+            var payload = {
+                feature_id: parseInt($('#muf-feature-id').val()),
+                account_module_id: parseInt($('#muf-feature-module-id').val()),
+                name: $('#muf-feature-name').val(),
+                description: $('#muf-feature-description').val(),
+                path_url: $('#muf-feature-path-url').val(),
+                method:$('#muf-feature-method').val(),
+            }
+
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payload),
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            });
+
+            promise.done(function(response){
+                response = response.data;
+
+                if(response.error!=null){
+                    setError(true, response.error.detail);
+                    gotoTop();
+                } else {
+                    handleModalCloseUpdateFeature();
+                    FinishLoading();
+                    window.location.reload();   
+                }
+            }).fail(function(response){
+                setError(true, defaultServerError);
+            });
+
+            return
+        }
+
         function getAllModules(){
             var params = new URLSearchParams({
                 page: 1,
@@ -246,6 +374,7 @@
                     var comp = `<option value="` + element.id + `"> ` + element.name + ` </option>`;
                     
                     $("#initial-module").after(comp);
+                    $("#initial-module-muf").after(comp);
                 });
 
 
