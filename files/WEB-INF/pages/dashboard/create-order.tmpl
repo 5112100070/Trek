@@ -60,9 +60,6 @@
                                         <div class="form-group">
                                             <label for="delivery-type">Layanan</label>
                                             <select class="form-control" id="delivery-type">
-                                                <option value="1">Same day</option>
-                                                <option value="2">Regular</option>
-                                                <option value="3">SuperSDS</option>        
                                             </select>
                                         </div>
                                     </div>
@@ -1193,6 +1190,26 @@
             return promise;
         }
 
+        function fetchListOrderType(){
+            var path = '/order/internal/v1/get/delivery-type';
+            var url = product_url + path;
+
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": GetSessionBasedOnEnv()
+                }
+            });
+
+            return promise;
+        }
+
         function generateProvinciesComp(){
             let components = '';
             for(let i in ListProvincies){
@@ -1321,10 +1338,30 @@
             });
         }
 
+        function generateListOrderType(){
+            var idDeliveryType = "#delivery-type";
+
+            var promise = fetchListOrderType();
+            promise.done(function(response){
+                let listOrderType = response.data;
+
+                let components = `<option value="">Pilih Jenis Pengiriman</option>`;;
+                for(let i in listOrderType){
+                    comp = `<option value="` + i + `">` + listOrderType[i] + `</option>`;
+                    components = components + comp;
+                }
+                    
+                // create and push component for filter company dropdown
+                $(idDeliveryType).empty();
+                $(idDeliveryType).append(components);
+            });
+        }
+
         $(document).ready(function(){
             init();
             
             var promiseProvince = fetchDetailLoc("province", {});
+            generateListOrderType();
             promiseProvince.done(function(response){
                 let listProvince = response.data;
                 for(let i in listProvince){
