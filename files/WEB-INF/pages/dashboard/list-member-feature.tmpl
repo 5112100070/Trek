@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ template "dashboard-header.tmpl" .}}
+
+    <body class="nav-fixed">
+      {{ template "dashboard-notifcenter.tmpl" .}}   
+
+      <div id="layoutSidenav">
+            <!-- Sidebar -->
+            {{ template "dashboard-sidebar.tmpl" .}}
+            <div id="layoutSidenav_content">
+              <main>
+                    <div class="container-fluid mt-5">
+                        <div id="success-alert" class="alert alert-success hide" role="alert"></div>
+                        <div id="failed-alert" class="alert alert-danger hide" role="alert"></div>
+                        <div class="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row mb-4">
+                            <div class="mr-4 mb-3 mb-sm-0">
+                                <h1 id="module-member-header" class="mb-0"></h1>
+                                <button class="btn btn-light btn-sm" type="button" onclick="javascript:window.location='/dashboard/modules'">
+                                    <i data-feather="chevron-left"></i>Kembali
+                                </button>   
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-primary lift btn-sm" data-target="#modal-register-feature" data-toggle="modal">
+                                    <i data-feather="plus"></i>Daftarkan fitur ke modul ini
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="datatable table-responsive">
+                                    <table class="table table-bordered table-hover middle-table" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;" style="width: 20%">NAME</th>
+                                                <th style="text-align: center;" style="width: 40%">DESCRIPTION</th>
+                                                <th style="text-align: center;" style="width: 10%">PATH/KEY</th>
+                                                <th style="text-align: center;" style="width: 10%">METHOD</th>
+                                                <th style="text-align: center;" style="width: 10%">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="init-feature"></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+      </div>
+      
+      <!-- Modal -->
+      <div id="loading-pop-up" class="modal-loading">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+      </div>
+
+    <!-- Modal Register Feature -->
+    <div class="modal fade" id="modal-register-feature" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-register-feature-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="muf-receiver-name-label">Register Feature On This Module</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="javascript:handleModalClose()">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="feature-detail">List Of Feature</label>
+                        <select id="feature-detail" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" onclick="javascript:handleModalClose()" data-dismiss="modal">Tutup</button>
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleUpdateFeature()" style="text-decoration: none; color: black;">
+                        Register The Feature
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Update Feature -->
+
+    <!-- Modal delete update relation feature -->
+    <div class="modal fade" id="modal-delete-feature" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modal-delete-feature-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modul-delete-header" class="modal-title"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="javascript:handleModalClose()">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="feature-detail" id="modul-delete-body"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" type="button" onclick="javascript:handleModalClose()" data-dismiss="modal">Tutup</button>
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleUpdateFeature()" style="text-decoration: none; color: black;">
+                        Hapus Fitur !
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Update Feature -->
+
+    <!-- Footer -->
+    {{ template "dashboard-footer.tmpl" .}}
+
+    </body>
+    {{ template "default-script-dashboard.tmpl" .}}
+
+    <script>
+        var list_active_feature = [];
+        var list_feature_exclude_from_modul = [];
+
+        $(document).ready(function(){
+            // get list modules
+            let promiseActiveFeature = getFeatureOnModule();
+            let promiseInActiveFeature = getListFeatureDetail();
+
+            $.when(promiseActiveFeature, promiseInActiveFeature).done(function(respActive, respAllFeature){
+                respActive = respActive[0].data;
+                respAllFeature = respAllFeature[0].data;
+
+               $("#module-member-header").html(respActive.name);
+               for(let i=0; i<respActive.features.length; i++){
+                    let element = respActive.features[i];
+                    var comp = `
+                        <tr>
+                            <td style="width: 20%">` + element.name + `</td>
+                            <td style="width: 40%">` + element.description + `</td>
+                            <td style="width: 10%">` + element.path_url + `</td>
+                            <td style="width: 10%">` + element.method + `</td>
+                            <td style="width: 10%">
+                                <button 
+                                    class="btn btn-sm btn-outline-danger col-sm-12" 
+                                    type="button" onclick="javascript:handleModulUnregister(` + element.id + `, '` + element.name + `')">
+                                    hapus
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    $("#init-feature").after(comp);
+                    list_active_feature.push(element);
+               }
+               
+               let compSelect = '<option value="">-</option>';
+               for(let j=0; j<respAllFeature.features.length; j++){
+                    let element = respAllFeature.features[j];
+                    let isActive = false;
+                    
+                    for(let i=0; i<list_active_feature.length; i++){
+                        if(list_active_feature[i].path_url == element.path_url && list_active_feature[i].method == element.method){
+                            isActive = true;
+                            break;
+                        }
+                    }
+
+                    if(!isActive){
+                        list_feature_exclude_from_modul.push(element);
+                        compSelect = compSelect + '<option value="'+ element.id +'">'+ element.name +'</option>';
+                    }
+               }
+
+               $('#feature-detail').html(compSelect);
+            }).fail(function(errActiveFeature, errAllFeature){
+                setError(true, defaultServerError);
+            });
+        });
+
+        function handleModulUnregister(id, featureName){
+            $("#modul-delete-header").html("Konfirmasi Hapus Fitur <b>" + featureName + "</b> Pada Modul ini");
+            $("#modul-delete-body").html("Apakah anda yakin untuk menghapus fitur <b>" + featureName + "</b> pada modul ini ?");
+
+            $("#modal-delete-feature").modal("show");
+        }
+
+        function handleModalClose(){
+            $("#modal-register-feature").modal("hide");
+            $("#modal-delete-feature").modal("hide");
+        }
+
+        function getFeatureOnModule(){
+            var url = new URL(window.location.href);
+            var moduleID = url.searchParams.get("module_id");
+
+            var params = new URLSearchParams({
+                module_id: moduleID
+            })
+            var url = product_url + '/admin/v1/module-member?' + params;
+
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Accept": "application/json"
+                }
+            });
+
+            return promise;
+        }
+
+        function getListFeatureDetail(){
+            var params = new URLSearchParams({
+                page: 1,
+                rows:100
+            })
+            var url = product_url + '/admin/v1/account-feature?' + params;
+
+            var promise = $.ajax({
+                url: url,
+                type: 'GET',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Accept": "application/json"
+                }
+            });
+
+            return promise;
+        }
+
+        function gotoTop(){
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+    </script>
+</html>

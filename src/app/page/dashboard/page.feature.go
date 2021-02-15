@@ -184,3 +184,26 @@ func FeaturePageHandler(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "list-feature.tmpl", renderData)
 }
+
+// MemberFeaturePageHandler is handler for show list feature which we have
+func MemberFeaturePageHandler(c *gin.Context) {
+	// Check user session
+	accountResp, _, errGetResponse := getUserProfile(c)
+	if errGetResponse != nil {
+		global.Error.Println("func MemberFeaturePageHandler error get user profile: ", errGetResponse)
+		global.RenderInternalServerErrorPage(c)
+		return
+	}
+
+	// expire - we remove cookie and redirect it
+	if accountResp.Error != nil {
+		handleSessionErrorPage(c, *accountResp.Error, true)
+		return
+	}
+
+	renderData := gin.H{
+		"UserDetail": accountResp.Data,
+		"config":     conf.GConfig,
+	}
+	c.HTML(http.StatusOK, "list-member-feature.tmpl", renderData)
+}
