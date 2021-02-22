@@ -77,7 +77,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-red btn-sm" type="button" onclick="javascript:handleModalClose()" data-dismiss="modal">Tutup</button>
-                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:handleUpdateFeature()" style="text-decoration: none; color: black;">
+                    <a class="btn btn-success btn-sm" type="button" onclick="javascript:addFeatureToModule()" style="text-decoration: none; color: black;">
                         Register The Feature
                     </a>
                 </div>
@@ -124,6 +124,7 @@
 
         $(document).ready(function(){
             // get list modules
+            StartLoading();
             let promiseActiveFeature = getFeatureOnModule();
             let promiseInActiveFeature = getListFeatureDetail();
 
@@ -132,49 +133,64 @@
                 respAllFeature = respAllFeature[0].data;
 
                $("#module-member-header").html(respActive.name);
-               for(let i=0; i<respActive.features.length; i++){
-                    let element = respActive.features[i];
-                    var comp = `
-                        <tr>
-                            <td style="width: 20%">` + element.name + `</td>
-                            <td style="width: 40%">` + element.description + `</td>
-                            <td style="width: 10%">` + element.path_url + `</td>
-                            <td style="width: 10%">` + element.method + `</td>
-                            <td style="width: 10%">
-                                <button 
-                                    class="btn btn-sm btn-outline-danger col-sm-12" 
-                                    type="button" onclick="javascript:handleModulUnregister(` + element.id + `, '` + element.name + `')">
-                                    hapus
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    
-                    $("#init-feature").after(comp);
-                    list_active_feature.push(element);
+               if(respActive.features != null){
+                    for(let i=0; i<respActive.features.length; i++){
+                            let element = respActive.features[i];
+                            var comp = `
+                                <tr>
+                                    <td style="width: 20%">` + element.name + `</td>
+                                    <td style="width: 40%">` + element.description + `</td>
+                                    <td style="width: 10%">` + element.path_url + `</td>
+                                    <td style="width: 10%">` + element.method + `</td>
+                                    <td style="width: 10%">
+                                        <button 
+                                            class="btn btn-sm btn-outline-danger col-sm-12" 
+                                            type="button" onclick="javascript:handleModulUnregister(` + element.id + `, '` + element.name + `')">
+                                            hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                            
+                            $("#init-feature").after(comp);
+                            list_active_feature.push(element);
+                    }
                }
                
-               let compSelect = '<option value="">-</option>';
-               for(let j=0; j<respAllFeature.features.length; j++){
-                    let element = respAllFeature.features[j];
-                    let isActive = false;
-                    
-                    for(let i=0; i<list_active_feature.length; i++){
-                        if(list_active_feature[i].path_url == element.path_url && list_active_feature[i].method == element.method){
-                            isActive = true;
-                            break;
-                        }
+               if(respAllFeature.features!=null){
+                    let compSelect = '<option value="">-</option>';
+                    for(let j=0; j<respAllFeature.features.length; j++){
+                            let element = respAllFeature.features[j];
+                            let isActive = false;
+                            
+                            for(let i=0; i<list_active_feature.length; i++){
+                                if(list_active_feature[i].path_url == element.path_url && list_active_feature[i].method == element.method){
+                                    isActive = true;
+                                    break;
+                                }
+                            }
+
+                            if(!isActive){
+                                list_feature_exclude_from_modul.push(element);
+                                compSelect = compSelect + '<option value="'+ element.id +'">'+ element.name +'</option>';
+                            }
                     }
 
-                    if(!isActive){
-                        list_feature_exclude_from_modul.push(element);
-                        compSelect = compSelect + '<option value="'+ element.id +'">'+ element.name +'</option>';
-                    }
+                    $('#feature-detail').html(compSelect);
                }
+               
+               FinishLoading();
+            }).fail(function(errorHandler){
+                FinishLoading();
+                if(errorHandler.status > 500){
+                    setError(true, defaultServerError);
+                } else {
+                    setError(true, errorHandler.responseJSON.error.detail);
+                }
 
-               $('#feature-detail').html(compSelect);
-            }).fail(function(errActiveFeature, errAllFeature){
-                setError(true, defaultServerError);
+                window.setTimeout(function(){
+                    window.location.href = "/dashboard/modules";
+                }, 3000);
             });
         });
 
@@ -236,6 +252,58 @@
             });
 
             return promise;
+        }
+
+        function addFeatureToModule() {
+            StartLoading();
+
+            let featureID = $("#feature-detail").val();
+            let list_active_feature_id = [];
+            list_active_feature.push(featureID);
+            
+            var url = product_url + '/admin/v1/registering-feature';
+
+            var urlActive = new URL(window.location.href);
+            var moduleID = urlActive.searchParams.get("module_id");
+
+            var payload = {
+                module_id: moduleID,
+                feature_ids: list_active_feature
+            };
+            
+            var promise = $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                processData: false,
+                contentType: false,
+                cache : false,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            promise.done(function(response){
+                FinishLoading();
+                setError(false, "");
+                $("#success-alert").removeClass("hide");
+
+                $("#success-alert").html("Sukses menambahkan fitur baru");
+                gotoTop();
+
+                window.setTimeout(function(){
+                    window.location.reload();
+                }, 2000);
+            }).fail(function(errReponse){
+                FinishLoading();
+                $("#modal-register-feature").modal("hide");
+                if(errReponse.status > 500){
+                    setError(true, defaultServerError);
+                } else {
+                    setError(true, errReponse.responseJSON.error.detail);
+                }
+            });
         }
 
         function gotoTop(){
