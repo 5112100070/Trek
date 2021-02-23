@@ -42,7 +42,7 @@
                                             <div class="form-group">
                                                 <label for="role">Role</label>
                                                 <select class="form-control form-control-sm" id="role">
-                                                    <option value="1">Admin</option>
+                                                    <option id="default-role" value="1">Admin</option>
                                                     <option value="2">Operator</option>
                                                 </select>
                                             </div>
@@ -120,8 +120,6 @@
                     $("#fullname").val("");
                     $("#email").val("");
                     $("#phone").val("");
-                    $('#role :selected').val(1);
-                    $('#company-id :selected').val(1);
                     $("#profile-image").val("");
                     $("#profile-image-banner").empty();
                 }
