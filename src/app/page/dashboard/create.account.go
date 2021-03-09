@@ -200,12 +200,12 @@ func CreateNewCompany(c *gin.Context) {
 	// define service user
 	userService := global.GetServiceUser()
 	param := user.CreateCompanyParam{
-		Name:            companyName,
-		Phone:           phone,
-		Address:         address,
-		Role:            role,
-		ImageLogo:       filename,
-		MemberOfCompany: memberOfCompany,
+		Name:      companyName,
+		Phone:     phone,
+		Address:   address,
+		Role:      role,
+		ImageLogo: filename,
+		ParentID:  memberOfCompany,
 	}
 
 	// send request to cgx to create company data
