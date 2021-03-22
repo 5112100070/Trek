@@ -162,7 +162,7 @@
                     for(let j=0; j<respAllFeature.features.length; j++){
                             let element = respAllFeature.features[j];
                             let isActive = false;
-                            
+                           
                             for(let i=0; i<list_active_feature.length; i++){
                                 if(list_active_feature[i].path_url == element.path_url && list_active_feature[i].method == element.method){
                                     isActive = true;
@@ -258,8 +258,12 @@
             StartLoading();
 
             let featureID = $("#feature-detail").val();
-            let list_active_feature_id = [];
-            list_active_feature.push(featureID);
+
+            let featureIDs = [parseInt(featureID)];
+
+            for(let i=0; i<list_active_feature.length; i++){
+                featureIDs.push(parseInt(list_active_feature[i].id));
+            }
             
             var url = product_url + '/admin/v1/registering-feature';
 
@@ -267,8 +271,8 @@
             var moduleID = urlActive.searchParams.get("module_id");
 
             var payload = {
-                module_id: moduleID,
-                feature_ids: list_active_feature
+                module_id: parseInt(moduleID),
+                feature_ids: featureIDs
             };
             
             var promise = $.ajax({
@@ -281,11 +285,16 @@
                 cache : false,
                 xhrFields: {
                     withCredentials: true
+                },
+                headers: {
+                    "Authorization": GetSessionBasedOnEnv(),
+                    "Accept": "application/json"
                 }
             });
 
             promise.done(function(response){
                 FinishLoading();
+                $("#modal-register-feature").modal("hide");
                 setError(false, "");
                 $("#success-alert").removeClass("hide");
 
@@ -294,7 +303,7 @@
 
                 window.setTimeout(function(){
                     window.location.reload();
-                }, 2000);
+                }, 1200);
             }).fail(function(errReponse){
                 FinishLoading();
                 $("#modal-register-feature").modal("hide");

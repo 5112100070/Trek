@@ -260,7 +260,6 @@
             var url = product_url + '/admin/v1/account-feature';
 
             var payload = {
-                account_module_id: parseInt($('#feature-module-id').val()),
                 name: $('#feature-name').val(),
                 description: $('#feature-description').val(),
                 path_url: $('#feature-path-url').val(),
@@ -306,7 +305,6 @@
 
             var payload = {
                 feature_id: parseInt($('#muf-feature-id').val()),
-                account_module_id: parseInt($('#muf-feature-module-id').val()),
                 name: $('#muf-feature-name').val(),
                 description: $('#muf-feature-description').val(),
                 path_url: $('#muf-feature-path-url').val(),
